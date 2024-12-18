@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>購物車</title>
+<link rel="stylesheet" th:href="@{/css/shoppingCart.css}">
+</head>
+<body>
+	<div class="cart-container">
+		<h1>購物車</h1>
+
+		<!-- 空購物車提示 -->
+		<div id="emptyCartMessage" th:if="${cartDetailsList.isEmpty()}"
+			style="display: none;">
+			<p>購物車是空的！</p>
+		</div>
+
+		<div id="cartItemsContainer">
+			<div th:each="cartItem : ${cartDetailsList}" class="cart-item">
+				<!-- 商品圖片 -->
+				<img
+					th:src="@{/pdImg/DBGifReader(pdImgId=${defaultImages[cartItem.pdDetailsVO.pdId]})}"
+					alt="商品圖片"
+					onerror="this.onerror=null;this.src='/images/no-image-available.png';" />
+
+				<!-- 商品細節 -->
+				<div class="cart-item-details">
+					<!-- 商品名稱 -->
+					<span th:text="${cartItem.pdDetailsVO.pdName}">商品名稱</span>
+					<!-- 單價 -->
+					<span class="unit-price"
+						th:data-price="${cartItem.pdDetailsVO.pdPrice}"
+						th:text="'單價: $' + ${cartItem.pdDetailsVO.pdPrice}"></span>
+					<!-- 數量 -->
+					<div>
+						<button class="decrease-btn">-</button>
+						<input class="quantity-input" type="number" min="1" max="99"
+							th:value="${cartItem.quantity}">
+						<button class="increase-btn">+</button>
+					</div>
+					<!-- 小計 -->
+					<span class="cart-item-price"
+						th:data-price="${cartItem.pdDetailsVO.pdPrice}"
+						th:text="'小計: $' + ${cartItem.pdDetailsVO.pdPrice * cartItem.quantity}"></span>
+					<!-- 移除按鈕 -->
+					<button class="remove-btn"
+						th:data-pd-id="${cartItem.pdDetailsVO.pdId}">移除</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- 總金額 -->
+		<div class="total-price">
+			<span id="totalAmount"
+				th:text="'總金額: $' + ${cartDetailsList != null ? cartDetailsList.size() > 0 ? cartDetailsList.get(0).quantity : 0 : 0}"></span>
+		</div>
+
+		<div class="button-container">
+			<a th:href="@{/pdDetails/allProductsHomepage}"
+				class="btn continue-shopping">繼續購物</a>
+			<button id="checkoutBtn" class="btn checkout">填寫配送資料</button>
+		</div>
+	</div>
+
+	<div class="modal-overlay"></div>
+	<div class="buyer-info-modal">
+		<h3>配送資料</h3>
+		<!-- 表單提交到後端 -->
+		<form th:action="@{/pdo/pdOrderSubmitted}" method="post">
+			<input type="hidden" name="totalAmount" id="hidden-total-amount">
+			<!-- 			其他表單欄位 -->
+			<input type="text" name="buyerName" id="buyer-name"
+				placeholder="收件人姓名" required> <input type="text"
+				name="buyerAddress" id="buyer-address" placeholder="收件人地址" required>
+			<!-- 		    <input type="tel" name="buyerPhone" id="buyer-phone" placeholder="收件人聯絡電話" required> -->
+			<input type="tel" name="buyerPhone" id="buyer-phone"
+				placeholder="收件人聯絡電話" required pattern="\d{1,10}" maxlength="10"
+				title="電話號碼只能包含最多 10 位數字"> <select name="shippingMethod"
+				id="shipping-method" required>
+				<option value="">選擇運輸方式</option>
+				<option value="0">宅配</option>
+				<option value="1">超商取貨</option>
+			</select>
+			<div class="total-price">
+				總金額: <span id="modal-total-price"></span>
+			</div>
+			<p class="text-right">
+				按下確認後將建立未付款訂單<br>並跳轉至儲值金扣款頁面
+			</p>
+			<button type="submit" id="submit-buyer-info" class="checkout-btn">進入結帳頁面</button>
+		</form>
+	</div>
+
+	<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const totalPriceEl = document.getElementById('totalAmount');
+        const modalTotalPriceEl = document.getElementById('modal-total-price');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const modalOverlay = document.querySelector('.modal-overlay'); // 修正這裡
+        const buyerInfoModal = document.querySelector('.buyer-info-modal'); // 修正這裡
+        const buyerInfoSubmit = document.getElementById('submit-buyer-info');
+        const hiddenTotalAmountInput = document.getElementById('hidden-total-amount');
+        if (!hiddenTotalAmountInput) {
+            console.error('Hidden input "hidden-total-amount" not found!');
+        }
+        
+        buyerInfoSubmit.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // 獲取總金額
+            const totalAmountText = totalPriceEl.textContent.replace('總金額: $', '').replace(/,/g, '');
+            hiddenTotalAmountInput.value = totalAmountText;
+
+            // 提交表單
+            buyerInfoSubmit.closest('form').submit();
+        });
+        
+        
+
+        // 格式化數字，每三位數添加逗號
+        const formatNumberWithCommas = (number) => {
+            return number.toLocaleString('en-US');
+        };
+
+        // 更新單項商品小計
+        const updateItemSubtotal = (item) => {
+            const quantity = parseInt(item.querySelector('.quantity-input').value) || 0;
+            const price = parseFloat(item.querySelector('.unit-price').dataset.price || 0);
+            const subtotalEl = item.querySelector('.cart-item-price');
+            subtotalEl.textContent = `小計: $${formatNumberWithCommas(quantity * price)}`;
+        };
+
+        // 更新總金額
+        const updateTotalPrice = () => {
+            const cartItems = document.querySelectorAll('.cart-item');
+            let total = 0;
+            cartItems.forEach(item => {
+                const quantity = parseInt(item.querySelector('.quantity-input').value) || 0;
+                const price = parseFloat(item.querySelector('.unit-price').dataset.price || 0);
+                total += quantity * price;
+
+                // 更新每個商品的小計
+                updateItemSubtotal(item);
+            });
+
+            if (totalPriceEl) {
+                totalPriceEl.textContent = `總金額: $${formatNumberWithCommas(total)}`;
+            }
+
+            if (modalTotalPriceEl) {
+                modalTotalPriceEl.textContent = `$${formatNumberWithCommas(total)}`;
+            }
+
+            if (cartItems.length === 0) {
+                if (cartItemsContainer) cartItemsContainer.style.display = 'none';
+                if (emptyCartMessage) emptyCartMessage.style.display = 'block';
+                if (totalPriceEl) totalPriceEl.textContent = '總金額: $0';
+            } else {
+                if (cartItemsContainer) cartItemsContainer.style.display = 'block';
+                if (emptyCartMessage) emptyCartMessage.style.display = 'none';
+            }
+        };
+
+     // 設置數量輸入框邏輯
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const item = input.closest('.cart-item');
+                const productId = item.querySelector('.remove-btn').dataset.pdId;
+                let quantity = parseInt(input.value) || 1;
+
+                if (quantity < 1) {
+                    quantity = 1; // 防止輸入小於 1
+                    input.value = quantity;
+                } else if (quantity > 99) {
+                    quantity = 99; // 防止輸入超過 99
+                    input.value = quantity;
+                }
+
+                // 更新後端數量
+                fetch(`/cartDetails/updateQuantity?productId=${productId}&quantity=${quantity}`, {
+                    method: 'POST',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        updateTotalPrice(); // 更新前端金額
+                    } else {
+                        alert('數量更新失敗，請稍後再試！');
+                    }
+                })
+                .catch(error => {
+                    console.error('更新數量時發生錯誤:', error);
+                });
+            });
+        });
+        
+     // 設置數量增減邏輯
+        document.querySelectorAll('.decrease-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = btn.nextElementSibling;
+                const item = btn.closest('.cart-item');
+                const productId = item.querySelector('.remove-btn').dataset.pdId;
+                let quantity = parseInt(input.value) || 1;
+                if (quantity > 1) {
+                    quantity -= 1;
+                    input.value = quantity;
+
+                    // 更新後端數量
+                    fetch(`/cartDetails/updateQuantity?productId=${productId}&quantity=${quantity}`, {
+                        method: 'POST',
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            updateTotalPrice(); // 更新前端金額
+                        } else {
+                            alert('數量更新失敗，請稍後再試！');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('更新數量時發生錯誤:', error);
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.increase-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = btn.previousElementSibling;
+                const item = btn.closest('.cart-item');
+                const productId = item.querySelector('.remove-btn').dataset.pdId;
+                let quantity = parseInt(input.value) || 1;
+                if (quantity < 99) {
+                    quantity += 1;
+                    input.value = quantity;
+
+                    // 更新後端數量
+                    fetch(`/cartDetails/updateQuantity?productId=${productId}&quantity=${quantity}`, {
+                        method: 'POST',
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            updateTotalPrice(); // 更新前端金額
+                        } else {
+                            alert('數量更新失敗，請稍後再試！');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('更新數量時發生錯誤:', error);
+                    });
+                }
+            });
+        });
+
+
+        // 設置移除商品邏輯
+        document.querySelectorAll('.remove-btn').forEach(removeBtn => {
+            removeBtn.addEventListener('click', () => {
+                const productId = removeBtn.dataset.pdId;
+                const cartItem = removeBtn.closest('.cart-item');
+                fetch(`/cartDetails/removeFromCart?productId=${productId}`, {
+                    method: 'POST',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('商品已成功移除！');
+                        if (cartItem) cartItem.remove();
+                        updateTotalPrice();
+                    } else {
+                        alert('移除失敗，請稍後再試！');
+                    }
+                })
+                .catch(error => {
+                    console.error('移除商品時發生錯誤:', error);
+                    alert('移除失敗，請稍後再試！');
+                });
+            });
+        });
+        
+        // 點擊【結帳】按鈕，顯示燈箱
+        checkoutBtn.addEventListener('click', () => {
+            const cartItems = document.querySelectorAll('.cart-item');
+            if (cartItems.length === 0) {
+                alert('購物車是空的，無法結帳！');
+                return; // 停止執行後續操作
+            }
+
+            // 更新燈箱中的總金額（確保打開燈箱時數值是最新的）
+            if (modalTotalPriceEl) {
+                modalTotalPriceEl.textContent = totalPriceEl.textContent.replace('總金額: ', '');
+            }
+            modalOverlay.style.display = 'block';
+            buyerInfoModal.style.display = 'block';
+        });
+
+
+//         // 點擊遮罩，關閉燈箱
+//         modalOverlay.addEventListener('click', () => {
+//             modalOverlay.style.display = 'none';
+//             buyerInfoModal.style.display = 'none';
+//         });
+
+     // 點擊【確認結帳】按鈕
+        buyerInfoSubmit.addEventListener('click', () => {
+            const name = document.querySelector('#buyer-name').value.trim();
+            const address = document.querySelector('#buyer-address').value.trim();
+            const phone = document.querySelector('#buyer-phone').value.trim();
+            const shipping = document.querySelector('#shipping-method').value;
+
+            if (!name || !address || !phone || !shipping) {
+                alert('請完整填寫購買者資料！');
+                return;
+            }
+
+            alert('訂單建立成功！將跳轉至結帳頁面');
+            modalOverlay.style.display = 'none';
+            buyerInfoModal.style.display = 'none';
+        }); 
+
+
+        // 初始化金額
+        updateTotalPrice();
+        
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>會員管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>會員列表</h2>
+    <form action="/members" method="get">
+        <input type="text" name="keyword" placeholder="搜尋名稱或 Email" th:value="${keyword}">
+        <button type="submit">搜尋</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名字</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="member : ${members}">
+                <td th:text="${member.mebId}"></td>
+                <td th:text="${member.mebName}"></td>
+                <td th:text="${member.mebMail}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="pagination">
+        <a th:if="${currentPage > 0}" th:href="@{/members(keyword=${keyword}, page=${currentPage - 1})}">上一頁</a>
+        <span>第 <span th:text="${currentPage + 1}"></span> 頁 / 共 <span th:text="${totalPages}"></span> 頁</span>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/members(keyword=${keyword}, page=${currentPage + 1})}">下一頁</a>
+    </div>
+</body>
+</html>

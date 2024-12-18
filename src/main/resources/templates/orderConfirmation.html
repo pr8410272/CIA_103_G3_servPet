@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>結帳頁面</title>
+<style>
+/* 全局樣式 */
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f9;
+	margin: 0;
+	padding: 0;
+	color: #333;
+	display: flex;
+	justify-content: center; /* 左右置中 */
+}
+
+/* 頁面容器 */
+.container {
+	width: 90%; /* 適應小屏幕，最大寬度 600px */
+	max-width: 600px;
+	background: #ffffff;
+	margin-top: 40px; /* 靠近頁面上緣 */
+	padding: 20px 30px;
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+/* 標題區 */
+header {
+	background-color: #334252;
+	color: #ffffff;
+	padding: 15px 0;
+	border-radius: 10px 10px 0 0;
+}
+
+header h1 {
+	margin: 0;
+	font-size: 24px;
+}
+
+/* 主要內容 */
+p {
+	font-size: 16px;
+	margin: 10px 0;
+	line-height: 1.6;
+}
+
+/* 高亮的文字 */
+span {
+	font-weight: bold;
+	color: #334252;
+}
+
+/* 集中美化的付款狀態/總金額/儲值金 */
+.info-box {
+	border: 1px solid #334252; /* 添加框線 */
+	border-radius: 10px;
+	padding: 20px;
+	margin-top: 20px; /* 與上方保持距離 */
+	background-color: #f9f9fc; /* 輕微背景色提升區域辨識度 */
+}
+
+.info-box p {
+	margin: 10px 0;
+	font-size: 18px;
+}
+
+.info-box span {
+	font-size: 20px;
+	color: #2c7dfa; /* 數字高亮 */
+}
+
+/* 按鈕區域 */
+.button-group {
+	display: flex;
+	justify-content: center; /* 水平置中 */
+	gap: 20px; /* 按鈕之間的間距 */
+	margin-top: 20px; /* 與其他內容保持距離 */
+}
+
+/* 按鈕樣式 */
+a {
+	display: inline-block;
+	text-decoration: none;
+	color: #ffffff;
+	background-color: #334252;
+	padding: 10px 20px;
+	border-radius: 5px;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+}
+
+a:nth-child(1):hover {
+	background-color: #2a9d8f; /* 回商城按鈕 hover 狀態顏色 */
+}
+
+a:nth-child(2):hover {
+	background-color: #e63946; /* 確認扣款按鈕 hover 狀態顏色 */
+}
+
+/* 頁腳 */
+footer {
+	background-color: #334252;
+	color: #ffffff;
+	padding: 10px 0;
+	margin-top: 20px;
+	border-radius: 0 0 10px 10px;
+}
+
+footer p {
+	margin: 0;
+	font-size: 14px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<h1>儲值金扣款結帳頁面</h1>
+
+		<!-- 主要內容 -->
+		<div class="content">
+			<p>感謝您的訂購！以下是您的訂單詳情，將使用儲值金扣款</p>
+			<p>
+				訂單編號：<span th:text="${orderId}"></span>
+			</p>
+			<p>
+				會員名字：<span th:text="${mebName}"></span>
+			</p>
+
+			<p>
+				運輸方式： <span th:switch="${pdo.shippingMethod}"> <span
+					th:case="'0'">宅配</span> <span th:case="'1'">超商取貨</span> <span
+					th:case="*">未知方式</span>
+				</span>
+			</p>
+			<p>
+				收件人地址：<span th:text="${pdo.shippingAddr}"></span>
+			</p>
+
+			<!-- 集中框線區域 -->
+			<div class="info-box">
+				<p>
+					訂單付款狀態：<span th:switch="${pdo.paymentStatus}">
+						<span th:case="'0'">未付款</span>
+						<span th:case="'1'">已付款</span>
+						<span th:case="'2'">已退款</span>
+						<span th:case="*">未知狀態</span>
+					</span>
+				</p>
+				<p>
+					總金額：<span th:text="${pdo.pdTotalPrice}"></span>
+				</p>
+				<p>
+					儲值金餘額：<span th:text="${bal}"></span>
+				</p>
+			</div>
+
+			<!-- 按鈕組 -->
+			<div class="button-group">
+				<a href="/pdDetails/allProductsHomepage">回商城首頁</a>
+				<a href="/confirmDeduction">確認扣款</a>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer>
+			<p>&copy; 2024 商城系統. 保留所有權利.</p>
+		</footer>
+	</div>
+</body>
+</html>

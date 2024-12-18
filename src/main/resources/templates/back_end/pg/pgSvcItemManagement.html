@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+
+<link rel="stylesheet" href="/css/pg/pgSvcItemManagement.css">
+
+<!-- ●● jquery datatables 設定 -->
+<script>
+	$(document)
+			.ready(
+					function() {
+						$('#example')
+								.DataTable(
+										{
+											"lengthMenu" : [  10, 15, 20,25,30
+													 ],
+											"searching" : true, //搜尋功能, 預設是開啟
+											"paging" : true, //分頁功能, 預設是開啟
+											"ordering" : true, //排序功能, 預設是開啟
+											"language" : {
+												"processing" : "處理中...",
+												"loadingRecords" : "載入中...",
+												"lengthMenu" : "顯示 _MENU_ 筆結果",
+												"zeroRecords" : "沒有符合的結果",
+												"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+												"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+												"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
+												"infoPostFix" : "",
+												"search" : "搜尋:",
+												"paginate" : {
+													"first" : "第一頁",
+													"previous" : "上一頁",
+													"next" : "下一頁",
+													"last" : "最後一頁"
+												},
+												"aria" : {
+													"sortAscending" : ": 升冪排列",
+													"sortDescending" : ": 降冪排列"
+												}
+											}
+										});
+					});
+</script>
+
+</head>
+<body>
+	<header>
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+				<button type="submit" class="btn btn-edit" onclick="window.location.href='/back_end/index'">回首頁</button>
+				<li><a href="#" th:href="@{/pg/listRealAllPgSvcItem}">美容師服務項目管理</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<div class="view">
+			<div class="bulk-action-buttons">
+			    <!-- 一鍵顯示所有項目 -->
+			    <form th:action="@{/pg/updateAllPgSvcItemStatus}" method="post" class="bulk-action-form">
+			        <input type="hidden" name="svcIsDeleted" value="1">
+			        <button type="submit" class="btn btn-show-all">顯示全部</button>
+			    </form>
+			
+			    <!-- 一鍵隱藏所有項目 -->
+			    <form th:action="@{/pg/updateAllPgSvcItemStatus}" method="post" class="bulk-action-form">
+			        <input type="hidden" name="svcIsDeleted" value="0">
+			        <button type="submit" class="btn btn-hide-all">隱藏全部</button>
+			    </form>
+			</div>
+			
+			<table id="example">
+				<thead>
+					<tr>
+						<th>項目編號</th>
+						<th>名稱</th>
+						<th>描述</th>
+						<th>狀態</th>
+						<th>操作</th>
+						<th>編輯</th>
+						<th>刪除</th>
+						
+	
+					</tr>
+				</thead>
+				<tbody>
+					<!-- 使用Thymeleaf來循環顯示訂單數據 -->
+					<th:block th:each=" item : ${list}">
+						<tr>
+							<td th:text="${item.svcId}"></td>
+							<td th:text="${item.svcName}"></td>
+							<td th:text="${item.svcDescr}"></td>
+		                	<td>
+		                	
+						    <!-- 狀態顯示，根據 svcIsDeleted 判斷 -->
+						    <span th:text="${item.svcIsDeleted.equals('1') ? '顯示' : '隱藏'}"></span>
+							</td>
+						
+						<!-- 醜陋按鈕 -->
+
+					<td>
+				    <form th:action="@{/pg/updatePgSvcItemStatus}" method="post" style="margin-bottom: 0px;">
+				        <input type="hidden" name="svcId" th:value="${item.svcId}" />
+				        <input type="hidden" name="svcIsDeleted" th:value="${item.svcIsDeleted.equals('0') ? '1' : '0'}" />
+				        <input type="submit" th:value="${item.svcIsDeleted.equals('0') ? '顯示' : '隱藏'}" />
+				    </form>
+					</td>
+					
+					<!-- 編輯按鈕，跳轉到編輯頁面 -->
+				    <td>
+				    <a th:href="@{/pg/editPgSvcItem(svcId=${item.svcId})}" class="btn btn-edit">編輯</a>
+					</td>
+					<!-- 刪除按鈕 -->
+				    <td>
+				    <a th:href="@{/pg/deletePgSvcItem(svcId=${item.svcId})}" class="btn btn-delete">刪除</a>
+					</td>
+				
+					
+						</tr>
+				</tbody>
+			</table>
+			
+			
+			<!-- 新增按鈕 (愛心圖案) -->
+			<div class="add-button">
+<!-- 			<a> -->
+				<a th:href="@{/pg/addPgSvcItem}"> 
+				<img th:src="@{/images/heart.png}">
+				</a>
+			</div>
+
+		</div>
+
+
+
+
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	
+<script>
+//監聽所有刪除按鈕的點擊事件
+document.addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('btn-delete')) {
+        event.preventDefault(); // 阻止默認的跳轉行為
+
+        const deleteUrl = event.target.getAttribute('href'); // 取得刪除的 URL
+        Swal.fire({
+            title: '確認刪除？',
+            text: '刪除後無法復原，您確定要刪除嗎？',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '確定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl; // 如果用戶確認，跳轉到刪除的 URL
+            }
+        });
+    }
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bulkActionForms = document.querySelectorAll('.bulk-action-form');
+
+        bulkActionForms.forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // 阻止表單的默認提交行為
+                const actionType = form.querySelector('input[name="svcIsDeleted"]').value === '0' ? '隱藏' : '顯示';
+                Swal.fire({
+                    title: `確認要${actionType}所有服務項目嗎？`,
+                    text: '這個操作會更改所有服務項目的顯示狀態！',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '確認',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // 提交表單
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+	
+	
+</body>
+</html>

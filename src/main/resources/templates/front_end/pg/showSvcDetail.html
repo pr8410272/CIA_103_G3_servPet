@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link rel="stylesheet" href="/css/pg/showSvcDetail.css">
+
+</head>
+<body>
+	<header>
+		<h1>servPet</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/}">首頁</a></li>
+				<li><a href="#" th:href="@{/pg}">寵物美容師</a></li>
+				<li><a href="#" th:href="@{/pg/showAllPgSvcItem}">寵物美容介紹</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<section class="search">
+			<div class="select-section">
+		        <label for="svcName"></label>
+		        <select id="svcName" name="svcName" onchange="window.location.href='/pg/showServiceDetail?svcName=' + this.value">
+			    <!-- 顯示提示選項 -->
+			    <option value="" th:if="${selectedService == null}" selected>請選擇想查看的服務介紹▽</option>
+			    
+			    <!-- 從服務列表生成選項 -->
+			    <option th:each="service : ${list}" 
+			            th:value="${service.svcName}" 
+			            th:text="${service.svcName} + ' 🐾'"
+			            th:selected="${selectedService?.svcName == service.svcName}">
+			    </option>
+				</select>
+		        
+		    </div>
+
+		</section>
+
+		<section class="view">
+		    
+		    <!-- 下半部 - 服務項目描述 -->
+			  <div class="description-section">
+			    <!-- 顯示選中服務項目的名稱和描述 -->
+			    <h2 th:if="${selectedService != null}" th:text="${selectedService?.svcName}">服務名稱</h2>
+			    <p th:if="${selectedService != null}" th:text="${selectedService?.svcDescr}">服務描述</p>
+			    
+			    <!-- 當未選擇服務時顯示提示 -->
+			    <p th:if="${selectedService == null}">🐾🐶🐼🦁🐾</p>
+			    
+			</div>
+
+		</section>
+		
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>更新訂單資料</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+		/* 可修改欄位的樣式 */
+		.form-control {
+		    background-color: #ffffff; /* 白色背景 */
+		    color: #000000;           /* 黑色文字 */
+		    border: 1px solid #ced4da; /* 淺灰色邊框 */
+		}
+		
+		/* 不可修改欄位的樣式 */
+		.readonly-field {
+		    background-color: #f8f9fa; /* 淺灰色背景 */
+		    color: #6c757d;            /* 深灰色文字 */
+		    border: 1px solid #dee2e6; /* 更深的灰色邊框 */
+		    cursor: not-allowed;       /* 顯示禁止符號的滑鼠指針 */
+		}
+	</style>
+</head>
+
+<body>
+<div class="container mt-5">
+    <h1>更新訂單資料</h1>
+    <form th:action="@{/pdo/updateOrder}" method="post">
+        <input type="hidden" name="pdoId" th:value="${pdoVO.pdoId}">
+        
+		<!-- 訂單編號 -->
+		<div class="mb-3">
+		    <label for="pdoId" class="form-label">訂單編號</label>
+		    <input type="text" class="form-control readonly-field" id="pdoId" th:value="${pdoVO.pdoId}" readonly>
+		</div>
+		
+		<!-- 會員編號 -->
+		<div class="mb-3">
+		    <label for="mebId" class="form-label">會員編號</label>
+		    <input type="text" class="form-control readonly-field" id="mebId" th:value="${pdoVO.mebVO.mebId}" readonly>
+		</div>
+		
+		<!-- 訂單日期 -->
+		<div class="mb-3">
+		    <label for="pdoDate" class="form-label">訂單日期</label>
+		    <input type="text" class="form-control readonly-field" id="pdoDate" th:value="${#dates.format(pdoVO.pdoDate, 'yyyy-MM-dd HH:mm')}" readonly>
+		</div>
+		
+		<!-- 訂單總金額 -->
+		<div class="mb-3">
+		    <label for="pdTotalPrice" class="form-label">訂單總金額</label>
+		    <input type="text" class="form-control readonly-field" id="pdTotalPrice" th:value="${pdoVO.pdTotalPrice}" readonly>
+		</div>
+
+       <div class="mb-3">
+            <label for="shippingMethod" class="form-label">配送方式</label>
+            <select class="form-select" name="shippingMethod" id="shippingMethod">
+                <option value="0" th:selected="${pdoVO.shippingMethod == '0'}">宅配</option>
+                <option value="1" th:selected="${pdoVO.shippingMethod == '1'}">超商取貨</option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="shippingStatus" class="form-label">配送狀態</label>
+            <select class="form-select" name="shippingStatus" id="shippingStatus">
+                <option value="0" th:selected="${pdoVO.shippingStatus == '0'}">理貨中</option>
+                <option value="1" th:selected="${pdoVO.shippingStatus == '1'}">配送中</option>
+                <option value="2" th:selected="${pdoVO.shippingStatus == '2'}">已配達</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="shippingAddr" class="form-label">配送地址</label>
+            <input type="text" class="form-control" id="shippingAddr" name="shippingAddr" th:value="${pdoVO.shippingAddr}" required>
+        </div>
+
+         <div class="mb-3">
+            <label for="pdoStatus" class="form-label">訂單狀態</label>
+            <select class="form-select" name="pdoStatus" id="pdoStatus">
+                <option value="0" th:selected="${pdoVO.pdoStatus == '0'}">進行中</option>
+                <option value="1" th:selected="${pdoVO.pdoStatus == '1'}">已完成</option>
+                <option value="2" th:selected="${pdoVO.pdoStatus == '2'}">已取消</option>
+            </select>
+        </div>
+
+		
+		<div class="d-flex justify-content-between mt-4">
+		    <!-- 返回按鈕 -->
+		    <a href="/pdo/listAllProductsOrders" class="btn btn-secondary">返回所有訂單資料</a>
+		
+		    <!-- 更新按鈕 -->
+		    <button type="submit" class="btn btn-primary">更新</button>
+		</div>
+
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

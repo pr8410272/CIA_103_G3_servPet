@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>檢舉管理</title>
+<link rel="stylesheet" th:href="@{/css/select_Compl_page.css}" />
+<link rel="stylesheet" th:href="@{/css/adminData.css}" />
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+</head>
+
+<body>
+
+	<!--*************** table#header (上方深色) 區域 **************-->
+	<table id="header">
+		<tr>
+			<td><img th:src="@{/images/admin/pflogow.png}" /> <font>檢舉管理</font>
+				<img th:src="@{/images/admin/pflogow.png}" /></td>
+		</tr>
+	</table>
+
+	<div th:include="@{back_end/admin/adminData}"></div>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+
+	<div th:include="@{back_end/admin/dashboard}"></div>
+
+	<div id="body">
+
+		<article id="BGcat">
+			<img id="BGcat" th:src="@{/images/admin/BGcat.png}" />
+		</article>
+
+		<article id="body">
+			<h2>
+				<span>檢舉查詢</span>
+			</h2>
+			<hr>
+			<font>單一條件檢索:</font>
+			<!-- 錯誤表列 -->
+			<div class="error" th:utext="${errorMessage}"
+				th:if="${errorMessage != null}">${errorMessage}</div>
+			<br>
+
+			<table id="body">
+				<!-- 單一條件檢索：檢舉編號 -->
+				<form method="post" th:action="@{/psCompl/getOne_For_Display}">
+					輸入檢舉編號: <input type="text" name="psComplId"
+						th:value="${param.psComplId}"> <input type="submit"
+						value="送出">
+				</form>
+				<br>
+
+				<!-- 單一條件檢索：選擇檢舉編號 -->
+				<form method="post" th:action="@{getOne_For_Display}">
+					選擇檢舉編號: <select id="one" name="psComplId">
+						<option th:each="psComplVO : ${psComplListData}"
+							th:value="${psComplVO.psComplId}"
+							th:text="${psComplVO.psComplId}" />
+					</select> <input type="submit" value="送出">
+				</form>
+				<br>
+				<br>
+				
+				<!-- 萬用複合查詢 -->
+				<form method="post" th:action="@{listPsCompl_ByCompositeQuery}">
+				    <font>多條件檢索:</font><br>
+				    輸入美容師編號: <input id="two" type="text" name="psId"><br>
+				    輸入會員編號: <input id="two" type="text" name="mebId"><br>
+				    輸入日期起始: <input type="datetime-local" name="startDate"><br>
+				    輸入日期結束: <input type="datetime-local" name="endDate"><br>
+				    <font>選擇檢舉狀態:  </font>
+				    <select id="two" name="psComplStatus">
+				        <option value="0">未處理</option>
+				        <option value="1">不懲處</option>
+				        <option value="2">處罰</option>
+				        <option value="3">加重處罰</option>
+				        <option value="4">停權</option>
+				    </select><br>
+				    <input type="submit" value="送出">
+				</form>
+				
+				<br>
+
+				<h2>
+					<span>檢舉管理</span>
+				</h2>
+				<!--  <button type="submit" onclick="window.location.href='/psCompl/addPsCompl'">提出檢舉</button> -->
+				<button type="submit"
+					onclick="window.location.href='/back_end/index'">回首頁</button>
+				<button type="submit"
+					onclick="window.location.href='/psCompl/listAllPsCompl'">檢舉單列表</button>
+			</table>
+		</article>
+
+		<article id="BGdog">
+			<img id="BGdog" th:src="@{/images/admin/BGdog.png}" />
+		</article>
+
+	</div>
+
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

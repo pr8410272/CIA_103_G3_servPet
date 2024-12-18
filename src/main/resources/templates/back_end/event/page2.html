@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>分頁導航</title>
+</head>
+<body>
+
+	<div th:if="${rowsPerPage < list.size()}">
+		<!-- 上一頁和第一頁 -->
+		<div th:if="${currentPage > 1}">
+			<a th:href="@{${requestURI}(whichPage=1)}">至第一頁</a>&nbsp; <a
+				th:href="@{${requestURI}(whichPage=${currentPage - 1})}">上一頁</a>&nbsp;
+		</div>
+
+		<!-- 下一頁和最後一頁 -->
+		<div th:if="${currentPage < totalPages}">
+			<a th:href="@{${requestURI}(whichPage=${currentPage + 1})}">下一頁</a>&nbsp;
+			<a th:href="@{${requestURI}(whichPage=${totalPages})}">至最後一頁</a>&nbsp;
+		</div>
+	</div>
+
+	<br>
+	<br>
+
+	<!-- 跳轉頁碼 -->
+	<div th:if="${totalPages > 1}">
+		<form method="post" th:action="@{${requestURI}}">
+			<select name="whichPage">
+				<option th:each="page : ${#numbers.sequence(1, totalPages)}"
+					th:value="${page}" th:text="'跳至第' + page + '頁'"></option>
+			</select> <input type="submit" value="確定">
+		</form>
+	</div>
+
+</body>
+</html>

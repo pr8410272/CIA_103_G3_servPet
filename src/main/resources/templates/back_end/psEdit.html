@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>保母資料修改</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/psEdit.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+<header>
+    <h1>servPet</h1>
+    <nav>
+        <ul>
+            <li><a href="#" th:href="@{/ps/psList}">首頁</a></li>
+            <li><a href="#" th:href="@{/ps/profile/{psId}(psId=${psVO.psId})}">寵物保母</a></li>
+            <li><a href="#" th:href="@{/ps/psSvcItemlist/{psId}(psId=${psVO.psId})}">服務項目管理</a></li>
+            <li><a href="#" th:href="@{/psOrder/psOrderManagement/{psId}(psId=${psVO.psId})}">訂單管理</a></li>
+            <li><a href="#" th:href="@{/}">登出</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="view">
+    <div class="form-container container mt-5">
+        <form th:action="@{/ps/update}" th:object="${psVO}" method="post" id="psForm">
+            <input type="hidden" id="psId" th:field="${psVO.psId}" />
+            <input type="hidden" id="totalStars" th:field="${psVO.totalStars}" />
+            <input type="hidden" id="ratingTimes" th:field="${psVO.ratingTimes}" />
+            <input type="hidden" id="reportTimes" th:field="${psVO.reportTimes}" />
+            <input type="hidden" id="approvalStatus" th:field="${psVO.approvalStatus}" />
+            <input type="hidden" id="psStatus" th:field="${psVO.psStatus}" />
+            <input type="hidden" id="psPw" th:field="${psVO.psPw}" />
+            <input type="hidden" id="psPic" th:field="${psVO.psPic}" />
+
+            <div class="mb-3">
+                <label for="psName" class="form-label">姓名:</label>
+                <input type="text" id="psName" class="form-control" th:field="*{psName}" />
+            </div>
+
+            <div class="mb-3">
+                <label for="psArea" class="form-label">服務地區:</label>
+                <div class="form-check-inline">
+                    <input type="radio" id="north" name="psArea" value="0" class="form-check-input" th:field="*{psArea}" />
+                    <label for="north" class="form-check-label">北部</label>
+                </div>
+                <div class="form-check-inline">
+                    <input type="radio" id="central" name="psArea" value="1" class="form-check-input" th:field="*{psArea}" />
+                    <label for="central" class="form-check-label">中部</label>
+                </div>
+                <div class="form-check-inline">
+                    <input type="radio" id="south" name="psArea" value="2" class="form-check-input" th:field="*{psArea}" />
+                    <label for="south" class="form-check-label">南部</label>
+                </div>
+                <div class="form-check-inline">
+                    <input type="radio" id="east" name="psArea" value="3" class="form-check-input" th:field="*{psArea}" />
+                    <label for="east" class="form-check-label">東部</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">每週服務日:</label>
+                <div id="schDate">
+                    <label><input type="checkbox" name="schDate" value="0" th:checked="${psVO.schDate[0] == '1'}" /> 一</label>
+                    <label><input type="checkbox" name="schDate" value="1" th:checked="${psVO.schDate[1] == '1'}" /> 二</label>
+                    <label><input type="checkbox" name="schDate" value="2" th:checked="${psVO.schDate[2] == '1'}" /> 三</label>
+                    <label><input type="checkbox" name="schDate" value="3" th:checked="${psVO.schDate[3] == '1'}" /> 四</label>
+                    <label><input type="checkbox" name="schDate" value="4" th:checked="${psVO.schDate[4] == '1'}" /> 五</label>
+                    <label><input type="checkbox" name="schDate" value="5" th:checked="${psVO.schDate[5] == '1'}" /> 六</label>
+                    <label><input type="checkbox" name="schDate" value="6" th:checked="${psVO.schDate[6] == '1'}" /> 日</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">每週服務時間:</label>
+                <div id="schTime">
+                    <label><input type="checkbox" name="schTime" value="0" th:checked="${psVO.schTime[0] == '1'}" /> 早</label>
+                    <label><input type="checkbox" name="schTime" value="1" th:checked="${psVO.schTime[1] == '1'}" /> 中</label>
+                    <label><input type="checkbox" name="schTime" value="2" th:checked="${psVO.schTime[2] == '1'}" /> 晚</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="psBio" class="form-label">簡介:</label>
+                <textarea id="psBio" class="form-control" th:field="*{psBio}"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="psEmail" class="form-label">聯絡信箱:</label>
+                <input type="email" id="psEmail" class="form-control" th:field="*{psEmail}" />
+            </div>
+
+            <button type="button" class="btn btn-primary" id="submitBtn">提交</button>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+</footer>
+
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function () {
+        const name = document.getElementById('psName').value.trim();
+        const email = document.getElementById('psEmail').value.trim();
+
+        if (!name) {
+            Swal.fire({
+                icon: 'warning',
+                title: '錯誤',
+                text: '姓名不能為空白！',
+            });
+            return;
+        }
+
+        if (!email) {
+            Swal.fire({
+                icon: 'warning',
+                title: '錯誤',
+                text: '聯絡信箱不能為空白！',
+            });
+            return;
+        }
+
+        Swal.fire({
+            icon: 'info',
+            title: '確認',
+            text: '確認送出資料？',
+            showCancelButton: true,
+            confirmButtonText: '確定',
+            cancelButtonText: '取消',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('psForm').submit();
+            }
+        });
+    });
+</script>
+
+</body>
+
+</html>

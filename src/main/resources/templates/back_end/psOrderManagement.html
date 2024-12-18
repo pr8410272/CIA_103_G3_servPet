@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>servPET</title>
+    <link rel="stylesheet" href="/css/psOrderManagement.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+</head>
+<body>
+<header>
+    <h1>servPet</h1>
+    <nav>
+        <ul>
+            <li><a href="#" th:href="@{/ps/psList}">首頁</a></li>
+            <li><a href="#" th:href="@{/ps/profile/{psId}(psId=${psVO.psId})}">寵物保母</a></li>
+            <li><a href="#" th:href="@{/ps/psSvcItemlist/{psId}(psId=${psVO.psId})}">服務項目管理</a></li>
+            <li><a href="#" th:href="@{/psOrder/psOrderManagement/{psId}(psId=${psVO.psId})}">訂單管理</a></li>
+            <li><a href="#" th:href="@{/}">登出</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="search-form">
+        <select id="psoId">
+            <option value="">訂單編號</option>
+            <option th:each="psOrder : ${orders}" th:value="${psOrder.psoId}" th:text="${psOrder.psoId}"></option>
+        </select>
+        <div>
+            <select id="year" name="year">
+                <option value="">選擇年份</option>
+                <option th:each="year : ${#numbers.sequence(2020, 2099)}"
+                        th:value="${year}" th:text="${year}"></option>
+            </select>
+            <select id="month" name="month">
+                <option value="">選擇月份</option>
+                <option th:each="month : ${#numbers.sequence(1, 12)}"
+                        th:value="${month}" th:text="${month}"></option>
+            </select>
+            <select id="day" name="day">
+                <option value="">選擇日期</option>
+                <option th:each="day : ${#numbers.sequence(1, 31)}"
+                        th:value="${day}" th:text="${day}"></option>
+            </select>
+        </div>
+    </div>
+
+    <table id="example" class="display">
+        <thead>
+        <tr>
+            <th>訂單編號</th>
+            <th>會員編號</th>
+            <th>寵物編號</th>
+            <th>預約時段</th>
+            <th>總金額</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="psOrder : ${orders}"
+            class="clickable"
+            th:data-meb-id="${psOrder.mebVO.getMebName()}"
+            th:data-pet-id="${psOrder.petVO.getPetName()}"
+            th:data-svc-id="${psOrder.getSvcId()}"
+            th:data-booking-time="${psOrder.bookingTime}"
+            th:data-appr-status="${psOrder.apprStatus}"
+            th:data-total-price="${psOrder.svcPrice}"
+            th:data-star="${psOrder.star}"
+            th:data-rating-comment="${psOrder.ratingComment}"
+            th:data-sus-point="${psOrder.susPoint}">
+            <td th:text="${psOrder.psoId}"></td>
+            <td th:text="${psOrder.mebVO.getMebId()}"></td>
+            <td th:text="${psOrder.petVO.getPetId()}"></td>
+            <td th:text="${psOrder.bookingDate}"></td>
+            <td th:text="${psOrder.svcPrice}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<footer>
+    <p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // 初始化 DataTable
+        var table = $('#example').DataTable({
+            "lengthMenu": [3, 5, 10, 20, 50, 100],
+            "searching": false,
+            "paging": true,
+            "ordering": true,
+            "language": {
+                "lengthMenu": "顯示 _MENU_ 筆結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 筆結果，共 _TOTAL_ 筆",
+                "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+            }
+        });
+
+        // 篩選邏輯
+        function filterOrders() {
+            const psoId = $('#psoId').val();
+            const year = $('#year').val();
+            const month = $('#month').val();
+            const day = $('#day').val();
+
+            table.rows().every(function () {
+                const row = $(this.node());
+                const rowPsoId = row.find('td:nth-child(1)').text();
+                const rowBookingDate = row.find('td:nth-child(4)').text();
+                const [rowYear, rowMonth, rowDay] = rowBookingDate.split('-');
+
+                const matchPsoId = !psoId || rowPsoId === psoId;
+                const matchYear = !year || rowYear === year;
+                const matchMonth = !month || rowMonth === month.padStart(2, '0');
+                const matchDay = !day || rowDay === day.padStart(2, '0');
+
+                if (matchPsoId && matchYear && matchMonth && matchDay) {
+                    row.show();
+                } else {
+                    row.hide();
+                }
+            });
+
+            // 重繪表格
+            table.draw(false);
+            table.page('first').draw(false);
+        }
+
+        // 綁定篩選事件
+        $('#psoId, #year, #month, #day').on('change', filterOrders);
+
+        // 展開/收起詳細資訊
+        $('#example tbody').on('click', 'tr.clickable', function () {
+            const row = table.row(this); // DataTable 的 API
+            if (row.child.isShown()) {
+                // 如果詳細資訊已顯示，隱藏
+                row.child.hide();
+            } else {
+                // 如果詳細資訊未顯示，生成 HTML
+                const detailsHtml = `
+                <div style="padding: 10px; background-color: #f9f9f9;">
+                    <strong>會員名稱:</strong> ${$(this).data('meb-id')}<br>
+                    <strong>寵物名稱:</strong> ${$(this).data('pet-id')}<br>
+                    <strong>服務項目編號:</strong> ${$(this).data('svc-id')}<br>
+                    <strong>預約時段:</strong> ${['早上', '中午', '晚上'][$(this).data('booking-time')]}<br>
+                    <strong>撥款狀態:</strong> ${$(this).data('appr-status') === 0 ? '未完成' : '已完成'}<br>
+                    <strong>總金額:</strong> ${$(this).data('total-price')}<br>
+                    <strong>評價星數:</strong> ${$(this).data('star')}<br>
+                    <strong>評價內容:</strong> ${$(this).data('rating-comment')}<br>
+                    <strong>停權記點:</strong> ${$(this).data('sus-point')}<br>
+                </div>
+            `;
+                // 使用 DataTables API 顯示詳細資訊
+                row.child(detailsHtml).show();
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

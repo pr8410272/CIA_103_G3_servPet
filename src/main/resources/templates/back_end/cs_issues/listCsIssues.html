@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<head>
+    <meta charset="UTF-8">
+    <title>客服表單列表</title>
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+
+    <!-- 通用樣式 -->
+    <style>
+ 		header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	#role, #name {
+             background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+        
+        nav {    
+		    margin-top: 0%;
+		}
+		
+		
+	body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            
+        }
+        h1 {
+	      font-size: 2rem;
+	
+	      color: #333;
+ 	      margin: 20px 0;
+	  }
+
+         /* 表格樣式 */
+    table {
+        width: 90%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
+        th, td {
+         padding: 15px; 
+        border: 1px solid #ddd;
+        text-align: center;
+        font-size: 1rem;
+    }
+     main {
+        border: 2px solid #334252; /* 邊框顏色與 header 相匹配 */
+        border-radius: 10px; /* 圓角邊框 */
+        padding: 20px; /* 內邊距 */
+        margin: 20px auto; /* 外邊距，讓框在垂直方向有間距並水平居中 */
+        background-color: #ffffff; /* 背景色為白色，與表格保持一致 */
+        width: 90%; /* 控制寬度，與表格寬度相符 */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影效果 */
+    }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #e8f5e9;
+        }
+        td > div {
+        display: flex;
+        justify-content: center;
+        gap: 5px; /* 按鈕間距 */
+    }
+         /* 按鈕容器 */
+    .button-container {
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        gap: 20px; /* 按鈕間距 */
+        margin: 20px 0;
+    }
+
+         /* 按鈕樣式 */
+    .button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+	/* 搜索框樣式 */
+.dataTables_filter input[type="search"] {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px; /* 圓角 */
+    outline: none;
+    transition: all 0.3s ease;
+    margin:10px;
+}
+
+/* 分頁按鈕樣式 */
+.dataTables_paginate .paginate_button {
+    padding: 8px 12px;
+    margin: 2px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+        .button {
+            background-color: #6c757d;
+        }
+        .button-view {
+            background-color: #17a2b8;
+        }
+
+        .button-reply {
+            background-color: #dc3545;
+        }
+
+        .button:hover {
+        transform: scale(1.05); /* 鼠標懸停放大效果 */
+        opacity: 0.9;
+    }
+
+     
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            gap: 15px; /* 按鈕間距 */
+            margin: 20px 0; /* 與上下內容的距離 */
+        }
+
+         /* 響應式設計 */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        .button {
+            font-size: 0.9rem;
+            padding: 8px 16px;
+        }
+
+        th, td {
+            font-size: 0.9rem;
+        }
+
+        table {
+        overflow: hidden;
+            width: 100%; /* 表格自適應屏幕 */
+        }
+    }
+      footer {
+		background-color: #334252;
+		padding:1%;
+		color: #FFE4CA;
+		text-align: center;
+		font-size: 0.9em;
+	}
+	  /* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		    z-index: 9999;
+		}
+		
+			.contact-icon img {
+		    width: 100px;
+		    height: 100px;
+		    object-fit: cover;
+		    border-radius: 29%;
+		    margin-left: 1%;
+		    margin-top: -60%;
+		}
+		
+		/* icon 文字樣式 */
+		.contact-icon span {
+		    font-size: 20px;
+		    color: #333;
+		    margin-top: 5px;
+		    text-align: center;
+		    white-space: nowrap;
+		    margin-left: -399%;
+			
+		}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+	
+	
+    </style>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        $(document).ready(function() {
+            // 初始化 DataTables
+            const table = $('#customerServiceTable').DataTable({
+                "lengthMenu": [15,10, 5],
+                "searching": true,
+                "paging": true,
+                "ordering": true,
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 筆結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color='red'> _TOTAL_ </font>筆",
+                    "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                    "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                    "search": "搜尋:",
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                }
+            });
+
+            // 篩選邏輯
+            function filterButtons(status) {
+                table.rows().every(function() {
+                    const row = $(this.node());
+                    const rowStatus = row.find('td:nth-child(9)').text().trim();
+                    if (status === '全部' || rowStatus === status) {
+                        row.show(); // 顯示符合條件的行
+                    } else {
+                        row.hide(); // 隱藏不符合條件的行
+                    }
+                });
+            }
+
+            // 綁定按鈕事件
+            $('#filterUnprocessed').click(() => filterButtons('未處理'));
+            $('#filterProcessed').click(() => filterButtons('已回覆'));
+            $('#resetFilter').click(() => filterButtons('全部'));
+        });
+    </script>
+ <header>
+			    <div class="header-container">
+			        <div class="home-button">平台問題反應
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+<div th:include="@{/back_end/admin/dashboard}"></div>
+
+<main>
+			<h1></h1>  <div class="contact-icon" id="icon-container">
+		    <a th:href="@{/back_end/index}">
+		        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+		    </a>
+		    <span>後台首頁</span>
+		</div>
+			
+			<!-- 按鈕區 -->
+			<div class="button-container">
+			    <button id="filterUnprocessed" class="button button-reply">顯示未處理</button>
+			    <button id="filterProcessed" class="button button-view">顯示已回覆</button>
+			    <button id="resetFilter" class="button">顯示全部</button>
+			</div>
+			
+			<!-- 表格 -->
+			<table id="customerServiceTable">
+			    <thead>
+			        <tr>
+			            <th>客服表單編號</th>
+			            <th>顧客編號</th>
+			            <th>顧客姓名</th>
+			            <th>平台管理員編號</th>
+			            <th>諮詢內容</th>
+			            <th>諮詢時間</th>
+			            <th>回覆內容</th>
+			            <th>回覆時間</th>
+			            <th>狀態</th>
+			            <th>操作</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr th:each="issue : ${issues}">
+			            <td th:text="${issue.csQaId}"></td>
+			            <td th:text="${issue.mebId.mebId}"></td>
+			            <td th:text="${issue.mebId.mebName}"></td>
+			            <td th:text="${issue.adminId?.adminId ?: '未指定'}"></td>
+			            <td th:text="${issue.qaContent}"></td>
+			            <td th:text="${issue.qaDate != null ? #temporals.format(issue.qaDate, 'yyyy-MM-dd HH:mm:ss') : '尚未記錄'}"></td>
+			            <td th:text="${issue.reContent ?: '尚未回覆'}"></td>
+			            <td th:text="${issue.reDate != null ? #temporals.format(issue.reDate, 'yyyy-MM-dd HH:mm:ss') : '尚未記錄'}"></td>
+			            <td th:text="${issue.qaSta == '0' ? '未處理' : '已回覆'}"></td>
+			            <td>
+						    <div>
+						        <a th:href="@{/cs-issues/view/{id}(id=${issue.csQaId})}" class="button button-view">查看</a>
+						        <a th:href="@{/cs-issues/addReply/{id}(id=${issue.csQaId})}" class="button button-reply">回覆</a>
+						    </div>
+						</td>
+			
+			        </tr>
+			    </tbody>
+			</table>
+			
+	</main>
+			<footer>
+		       <p>© 2024 寵寵唯跡友善平台</p>
+		   </footer>
+	   </body>
+</html>

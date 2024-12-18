@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>分頁範例</title>
+</head>
+<body>
+
+<!-- 分頁邏輯 -->
+<div th:if="${list != null}">
+    <div>
+        <b>●符 合 查 詢 條 件 如 下 所 示: 共
+            <span th:text="${list.size()}"></span> 筆
+        </b>
+    </div>
+
+    <!-- 計算總頁數 -->
+    <div th:with="rowsPerPage=3,
+                  rowNumber=${list.size()},
+                  pageNumber=${rowNumber % rowsPerPage == 0 ? rowNumber / rowsPerPage : (rowNumber / rowsPerPage) + 1},
+                  whichPage=${param.whichPage != null ? param.whichPage : 1},
+                  pageIndexArray=${#numbers.sequence(0, pageNumber * rowsPerPage - rowsPerPage, rowsPerPage)}">
+        
+        <b>
+            <font color="red">第
+                <span th:text="${whichPage}"></span>/<span th:text="${pageNumber}"></span>頁
+            </font>
+        </b>
+
+        <!-- 當前頁面數據 -->
+        <ul>
+            <li th:each="item, iterStat : ${list.subList((whichPage-1)*rowsPerPage, whichPage*rowsPerPage > rowNumber ? rowNumber : whichPage*rowsPerPage)}">
+                <span th:text="${iterStat.index + 1}">序號</span>：<span th:text="${item}"></span>
+            </li>
+        </ul>
+
+        <!-- 分頁導航 -->
+        <div>
+            <a th:each="page, idxStat : ${#numbers.sequence(1, pageNumber)}"
+               th:href="@{?whichPage={page}}" th:text="'第 ' + page + ' 頁'"></a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

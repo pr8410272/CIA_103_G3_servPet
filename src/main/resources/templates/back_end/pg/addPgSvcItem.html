@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/pg/addPgSvcItem.css">
+
+</head>
+<body>
+	<header>
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/pg/listRealAllPgSvcItem}">美容師服務項目管理</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+
+		<div class="view">
+			<!-- 返回按鈕 -->
+			<div class="return-button">
+				<a th:href="@{/pg/listRealAllPgSvcItem}"> 
+				<img th:src="@{/images/heart.png}">
+				</a>
+
+			</div>
+
+
+			<div>
+				<!-- 新增服務項目表單 -->
+		
+					<form  id="addSvcItem" th:action="@{/pg/createPgSvcItem}" method="post" th:object="${pgSvcItemVO}" class="form-container">
+
+					<!-- 服務項目名稱 -->
+					<label for="svcName">服務項目名稱:</label> 
+					<input type="text" id="svcName" th:field="*{svcName}" placeholder="輸入服務項目名稱" required>
+					<!-- 服務項目描述 -->
+					<label for="svcDescr">服務項目描述:</label>
+					 <textarea id="svcDescr" th:field="*{svcDescr}" placeholder="輸入服務項目描述" rows="4" required></textarea>
+
+
+					<!-- 送出按鈕 -->
+					<button type="submit">新增</button>
+				</form>
+			</div>
+
+	
+
+		</div>
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	
+ <!-- SweetAlert 顯示成功的消息 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 透過 Thymeleaf 獲取 successMessage
+            const successMessage = /*[[${successMessage}]]*/ 'null';
+            if (successMessage && successMessage.trim() !== 'null') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '成功',
+                    text: successMessage,
+                    confirmButtonText: '確定'
+                });
+            }
+
+            // **表單提交事件綁定**
+            const form = document.getElementById('addSvcItem');
+
+            // 監聽表單提交事件
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // 阻止默認提交
+                Swal.fire({
+                    title: '確認新增？',
+                    text: '確定要新增此服務項目嗎？',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '確定',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // 當用戶點擊「確定」後，提交表單
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

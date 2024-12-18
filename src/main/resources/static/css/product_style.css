@@ -1,0 +1,154 @@
+html, body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #FFFDF9;
+  color: #333;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+header {
+  background-color: #F8EAD3;
+  text-align: center;
+  padding: 10px;
+}
+
+header h1 a {
+  text-decoration: none;
+  color: #3f3f3f;
+  transition: color 0.3s ease;
+}
+
+header h1 a:hover {
+  color: #F8A978;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: #FFF8EE;
+  padding: 10px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background: none;
+  border: none;
+  color: #3f3f3f;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: color 0.3s ease;
+}
+
+.dropbtn:hover {
+  color: #F8A978; /* 滑鼠移上時顏色變化 */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #FFF8EE;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: #3f3f3f;
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: #F8A978;
+  color: #FFFDF9;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+main {
+  flex: 1;
+  padding: 20px;
+}
+
+footer {
+  background-color: #F8EAD3;
+  padding: 10px;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #3f3f3f;
+}
+
+.product-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.product-image img {
+  width: auto;
+  height: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-details table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.product-details th, .product-details td {
+  padding: 10px;
+  border: 1px solid #DDD;
+}
+
+.product-buttons button {
+  margin: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #FFA500;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-buttons button:hover {
+  background-color: #CC8400;
+}
+
+.product-thumbnails img {
+  width: auto;
+  height: 100px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

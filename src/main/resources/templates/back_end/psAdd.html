@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>新增/修改保母</title>
+</head>
+<body>
+<h1 th:text="${#strings.isEmpty(psVO.psId) ? '新增保母' : '修改保母'}"></h1>
+<form th:action="@{/ps/add}" th:object="${psVO}" method="post">
+    <label for="psName">姓名:</label>
+    <input type="text" id="psName" th:field="*{psName}" /><br/>
+
+    <label for="psArea">服務地區:</label>
+    <input type="text" id="psArea" th:field="*{psArea}" /><br/>
+
+    <label for="psEmail">聯絡信箱:</label>
+    <input type="text" id="psEmail" th:field="*{psEmail}" /><br/>
+
+    <button type="submit">提交</button>
+</form>
+</body>
+</html>

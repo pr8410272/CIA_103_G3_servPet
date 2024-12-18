@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>功能資料修改</title>
+<link rel="stylesheet" th:href="@{/css/update_fnc_input.css}" />
+<link rel="stylesheet" th:href="@{/css/adminData.css}" />
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+</head>
+
+<body>
+	<!--*************** table#header (上方深色) 區域 **************-->
+	<table id="header">
+		<tr>
+			<td><img th:src="@{/images/admin/pflogow.png}"> <font>功能資料修改</font>
+				<img th:src="@{/images/admin/pflogow.png}">
+				<h4>
+					<a th:href="@{/fnc/listAllFnc}">回功能列表</a>
+				</h4></td>
+		</tr>
+	</table>
+
+	<div th:include="@{back_end/admin/adminData}"></div>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+	
+	<div th:include="@{back_end/admin/dashboard}"></div>
+
+	<div id="body">
+
+		<article id="BGcat">
+			<img id="BGcat" th:src="@{/images/admin/BGcat.png}" />
+		</article>
+
+		<article id="body">
+			<h2>
+				<span>修改資料</span>
+			</h2>
+			<hr>
+			<h4>
+				<b>所有欄位皆為必填欄位</b>
+			</h4>
+			<form th:action="@{update}" method="post" th:object="${fncVO}">
+				<div>
+					<label>功能編號:</label> <input type="text" th:field="*{fncId}"
+						readonly /><br />
+				</div>
+
+				<div>
+					<label>功能名稱:</label> <input type="text" th:field="*{fncName}"
+						onclick="hideContent('fncName.errors');" /><br /> <span
+						th:if="${#fields.hasErrors('fncName')}" th:errors="*{fncName}"
+						class="error" id="fncName.errors"></span>
+				</div>
+
+				<div>
+					<label id="des">功能描述:</label>
+					<textarea th:field="*{fncDes}"
+						onclick="hideContent('fncDes.errors');"></textarea>
+					<br /> <span th:if="${#fields.hasErrors('fncDes')}"
+						th:errors="*{fncDes}" class="error" id="fncDes.errors"></span>
+				</div>
+
+				<div>
+					<label>建立時間:</label> <input type="text" th:field="*{fncCreAt}"
+						readonly /><br />
+				</div>
+
+				<div>
+					<label>更新時間:</label> <input type="text" th:field="*{fncUpdAt}"
+						id="fncUpdAt" readonly /><br />
+				</div>
+				<br>
+
+				<div>
+					<div></div>
+					<div>
+						<button type="submit" id="submit">送出修改</button>
+					</div>
+					<div></div>
+				</div>
+			</form>
+		</article>
+
+		<article id="BGdog">
+			<img id="BGdog" th:src="@{/images/admin/BGdog.png}" />
+		</article>
+
+	</div>
+
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<!-- JavaScript part -->
+	<script type="text/javascript">
+        // 清除提示信息
+        function hideContent(d) {
+            document.getElementById(d).style.display = "none";
+        }
+      
+    </script>
+</body>
+
+</html>

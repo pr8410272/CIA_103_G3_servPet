@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>新增商品資料</title>
+<style>
+@charset "UTF-8";
+
+/* 引入 Google Fonts 字型 */
+@import
+	url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap')
+	;
+
+body {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	background-color: #F8F9FA;
+	color: #334252;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+nav.navbar {
+	background-color: #334252;
+	color: white;
+	padding: 15px 0;
+	text-align: center;
+}
+
+nav.navbar h2 {
+	margin: 0;
+	font-size: 24px;
+}
+
+nav.navbar h3 a {
+	color: #FFD700;
+	text-decoration: none;
+}
+
+form {
+	max-width: 600px;
+	margin: 20px auto;
+	padding: 20px;
+	background: #ffffff;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+}
+
+form div {
+	margin-bottom: 20px; /* 增加欄位之間的間距 */
+	text-align: left; /* 確保標籤靠左 */
+	max-width: 500px; /* 限制最大寬度 */
+	margin: 0 auto 20px; /* 讓欄位置中，並設定底部間距 */
+}
+
+form label {
+	display: block; /* 使 label 獨占一行 */
+	margin-bottom: 5px; /* 增加間距 */
+	font-weight: bold;
+}
+
+form input, form select, form button {
+	width: 100%; /* 保持寬度填滿父容器 */
+	padding: 10px; /* 增加內邊距 */
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	text-align: left; /* 讓文字靠左 */
+	box-sizing: border-box; /* 避免 padding 導致寬度超出 */
+}
+
+form button {
+	display: block; /* 讓按鈕獨佔一行 */
+	margin: 30px auto; /* 置中並設定上下間距 */
+	padding: 10px 20px; /* 增加內邊距 */
+	background-color: #334252; /* 按鈕背景顏色 */
+	color: white;
+	font-size: 16px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+form button:hover {
+	background-color: #556B8D; /* 滑鼠懸停顏色 */
+}
+
+form .image-preview-container {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+form .image-preview {
+	position: relative;
+	display: inline-block;
+}
+
+form .image-preview img {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+form .image-preview .remove-btn {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-color: transparent; /* 設置透明背景 */
+	color: black; /* 讓 X 的顏色是紅色 */
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	text-align: center;
+	line-height: 20px;
+	font-size: 12px;
+}
+
+footer {
+	background-color: #334252;
+	color: white;
+	text-align: center;
+	padding: 10px 0;
+}
+
+.navbar-btn {
+    margin-left: auto; /* 將按鈕推到最右邊 */
+    margin-right: 20px; /* 右邊間距 */
+    background-color: #55687d; /* 按鈕背景顏色 */
+    color: #FFFFFF; /* 文字顏色 */
+    border: 1px solid #334252; /* 邊框顏色 */
+    padding: 8px 16px; /* 內邊距 */
+    font-size: 14px; /* 字體大小 */
+    font-weight: bold; /* 字體加粗 */
+    border-radius: 5px; /* 圓角邊框 */
+    cursor: pointer; /* 鼠標指針 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 過渡效果 */
+}
+
+.navbar-btn:hover {
+    background-color: #556B8D; /* 滑鼠懸停時的背景顏色 */
+    color: #FFFFFF; /* 滑鼠懸停時的文字顏色 */
+    border-color: #556B8D; /* 邊框顏色 */
+}
+
+</style>
+</head>
+<body>
+	<nav
+		class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		<div align="center">
+			<h2>新增商品資料</h2>
+			<h3>
+				<!-- 回到所有商品資料頁面 -->
+				<a class="navbar-btn" th:href="@{/pdDetails/listAllProducts}"
+					style="margin-right: 15px;"> 回到所有商品資料頁面 </a>
+
+				<!-- 登出按鈕 -->
+				<a class="logout-btn navbar-btn"
+					onclick="window.location.href='/back_end/logout'">登出</a>
+			</h3>
+		</div>
+	</nav>
+
+	<main>
+		<div align="center">
+			<form th:action="@{insertOrBatchInsert}"
+				enctype="multipart/form-data" method="post"
+				th:object="${pdDetailsVO}">
+
+				<div>
+					<label>商品類別:</label> <select th:field="*{pdCategVO.pdCategory}"
+						required>
+						<option th:each="category : ${pdCategList}"
+							th:value="${category.pdCategory}"
+							th:text="${category.categoryName}"></option>
+					</select>
+				</div>
+
+				<div>
+					<label>商品名稱:</label> <input type="text" th:field="*{pdName}"
+						required="required" placeholder="請輸入商品名稱" />
+				</div>
+
+				<div>
+					<label>商品描述:</label> <input type="text" th:field="*{pdDescr}"
+						required="required" placeholder="請輸入商品描述" />
+				</div>
+
+				<div>
+					<label>商品價格:</label> <input type="number" th:field="*{pdPrice}"
+						required="required" placeholder="請輸入商品價格" />
+				</div>
+
+				<div>
+					<label>商品數量:</label> <input type="number" th:field="*{pdQty}"
+						required="required" placeholder="請輸入商品數量" />
+				</div>
+
+				<div>
+					<label>商品重量:</label> <input type="number" step="0.01"
+						th:field="*{pdWeight}" placeholder="請輸入商品重量（kg）" />
+				</div>
+
+				<div>
+					<label>商品尺寸:</label> <input type="text" th:field="*{pdSize}"
+						placeholder="請輸入商品尺寸（如: L, XL, etc.）" />
+				</div>
+
+				<div>
+					<label>商品顏色:</label> <input type="text" th:field="*{pdColor}"
+						placeholder="請輸入商品顏色" />
+				</div>
+
+				<div>
+					<label>商品狀態:</label> <select th:field="*{pdStatus}">
+						<option value="0">下架</option>
+						<option value="1">上架中</option>
+						<option value="2">停售</option>
+						<option value="3">測試</option>
+					</select>
+				</div>
+
+				<div>
+					<label>上傳圖片<br>(最多 4 張):
+					</label> <input type="file" name="images" id="imageUpload" accept="image/*"
+						multiple />
+				</div>
+
+				<div class="image-preview-container" id="imagePreviewContainer">
+					<!-- 圖片預覽會顯示在這裡 -->
+				</div>
+
+				<div>
+					<button type="submit">送出新增</button>
+				</div>
+
+			</form>
+		</div>
+	</main>
+
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<script>
+	const imageUpload = document.getElementById('imageUpload');
+	const previewContainer = document.getElementById('imagePreviewContainer');
+	const maxImages = 4;
+
+	imageUpload.addEventListener('change', function (event) {
+	    // 確保不超過4張圖片
+	    const files = Array.from(event.target.files).slice(0, maxImages);
+
+	    // 更新 input 的值，只保留前4個檔案
+	    const dataTransfer = new DataTransfer();
+	    files.forEach(file => dataTransfer.items.add(file));
+	    imageUpload.files = dataTransfer.files;
+
+	    // 清空之前的預覽
+	    previewContainer.innerHTML = '';
+
+	    files.forEach((file, index) => {
+	        const reader = new FileReader();
+
+	        reader.onload = function (e) {
+	            const previewDiv = document.createElement('div');
+	            previewDiv.classList.add('image-preview');
+
+	            const img = document.createElement('img');
+	            img.src = e.target.result;
+
+	            const removeBtn = document.createElement('button');
+	            removeBtn.textContent = 'X';
+	            removeBtn.classList.add('remove-btn');
+	            removeBtn.addEventListener('click', () => {
+	                previewDiv.remove();
+	                const remainingFiles = Array.from(imageUpload.files).filter((_, i) => i !== index);
+	                const updatedDataTransfer = new DataTransfer();
+	                remainingFiles.forEach(file => updatedDataTransfer.items.add(file));
+	                imageUpload.files = updatedDataTransfer.files;
+	                updateChooseFilesText();
+	            });
+
+	            previewDiv.appendChild(img);
+	            previewDiv.appendChild(removeBtn);
+	            previewContainer.appendChild(previewDiv);
+	        };
+
+	        reader.readAsDataURL(file);
+	    });
+
+	    // 更新顯示的文字
+	    updateChooseFilesText();
+	});
+
+	function updateChooseFilesText() {
+	    const fileCount = imageUpload.files.length;
+	    imageUpload.nextElementSibling.textContent = `${fileCount} file${fileCount > 1 ? 's' : ''}`;
+	}
+
+    </script>
+</body>
+</html>

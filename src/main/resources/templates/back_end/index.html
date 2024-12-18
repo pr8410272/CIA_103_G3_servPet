@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>後台首頁</title>
+<link rel="stylesheet" th:href="@{/css/index.css}"/>
+<link rel="stylesheet" th:href="@{/css/adminData.css}" />
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+</head>
+<body>
+
+<!--*************** table#header (上方深色) 區域 **************-->
+			<table id="header">
+					<tr>
+				        <td>
+				        <div id="title" style="width:100%">
+				            <img th:src="@{/images/admin/pflogow.png}" alt="Logo">
+				            <font>管理員後台首頁</font>
+				            <img th:src="@{/images/admin/pflogow.png}" alt="Logo">
+				            </div>
+				          </td>
+			    	</tr>		
+			   </table>
+			   
+				<div th:include="@{back_end/admin/adminData}"></div>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+	
+	<div th:include="@{back_end/admin/dashboard}"></div>
+		
+<div id ="body">
+
+			<article th:if="${allowedFunctionIds.contains(16001)}" id="body" class="admin" onclick="window.location.href='/admin/select_admin_page'">
+			    <div>
+			        <h3>管理員管理</h3>
+			        <hr>
+			        <img id="fnc" th:src="@{/images/fnc/fnc-01.png}"/>
+			        <br>
+			    </div>
+			</article>
+		
+			 <article th:if="${allowedFunctionIds.contains(16002)}" id="body" class="admin" onclick="window.location.href='/adminPer/select_adminPer_page'">
+		    <div>
+		        <h3>管理員權限管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-02.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16003)}" id="body" class="admin" onclick="window.location.href='/fnc/select_fnc_page'">
+		    <div>
+		        <h3>功能管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-03.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+				<article th:if="${allowedFunctionIds.contains(16004)}" id="body" class="front_end" onclick="window.location.href='/event/select'">
+		    <div>
+		        <h3>最新消息管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-04.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+			<article th:if="${allowedFunctionIds.contains(16005)}" id="body" class="front_end" onclick="window.location.href='/cs-issues/list'">
+		    <div>
+		        <h3>平台問題反應</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-05.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16006)}" id="body" class="shop" onclick="window.location.href='/pdDetails/listAllProducts'">
+		    <div>
+		        <h3>商品管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-06.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16007)}" id="body"  class="shop" onclick="window.location.href='/pdo/listAllProductsOrders'">
+		    <div>
+		        <h3>訂單管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-07.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+	<!--  	<article th:if="${allowedFunctionIds.contains(16008)}"  id="body" class="shop" onclick="window.location.href='/XXXX/select_XXXX_page'">
+		    <div>
+		        <h3>營運展現</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-08.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16009)}"  id="body" class="shop" onclick="window.location.href='/XXXX/select_XXXX_page'">
+		    <div>
+		        <h3>訂單評價管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-09.png}"/>
+		        <br>
+		    </div>
+		</article>  -->
+		
+		<article th:if="${allowedFunctionIds.contains(16010)}" id="body" class="member" onclick="window.location.href='/admin/listAllMeb'">
+		    <div>
+		        <h3>會員權限管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-10.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16011)}" id="body" class="member" onclick="window.location.href='/vtr_filter'">
+		    <div>
+		        <h3>儲值金管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-11.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16012)}" id="body" class="member" onclick="window.location.href='/ntfy/admin'">
+		    <div>
+		        <h3>訊息回覆管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-12.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		
+		<article th:if="${allowedFunctionIds.contains(16013)}" id="body" class="both" onclick="window.location.href='/apply/listApply'">
+		    <div>
+		        <h3>業主權限審核</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-13.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16014)}" id="body" class="both" onclick="window.location.href='/admin/listAllPsAndPg'">
+		    <div>
+		        <h3>業主權限管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-14.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		 <article th:if="${allowedFunctionIds.contains(16015)}" id="body" class="pet_groomer" onclick="window.location.href='/pgCompl/select_pgCompl_page'">
+		    <div>
+		        <h3>美容師檢舉單管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-15.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		 <article th:if="${allowedFunctionIds.contains(16016)}"  id="body" class="pet_groomer" onclick="window.location.href='/admin/listAllPgOrder'">
+		    <div>
+		        <h3>美容師撥款</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-16.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+			<article th:if="${allowedFunctionIds.contains(16017)}" id="body" class="pet_groomer" onclick="window.location.href='/pg/listRealAllPgSvcItem'">
+		    <div>
+		        <h3>美容服務項目管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-17.png}"/>
+		        <br>
+		    </div>
+		</article>
+		  
+		   <article th:if="${allowedFunctionIds.contains(16020)}"id="body" class="pet_sitter" onclick="window.location.href='/psCompl/select_psCompl_page'">
+		    <div>
+		        <h3>保母檢舉單管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-20.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<article th:if="${allowedFunctionIds.contains(16021)}"id="body" class="pet_sitter" onclick="window.location.href='/admin/listAllPsOrder'">
+		    <div>
+		        <h3>保母撥款</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-21.png}"/>
+		        <br>
+		    </div>
+		</article>
+		
+		<!-- <article th:if="${allowedFunctionIds.contains(16022)}" id="body" class="pet_sitter" onclick="window.location.href='/XXXX/select_XXXX_page'">
+		    <div>
+		        <h3>保母服務項目管理</h3>
+		        <hr>
+		        <img id="fnc" th:src="@{/images/fnc/fnc-22.png}"/>
+		        <br>
+		    </div>
+		</article>  -->
+		
+		</div>
+
+<!--***************** footer (下方深色) 區域 *****************-->
+<footer>
+      <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

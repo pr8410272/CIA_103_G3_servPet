@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>List All Products (Homepage)</title>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<style>
+body {
+	margin: 1rem 12rem 2rem 12rem;
+	font-family: Arial, sans-serif;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr); /* 九宮格：每列三個卡片 */
+	gap: 1rem;
+	margin-top: 1rem;
+}
+
+.product-card {
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	padding: 1rem;
+	text-align: center;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	background-color: white;
+}
+
+.product-image {
+	width: 100px;
+	height: auto;
+	margin-bottom: 10px;
+}
+
+.product-name {
+	font-weight: bold;
+	margin: 5px 0;
+}
+
+.product-price {
+	color: #d9534f;
+	font-size: 14px;
+	margin: 5px 0;
+}
+
+.add-to-cart-btn {
+	background-color: #28a745;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	margin-top: 10px;
+	border-radius: 5px;
+}
+
+.add-to-cart-btn:hover {
+	background-color: #218838;
+}
+
+.pagination {
+	text-align: center;
+	margin-top: 1rem;
+}
+
+.pagination button {
+	margin: 0 2px;
+	padding: 5px 10px;
+	border: 1px solid #ddd;
+	background-color: #f8f9fa;
+	cursor: pointer;
+}
+
+.pagination button.active {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
+}
+
+.pagination button:hover {
+	background-color: #007bff;
+	color: white;
+}
+
+.cart_icon {
+	display: flex;
+	width: 64px;
+	height: 64px;
+	background-color: #607D8B;
+	border-radius: 50%;
+	/*   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); */
+	position: fixed;
+	top: 3%;
+	left: 88%;
+	transform: translate(-50%);
+}
+
+.cart_icon_img {
+	position: absolute;
+	left: 48%;
+	top: 25%;
+	transform: translate(-50%);
+	max-width: 60%;
+	max-height: 60%;
+	font-size: 30px;
+	color: #00B8D4;
+	font-weight: bold;
+}
+/* .fab_icon.clicked{
+  background-color: #37474F;
+} */
+
+/* 實驗區 */
+.cart_icon.active {
+	background: #37474F;
+}
+
+.cart_icon_img.active {
+	color: white;
+}
+
+.quantity-control {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 10px 0;
+}
+
+.quantity-control button {
+	width: 30px;
+	height: 30px;
+	border: 1px solid #ddd;
+	background-color: #f8f9fa;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 28px;
+}
+
+.quantity-control button:hover {
+	background-color: #007bff;
+	color: white;
+}
+
+.quantity-input {
+	width: 50px;
+	text-align: center;
+	margin: 0 5px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+</style>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-light bg-light">
+			<div class="container">
+				<h1>List All Products (Homepage)</h1>
+				<div class="cart_icon">
+					<div class="cart_icon_img">
+						<a th:href="@{/cartDetails/shoppingCart}" class="btn btn-primary">
+							<img th:src="@{/images/shopping_icon.png}" alt="購物車"
+							style="width: 24px; height: 24px;">
+						</a>
+					</div>
+				</div>
+
+			</div>
+		</nav>
+	</header>
+	<main>
+		<div style="margin-bottom: 1rem;">
+			<select id="categoryFilter">
+				<option value="">全部分類</option>
+				<option th:each="category : ${categoryList}"
+					th:value="${category.pdCategory}"
+					th:text="${category.categoryName}"></option>
+			</select> <input type="text" id="searchInput" placeholder="搜尋商品..."
+				style="width: 50%; padding: 0.5rem;">
+			<button id="sortAsc" class="btn btn-primary">價格由低到高排序</button>
+			<button id="sortDesc" class="btn btn-secondary">價格由高到低排序</button>
+		</div>
+
+		<!-- 商品卡片列表 -->
+		<div id="productGrid" class="grid-container">
+			<th:block th:if="${pdDetailsList != null}"
+				th:each="pd : ${pdDetailsList}">
+				<div class="product-card"
+					th:data-category="${pd.pdCategVO != null ? pd.pdCategVO.pdCategory : 'uncategorized'}"
+					th:data-name="${pd.pdName}">
+					<img
+						th:src="@{/pdImg/DBGifReader(pdImgId=${defaultImages[pd.pdId] != null ? defaultImages[pd.pdId] : 0})}"
+						alt="商品圖片" class="product-image"
+						onerror="this.onerror=null;this.src='/images/no-image-available.png';" />
+					<p th:text="${pd.pdName}" class="product-name"></p>
+					<p th:text="'售價: $' + ${pd.pdPrice}" class="product-price"></p>
+
+					<!-- 數量調整區域 -->
+					<div class="quantity-control">
+						<button class="quantity-decrease">-</button>
+						<input type="number" class="quantity-input" min="1" max="99"
+							value="1">
+						<button class="quantity-increase">+</button>
+					</div>
+
+					<button class="add-to-cart-btn" th:data-pd-id="${pd.pdId}">加入購物車</button>
+				</div>
+			</th:block>
+		</div>
+
+
+		<!-- 分頁按鈕 -->
+		<div id="pagination" class="pagination"></div>
+	</main>
+	<footer
+		style="text-align: center; margin-top: 2rem; padding: 1rem; background-color: #f9f9f9;">
+		<p>&copy; 2024 Pet Shop. All rights reserved.</p>
+	</footer>
+	<script>
+    $(document).ready(function () {
+        const container = $("#productGrid");
+        const items = container.children(".product-card").toArray();
+        const itemsPerPage = 9; // 每頁顯示的商品數量
+        let currentPage = 1;
+        const formatNumberWithCommas = (number) => {
+            return number.toLocaleString('en-US'); // 將數字格式化為帶逗號的格式
+        };
+        
+//         在購物車頁面或按鈕處檢查登入狀態，未登入跳轉至登入頁面。
+        document.getElementById("cartButton").addEventListener("click", function(event) {
+            if (!sessionStorage.getItem("loggedInMember")) {
+                event.preventDefault();
+                window.location.href = "/front_end/login";
+            }
+        });
+        
+	// 格式化所有的商品價格
+	$(".product-price").each(function () {
+	    const priceElement = $(this);
+	    const rawPrice = parseFloat(priceElement.text().replace(/[^0-9.]/g, "")); // 從文字中提取數字
+	    if (!isNaN(rawPrice)) {
+	        priceElement.text(`售價: $${formatNumberWithCommas(rawPrice)}`); // 使用反引號包裹字串
+	    }
+	});
+
+
+        // 分頁功能
+    const updatePagination = (totalPages, filteredItems) => {
+        const paginationContainer = $("#pagination");
+        paginationContainer.empty();
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = $("<button>").text(i).on("click", () => {
+                currentPage = i;
+                paginateItems(filteredItems);
+            });
+            if (i === currentPage) btn.addClass("active");
+            paginationContainer.append(btn);
+        }
+    };
+	
+    	// 分页显示
+ const paginateItems = (filteredItems) => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        // 清空九宫格并重新填充符合条件的商品
+        container.empty();
+        filteredItems.forEach((item, index) => {
+            if (index >= startIndex && index < endIndex) {
+                container.append(item);
+            }
+        });
+
+        const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+        updatePagination(totalPages, filteredItems);
+    };
+        
+        // 搜尋功能
+        $("#searchInput").on("input", function () {
+            const searchText = $(this).val().toLowerCase();
+            items.forEach((item) => {
+                const productName = $(item).attr("data-name").toLowerCase();
+                if (productName.includes(searchText)) {
+                    $(item).show();
+                } else {
+                    $(item).hide();
+                }
+            });
+        });
+
+     // 商品分類篩選功能
+		$("#categoryFilter").on("change", function () {
+		    const selectedCategory = $(this).val(); // 獲取選中的分類 ID
+		    const filteredItems = items.filter(item => {
+		        const itemCategory = $(item).attr("data-category"); // 商品分類 ID
+		        return !selectedCategory || itemCategory === selectedCategory;
+		    });
+		    currentPage = 1; // 篩選後重置到第一頁
+		    paginateItems(filteredItems);
+		});
+     
+     
+
+        // 商品排序功能
+        const sortItems = (asc) => {
+            items.sort((a, b) => {
+                const priceA = parseFloat($(a).find(".product-price").text().replace(/[^0-9.]/g, ""));
+                const priceB = parseFloat($(b).find(".product-price").text().replace(/[^0-9.]/g, ""));
+                return asc ? priceA - priceB : priceB - priceA;
+            });
+
+            container.empty().append(items);
+            currentPage = 1; // 排序後重置到第一頁
+            paginateItems(items); // 排序後顯示第一頁
+        };
+
+        $("#sortAsc").on("click", () => sortItems(true));
+        $("#sortDesc").on("click", () => sortItems(false));
+
+        // 初始化顯示
+        paginateItems(items);
+        
+     // 數量增加
+        $(document).on("click", ".quantity-increase", function () {
+            const input = $(this).siblings(".quantity-input");
+            let currentValue = parseInt(input.val());
+            if (currentValue < 99) {
+                input.val(currentValue + 1);
+            } else {
+                alert("商品數量不能超過 99！");
+            }
+        });
+
+     // 數量減少
+        $(document).on("click", ".quantity-decrease", function () {
+            const input = $(this).siblings(".quantity-input");
+            let currentValue = parseInt(input.val());
+            if (currentValue > 1) {
+                input.val(currentValue - 1);
+            }
+        });
+
+        // 輸入框限制
+        $(".quantity-input").on("input", function () {
+            let currentValue = parseInt($(this).val());
+            if (currentValue > 99) {
+                alert("商品數量不能超過 99！");
+                $(this).val(99);
+            } else if (currentValue < 1 || isNaN(currentValue)) {
+                $(this).val(1);
+            }
+        });
+
+        
+     // 加入購物車按鈕事件
+        $(document).on("click", ".add-to-cart-btn", function () {
+            const productCard = $(this).closest(".product-card");
+            const productId = $(this).data("pd-id");
+            const pdName = productCard.find(".product-name").text().trim();
+            const pdPrice = parseFloat(productCard.find(".product-price").text().replace(/[^0-9.]/g, ""));
+            const quantityInput = productCard.find(".quantity-input");
+            const quantity = parseInt(quantityInput.val());
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert("請輸入有效的數量");
+                return;
+            }
+
+            if (isNaN(pdPrice)) {
+                alert("商品價格有誤，請稍後再試");
+                return;
+            }
+
+            const cartItem = {
+                pdDetailsVO: {
+                    pdId: productId,
+                    pdName: pdName,
+                    pdPrice: pdPrice,
+                },
+                quantity: quantity,
+            };
+
+            $.ajax({
+                url: 'http://localhost:8080/cartDetails/addToCart',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(cartItem),
+                success: function (response) {
+                    alert('商品已成功加入購物車！');
+                },
+                error: function (xhr, status, error) {
+                    alert('加入購物車失敗！請稍後再試。');
+                }
+            });
+        });
+
+	
+    });
+</script>
+
+
+
+
+
+
+</body>
+</html>

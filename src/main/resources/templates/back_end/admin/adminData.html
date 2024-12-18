@@ -1,0 +1,17 @@
+
+<div id="role">
+	<span th:if="${admin == null}" th:text="未知身分"></span> 
+	<span th:if="${admin != null}" th:switch="${admin.adminRole}"> 
+		<span th:case="1">超級管理</span> 
+		<span th:case="2">後台管理</span> 
+		<span th:case="3">商城管理</span> 
+		<span th:case="*">未知身分</span>
+	</span> 
+	<span th:if="${admin != null}" th:text="${admin.adminName}"></span> 
+</div>
+
+<div id="headshot">
+	<img id="headshot" th:if="${admin != null}" th:src="@{/admin/DBGifReader(adminId=${admin.adminId})}" width="150px" alt="管理員照片">
+	<img id="headshot" th:if="${admin == null}" 
+		th:src="@{/images/admin/unknown.jpg}" alt="管理員照片" />
+</div>

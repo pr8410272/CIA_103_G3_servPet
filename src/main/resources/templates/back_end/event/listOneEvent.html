@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<head>
+    <meta charset="UTF-8">
+    <title>活動公告詳細資訊</title>
+    <style>
+   header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	#role, #name {
+           background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+	
+	nav {    
+		    margin-top: 0%;
+		}
+        /* 通用樣式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #334252;;
+        }
+	
+    
+		/* 回首頁按鈕樣式 */
+		.home-button a {
+/* 		    display: flex; /* 水平排列 */ 
+	    align-items: center; /* 垂直居中 */ 
+		    text-decoration: none; /* 移除下劃線 */
+		    color: white; /* 字體顏色為白色 */
+		    font-size: 1.2rem; /* 回首頁字體大小 */
+		    font-weight: bold; /* 粗體 */
+		    gap: 10px; /* 圖片和文字之間的間距 */
+		}
+		
+		/* Title 的樣式 */
+		.title {
+		    font-size: 3rem; /* 大字體標題 */
+		    font-weight: bold; /* 粗體 */
+		    color: white; /* 白色文字 */
+		    margin-bottom: 20px; /* 與圖片間的距離 */
+		}
+		
+		/* 特別標注部分 (servPet) */
+		.title .highlight {
+		    color: #ffd54f; /* 亮黃色 */
+		    font-style: italic; /* 斜體 */
+		}
+		
+		/* 圖片區域 */
+		.header-image img {
+		    width: 100%; /* 讓圖片寬度填滿容器 */
+		    max-width: 1000px; /* 圖片的最大寬度 */
+		    height: auto; /* 高度自動調整，保持比例 */
+		    border-radius: 12px; /* 圖片添加圓角效果 */
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影效果 */
+		    margin: 0 auto; /* 水平居中 */
+		}
+
+
+        .container {
+    max-width: 800px; /* 增加寬度 */
+    margin: 50px auto; /* 垂直和水平居中 */
+    background: #ffffff; /* 背景顏色 */
+    padding: 30px; /* 內邊距 */
+    border-radius: 15px; /* 圓角效果 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 更明顯的陰影效果 */
+    border: 1px solid #ddd; /* 添加邊框 */
+}
+
+h1 {
+    text-align: center; /* 置中標題 */
+    color: #334252; /* 深色標題 */
+    font-size: 2.5rem; /* 更大的字體 */
+    margin-bottom: 30px; /* 增加與內容的距離 */
+    border-bottom: 2px solid #334252; /* 添加下劃線 */
+    padding-bottom: 10px; /* 增加標題內邊距 */
+}
+
+p {
+    font-size: 1.1rem; /* 稍微放大字體 */
+    line-height: 1.8; /* 行距 */
+    margin-bottom: 20px; /* 增加段落間距 */
+   
+    padding-left: 150px;
+    
+}
+
+p strong {
+   
+    font-weight: bold;
+    display: inline-block; /* 文字內建塊效果 */
+    width: 100px;
+
+}
+
+p span {
+    display: inline-block; /* 文字內建塊效果 */
+    color:#334252; /* 深色文字 */
+}
+
+.back-link {
+    display: block;
+    margin: 30px auto; /* 自動置中 */
+    padding: 12px 25px;
+    background-color: #17a2b8;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px; /* 圓角按鈕 */
+    font-size: 1rem;
+    text-align: center;
+    width: fit-content;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加按鈕陰影 */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* 添加交互效果 */
+}
+
+.back-link:hover {
+    background-color: #138496;
+    transform: translateY(-3px); /* 懸停時向上移動 */
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px; /* 減少內邊距 */
+    }
+
+    h1 {
+        font-size: 2rem; /* 減小標題字體 */
+    }
+
+  
+    .back-link {
+        padding: 10px 20px; /* 減小按鈕大小 */
+        font-size: 0.9rem;
+    }
+}
+
+         footer {
+		    background-color: #334252;
+		    color: #FFE4CA;
+		    text-align: center;
+/* 		    padding: 20px 0; */
+		    font-size: 16px;
+		    position: fixed; /* Fixed position at the bottom */
+		    bottom: 0; /* Located at the bottom of the screen */
+		    width: 100%; /* Full width */
+		    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+		}
+		
+		/* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		    z-index: 9999;
+		}
+		
+			.contact-icon img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 29%;
+    margin-left: -203%;
+    margin-top: 83%;
+}
+		
+		/* icon 文字樣式 */
+		.contact-icon span {
+    font-size: 20px;
+    color: #333;
+    margin-top: 5px;
+    text-align: center;
+    white-space: nowrap;
+    margin-left: -410%;
+}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+		
+    </style>
+</head>
+<body>
+    <header>
+			    <div class="header-container">
+			        <div class="home-button">最新消息管理
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+
+
+   <div th:include="@{/back_end/admin/dashboard}"></div>
+<main>  
+	    <div class="container">
+	        <h1>活動公告詳細資訊</h1>
+	    <div class="contact-icon" id="icon-container">
+				    <a th:href="@{/back_end/index}">
+				        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+				    </a>
+				    <span>後台首頁</span>
+				</div>
+	        <p><strong>標題:</strong> 
+	        <span th:text="${eventVO.title}">活動標題</span></p>
+	        <p><strong>內容:</strong> 
+	        <span th:text="${eventVO.content}">活動內容</span></p>
+	        <p><strong>類型:</strong> 
+	            <span th:if="${eventVO.infType == 0}">最新消息</span>
+	            <span th:if="${eventVO.infType == 1}">常見問題</span>
+	            <span th:if="${eventVO.infType == 2}">專欄文章</span>
+	            <span th:if="${eventVO.infType == 99}">下架</span>
+	        </p>
+	        <p><strong>建立時間:</strong> <span th:text="${#dates.format(eventVO.created, 'yyyy-MM-dd HH:mm:ss')}">2024-11-30 10:00:00</span></p>
+	        <p><strong>更新時間:</strong> <span th:text="${#dates.format(eventVO.updated, 'yyyy-MM-dd HH:mm:ss')}">2024-11-30 12:00:00</span></p>
+	        <a th:href="@{/event/select}" class="back-link">返回最新消息查詢</a>
+	    </div>
+	    
+	</main>	
+	<footer>
+		       <p>© 2024 寵寵唯跡友善平台</p>
+	</footer>
+	</body>
+	</html>

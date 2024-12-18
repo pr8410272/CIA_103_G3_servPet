@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+header {
+	background-color: #334252;
+	height: 80px;
+	width: 100%;
+	position: sticky;
+}
+
+h1 {
+	color: antiquewhite;
+	position: absolute;
+	left: 25px;
+	top: 0;
+	line-height: 80px;
+}
+
+header ul {
+	position: absolute;
+	right: 5vw;
+	top: 0;
+	line-height: 80px;
+}
+
+header li {
+	display: inline;
+	margin-right: 4vw;
+	/* 視窗寬度4% */
+}
+
+header a {
+	color: antiquewhite;
+	text-decoration: none;
+}
+
+header a:hover {
+	text-decoration: underline;
+}
+
+footer {
+	background-color: #334252;
+	color: antiquewhite;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 14px;
+}
+
+div.view {
+	background-color: #778899;
+	width: 100%; /* 父容器滿版 */
+	padding: 15px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.table {
+	background-color: #334252;
+	padding: 15px;
+	/* display: flex; 
+    justify-content: flex-end;
+    align-items:center; */
+	color: cornsilk;
+	table-layout: fixed;
+	width: 100%; /* 確保整個表格寬度滿版 */
+	margin: 20px;;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1.5px solid antiquewhite;
+	padding: 8px;
+	text-align: center;
+}
+
+th {
+	background-color: #778899; /* 表頭背景顏色 */
+	color: antiquewhite; /* 表頭文字顏色 */
+}
+
+/* .tb{ */
+/*     width: 100%; */
+/* } */

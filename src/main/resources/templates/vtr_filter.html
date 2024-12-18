@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>交易記錄篩選</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* 全局樣式 */
+        body {
+            font-family: "Quicksand", Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+/* 篩選表單 */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.filter-item {
+    flex: 1 1 calc(20% - 10px); /* 調整寬度，縮小每個輸入框 */
+    min-width: 150px;
+}
+
+label {
+    display: block;
+    font-size: 14px; /* 縮小標籤字體 */
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: #555;
+}
+
+input, select {
+    width: 100%;
+    padding: 6px; /* 減少內邊距 */
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 按鈕區 */
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.filter-buttons button {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 14px; /* 縮小字體 */
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+        /* 按鈕樣式 */
+        .filter-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .filter-buttons button {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+        }
+
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .clear-btn {
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 4px 6px rgba(220, 53, 69, 0.2);
+        }
+
+        .clear-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* 表格樣式 */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+            border-radius: 6px 6px 0 0;
+        }
+
+        table tr {
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            transition: transform 0.2s;
+        }
+
+        table tr:hover {
+            background-color: #eef7ff;
+            transform: scale(1.01);
+        }
+
+        table td {
+            border: 1px solid #e0e0e0;
+            border-top: none;
+            border-bottom: none;
+        }
+
+        table tr:last-child td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        /* 分頁樣式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: white;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination button:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>交易記錄篩選</h1>
+     <button type="submit"
+		onclick="window.location.href='/back_end/index'">回首頁</button>
+    <!-- 將篩選容器改為真正的 <form> -->
+    <form id="filterForm" class="filter-container">
+        <div class="filter-item">
+            <label for="mebId">MebId:</label>
+            <input type="number" id="mebId" name="mebId" placeholder="輸入會員ID">
+        </div>
+        <div class="filter-item">
+            <label for="startTime">開始時間:</label>
+            <input type="datetime-local" id="startTime" name="startTime">
+        </div>
+        <div class="filter-item">
+            <label for="endTime">結束時間:</label>
+            <input type="datetime-local" id="endTime" name="endTime">
+        </div>
+        <div class="filter-item">
+            <label for="minMoney">最低金額:</label>
+            <input type="number" id="minMoney" name="minMoney" placeholder="輸入最低金額">
+        </div>
+        <div class="filter-item">
+            <label for="maxMoney">最高金額:</label>
+            <input type="number" id="maxMoney" name="maxMoney" placeholder="輸入最高金額">
+        </div>
+        <div class="filter-item">
+            <label for="transactionType">交易類型:</label>
+            <select id="transactionType" name="transactionType">
+                <option value="">全部</option>
+                <option value="儲值">儲值</option>
+                <option value="扣款">扣款</option>
+                <option value="退款">退款</option>
+            </select>
+        </div>
+        <!-- 按鈕區 -->
+        <div class="filter-buttons">
+            <button type="button" class="search-btn" onclick="filter()">篩選</button>
+            <button type="button" class="clear-btn" onclick="clearFilters()">清空查詢條件</button>
+        </div>
+    </form>
+
+    <table id="resultsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>MebId</th>
+                <th>金額</th>
+                <th>交易類型</th>
+                <th>創建時間</th>
+            </tr>
+        </thead>
+        <tbody id="results">
+            <!-- 篩選結果將動態插入 -->
+        </tbody>
+    </table>
+
+    <div class="pagination" id="pagination">
+        <!-- 分頁按鈕將動態插入 -->
+    </div>
+</div>
+
+    <script>
+ // 初始化變數
+    let currentPage = 0; // 初始頁碼
+    const pageSize = 10; // 每頁顯示的記錄數
+
+    // 篩選功能
+    function filter() {
+        // 獲取表單數據
+        const formData = new FormData(document.getElementById("filterForm"));
+        const params = new URLSearchParams();
+        const startTime = document.getElementById("startTime").value;
+        const endTime = document.getElementById("endTime").value;
+        const minMoney = document.getElementById("minMoney").value;
+        const maxMoney = document.getElementById("maxMoney").value;
+
+        // 驗證時間範圍
+        if (startTime && endTime && new Date(startTime) > new Date(endTime)) {
+            alert("開始時間不能晚於結束時間！");
+            return;
+        }
+        
+        // 驗證金額範圍
+        if (minMoney && maxMoney && parseFloat(minMoney) > parseFloat(maxMoney)) {
+            alert("最低金額不能大於最高金額！");
+            return;
+        }
+        // 過濾空值並組裝查詢參數
+        formData.forEach((value, key) => {
+            if (value) params.append(key, value);
+        });
+
+        // 添加分頁參數
+        params.append("page", currentPage);
+        params.append("size", pageSize);
+
+        // 發送篩選請求
+        fetch(`/vtr/filter?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data.content);
+                setupPagination(data.totalPages);
+            })
+            .catch(error => {
+                console.error("篩選時發生錯誤:", error);
+            });
+    }
+
+    // 清空篩選條件
+    function clearFilters() {
+        document.getElementById("filterForm").reset(); // 重置表單內容
+        currentPage = 0; // 重置頁碼為第 1 頁
+        filter(); // 清空後重新篩選
+    }
+
+    // 顯示篩選結果
+    function displayResults(records) {
+        const results = document.getElementById("results");
+        results.innerHTML = "";
+
+        if (records.length === 0) {
+            results.innerHTML = `<tr><td colspan="5">無數據可顯示</td></tr>`;
+            return;
+        }
+
+        records.forEach(record => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${record.vtrId}</td>
+                <td>${record.mebId}</td>
+                <td>${record.money}</td>
+                <td>${record.transactionType}</td>
+                <td>${record.createTime}</td>
+            `;
+            results.appendChild(row);
+        });
+    }
+
+    // 分頁按鈕設置
+    function setupPagination(totalPages) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        for (let i = 0; i < totalPages; i++) {
+            const button = document.createElement("button");
+            button.textContent = i + 1;
+            button.className = i === currentPage ? "active" : "";
+            button.onclick = () => {
+                currentPage = i; // 更新當前頁碼
+                filter(); // 加載該頁數據
+            };
+            pagination.appendChild(button);
+        }
+    }
+
+    // 頁面加載時自動執行篩選
+    filter();
+
+    </script>
+</body>
+</html>

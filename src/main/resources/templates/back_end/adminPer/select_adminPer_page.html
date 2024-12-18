@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>管理員權限管理 - AdminPer Management</title>
+<link rel="stylesheet" th:href="@{/css/select_adminPer_page.css}" />
+<link rel="stylesheet" th:href="@{/css/adminData.css}" />
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+</head>
+
+<body>
+
+	<!--*************** table#header (上方深色) 區域 **************-->
+	<table id="header">
+		<tr>
+			<td><img th:src="@{/images/admin/pflogow.png}" /> <font>管理員權限管理</font>
+				<img th:src="@{/images/admin/pflogow.png}" /></td>
+		</tr>
+	</table>
+
+	<div th:include="@{back_end/admin/adminData}"></div>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+	<div th:include="@{back_end/admin/dashboard}"></div>
+	<div id="body">
+
+		<article id="BGcat">
+			<img id="BGcat" th:src="@{/images/admin/BGcat.png}" />
+		</article>
+
+		<article id="body">
+			<h2>
+				<span>管理員權限檢索</span>
+			</h2>
+			<font>單一條件檢索:</font><br>
+
+		<div class="error" th:utext="${errorMessage}"
+				th:if="${errorMessage != null}">${errorMessage}</div>
+			<br>
+
+			<table id="body">
+				<form method="post" th:action="@{/adminPer/listOneAdminPer}">
+				    <label for="adminId">輸入管理員編號 : </label>
+				    <input type="text" name="adminId" th:value="${param.adminId}" />
+				    <input type="submit" value="送出" />
+				</form>
+				<br>
+
+				<form method="post" th:action="@{/adminPer/listOneAdminPer}">
+				    <label for="adminId">選擇管理員編號 : </label>
+				    <select name="adminId">
+				        <option th:each="adminVO : ${adminListData}" th:value="${adminVO.adminId}" th:text="${adminVO.adminId}" />
+				    </select>
+				    <input type="submit" value="送出" />
+				</form>
+				<br>
+				<form method="post" th:action="@{/adminPer/listOneAdminPer}">
+				    <label for="adminName">選擇管理員姓名 : </label>
+				    <select name="adminName">
+				        <option th:each="adminVO : ${adminListData}" th:value="${adminVO.adminId}" th:text="${adminVO.adminName}" />
+				    </select>
+				    <input type="submit" value="送出" />
+				</form>
+
+				<!--  萬用複合查詢-以下欄位-可隨意增減 -->
+				<form method="post"
+					th:action="@{/adminPer/listAdminPer_ByCompositeQuery}">
+					<br> <font>多條件檢索:</font><br> 輸入管理員編號: <input type="text2"
+						name="adminId" value=""><br> 輸入管理員姓名: <input
+						type="text2" name="adminName"><br> 輸入功能的編號: <input
+						type="text2" name="fncId"><br> <input type="submit"
+						value="送出">
+				</form>
+				<br>
+				<h2>
+					<span>管理員權限管理</span>
+				</h2>
+				<button type="submit"
+					onclick="window.location.href='/back_end/index'">回首頁</button>
+				<button type="submit"
+					onclick="window.location.href='/adminPer/addAdminPer'">新增管理員權限</button>
+				<button type="submit"
+					onclick="window.location.href='/adminPer/listAllAdminPer'">管理員權限列表</button>
+				<br>
+				<br>
+			</table>
+		</article>
+
+		<article id="BGdog">
+			<img id="BGdog" th:src="@{/images/admin/BGdog.png}" />
+		</article>
+
+	</div>
+	<!-- 旗標getOne_For_Display見AdminPerController.java的第74行 -->
+	<div class="b" th:if="${getOne_For_Display}">
+		<!-- 使用listOneAdmin.html網頁的listOneAdmin-div片段-->
+		<div
+			th:insert="~{/back_end/adminPer/listOneAdminPer :: listOneAdminPer-div}"></div>
+	</div>
+
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

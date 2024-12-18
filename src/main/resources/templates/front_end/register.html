@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+<title>會員註冊</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f9f9f9;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	max-width: 600px;
+	margin: 40px auto;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+form label {
+	font-weight: bold;
+	color: #555;
+	display: block;
+	margin-top: 15px;
+}
+
+form input, form select, form button {
+	width: 100%;
+	padding: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+	box-sizing: border-box;
+}
+
+form input:focus, form select:focus {
+	outline: none;
+	border-color: #4CAF50;
+	box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.error-message {
+	color: #d9534f;
+	font-size: 14px;
+	margin-top: 5px;
+	display: none;
+}
+
+.success-message {
+	color: #5cb85c;
+	font-size: 14px;
+	margin-top: 5px;
+	display: none;
+}
+
+.invalid {
+	border-color: #d9534f;
+	background-color: #fbe3e4;
+}
+
+.valid {
+	border-color: #5cb85c;
+	background-color: #e9f8e9;
+}
+
+.format-guide {
+	font-size: 12px;
+	color: #888;
+	margin-top: 3px;
+}
+
+form button:hover {
+	background-color: #45a049;
+	color: #fff;
+}
+
+form button:active {
+	background-color: #3e8e41;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<h1>會員註冊</h1>
+		<form id="registrationForm" th:object="${member}"
+			th:action="@{/register}" method="post" enctype="multipart/form-data">
+			<label for="mebName">用戶名:</label> <input type="text" id="mebName"
+				th:field="*{mebName}" placeholder="請輸入用戶名" required />
+			<div id="mebNameError" class="error-message">用戶名長度必須在 2 到 20
+				字之間</div>
+
+			<label for="mebPwd">密碼:</label> <input type="password" id="mebPwd"
+				th:field="*{mebPwd}"
+				pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$"
+				placeholder="請輸入密碼（6-16位，包含字母和數字）" required />
+			<div id="mebPwdError" class="error-message">密碼必須符合格式：6~16
+				字符，包含大字母和數字</div>
+
+			<label for="mebMail">郵箱:</label> <input type="email" id="mebMail"
+				th:field="*{mebMail}" placeholder="請輸入郵箱" required
+				pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
+			<div id="mebMailError" class="error-message">請輸入有效的電子郵件</div>
+			<div id="mebMailSuccess" class="success-message">電子郵件可以使用</div>
+
+			<label for="mebPhone">電話號碼:</label> <input type="text" id="mebPhone"
+				th:field="*{mebPhone}" placeholder="請輸入電話號碼" required />
+			<div class="format-guide">格式：10~15 位數字</div>
+			<div id="mebPhoneError" class="error-message">電話號碼格式不正確</div>
+
+			<label for="mebAddress">地址:</label> <input type="text"
+				id="mebAddress" th:field="*{mebAddress}" placeholder="請輸入地址"
+				required />
+			<div id="mebAddressError" class="error-message">地址不可為空</div>
+
+			<label for="mebSex">性別:</label> <select id="mebSex"
+				th:field="*{mebSex}">
+				<option value="M">男</option>
+				<option value="F">女</option>
+				<option value="O">其他</option>
+			</select>
+			<div id="mebSexError" class="error-message">請選擇性別</div>
+
+			<label for="mebImg">頭像:</label> <input type="file" id="mebImg"
+				th:field="*{mebImg}" accept="image/*" />
+			<div id="previewContainer">
+				<img id="imagePreview" src="#" alt="照片預覽"
+					style="display: none; max-width: 100%; border-radius: 8px; margin-top: 10px;" />
+			</div>
+			<div id="mebImgError" class="error-message">頭像格式不正確</div>
+
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+			<button type="submit"
+				style="background-color: #4CAF50; color: white;">註冊</button>
+		</form>
+	</div>
+
+	<script>
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
+        const validateField = (field, regex, errorField, errorMessage) => {
+            field.addEventListener('input', () => {
+                if (regex.test(field.value.trim())) {
+                    field.classList.add('valid');
+                    field.classList.remove('invalid');
+                    errorField.style.display = 'none';
+                } else {
+                    field.classList.add('invalid');
+                    field.classList.remove('valid');
+                    errorField.textContent = errorMessage;
+                    errorField.style.display = 'block';
+                }
+            });
+        };
+
+        const nameField = document.getElementById('mebName');
+        const nameError = document.getElementById('mebNameError');
+        validateField(nameField, /^.{2,20}$/, nameError, "用戶名長度必須在 2 到 20 字之間");
+
+        const passwordField = document.getElementById('mebPwd');
+        const passwordError = document.getElementById('mebPwdError');
+        validateField(passwordField, /^(?=.*[a-zA-Z])(?=.*\d).{6,16}$/, passwordError, "密碼必須包含字母和數字，長度為 6~16");
+
+        const phoneField = document.getElementById('mebPhone');
+        const phoneError = document.getElementById('mebPhoneError');
+        validateField(phoneField, /^[0-9]{10,15}$/, phoneError, "電話號碼必須為 10 到 15 位數字");
+
+
+
+     // 元素選取
+        const emailField = document.getElementById('mebMail');
+        const emailError = document.getElementById('mebMailError');
+        const emailSuccess = document.getElementById('mebMailSuccess');
+        let debounceTimer;
+
+        // 發送 AJAX 請求檢查電子郵件是否已註冊
+        const checkEmailAvailability = async (email) => {
+            const response = await fetch('/front_end/checkEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken,
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            if (!response.ok) {
+                throw new Error("伺服器錯誤，請稍後再試");
+            }
+
+            return response.json();
+        };
+
+        // 更新 UI 的輔助函數
+        const updateEmailUI = (status, message) => {
+            if (status === "available") {
+                emailError.style.display = 'none';
+                emailSuccess.textContent = "電子郵件可以使用";
+                emailSuccess.style.display = 'block';
+                emailField.classList.add('valid');
+                emailField.classList.remove('invalid');
+            } else if (status === "taken") {
+                emailError.textContent = message || "電子郵件已被使用";
+                emailError.style.display = 'block';
+                emailSuccess.style.display = 'none';
+                emailField.classList.add('invalid');
+                emailField.classList.remove('valid');
+            } else if (status === "error") {
+                emailError.textContent = message || "檢查失敗，請稍後再試";
+                emailError.style.display = 'block';
+                emailSuccess.style.display = 'none';
+                emailField.classList.add('invalid');
+                emailField.classList.remove('valid');
+            }
+        };
+
+        // 驗證輸入格式
+        const validateEmailFormat = (email) => {
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailPattern.test(email);
+        };
+
+        // 綁定輸入事件
+        emailField.addEventListener('input', () => {
+            clearTimeout(debounceTimer); // 清除防抖計時器
+
+            debounceTimer = setTimeout(async () => {
+                const email = emailField.value.trim();
+
+                // 檢查是否為空
+                if (!email) {
+                    updateEmailUI("error", "電子郵件不可為空");
+                    return;
+                }
+
+                // 檢查格式是否正確
+                if (!validateEmailFormat(email)) {
+                    updateEmailUI("error", "電子郵件格式不正確");
+                    return;
+                }
+
+                // 顯示檢查中狀態
+                emailError.style.display = 'none';
+                emailSuccess.textContent = "檢查中...";
+                emailSuccess.style.display = 'block';
+                emailField.classList.remove('valid', 'invalid');
+
+                try {
+                    // 發送請求檢查電子郵件是否可用
+                    const data = await checkEmailAvailability(email);
+                    console.log("後端返回結果：", data);
+
+                    if (data.exists) {
+                        updateEmailUI("taken", "電子郵件已被使用");
+                    } else {
+                        updateEmailUI("available");
+                    }
+                } catch (error) {
+                    updateEmailUI("error", "伺服器發生錯誤，請稍後再試");
+                    console.error(error);
+                }
+            }, 300); // 防抖延遲 300 毫秒
+        });
+
+
+        const imageInput = document.getElementById('mebImg');
+        const imagePreview = document.getElementById('imagePreview');
+        const imgError = document.getElementById('mebImgError');
+
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+
+            if (!file) {
+                imgError.textContent = "請選擇一張圖片";
+                imgError.style.display = 'block';
+                imagePreview.style.display = 'none';
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                imgError.textContent = "請上傳有效的圖片文件";
+                imgError.style.display = 'block';
+                imagePreview.style.display = 'none';
+                return;
+            }
+
+            const maxSize = 2 * 1024 * 1024;
+            if (file.size > maxSize) {
+                imgError.textContent = "圖片大小不可超過 2MB";
+                imgError.style.display = 'block';
+                imagePreview.style.display = 'none';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imgError.style.display = 'none';
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>

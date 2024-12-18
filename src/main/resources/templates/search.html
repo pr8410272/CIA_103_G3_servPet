@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交易記錄篩選</title>
+    <style>
+        body {
+            font-family: "Quicksand", sans-serif;
+            background-color: #FFFDF9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #FFF8EE;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #F8A978;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        form label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+        }
+
+        form input, form button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CCC;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: #F8A978;
+            box-shadow: 0 0 5px rgba(248, 169, 120, 0.5);
+        }
+
+        form button {
+            grid-column: 1 / -1;
+            background-color: #F8A978;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #E7946D;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #CCC;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #F8EAD3;
+            color: #333;
+        }
+
+        table tbody tr:nth-child(odd) {
+            background-color: #FFF8EE;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #FFFDF9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>交易記錄篩選</h1>
+        <form id="filterForm">
+            <label for="mebId">MebId:</label>
+            <input type="number" id="mebId" name="mebId" placeholder="輸入會員ID">
+
+            <label for="startTime">開始時間:</label>
+            <input type="datetime-local" id="startTime" name="startTime">
+
+            <label for="endTime">結束時間:</label>
+            <input type="datetime-local" id="endTime" name="endTime">
+
+            <label for="minMoney">最低金額:</label>
+            <input type="number" id="minMoney" name="minMoney" placeholder="輸入最低金額">
+
+            <label for="maxMoney">最高金額:</label>
+            <input type="number" id="maxMoney" name="maxMoney" placeholder="輸入最高金額">
+
+            <label for="transactionType">交易類型:</label>
+            <input type="text" id="transactionType" name="transactionType" placeholder="輸入交易類型">
+
+            <button type="button" onclick="filter()">篩選</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>MebId</th>
+                    <th>金額</th>
+                    <th>交易類型</th>
+                    <th>創建時間</th>
+                </tr>
+            </thead>
+            <tbody id="results"></tbody>
+        </table>
+    </div>
+
+    <script>
+        function filter() {
+            const formData = new FormData(document.getElementById("filterForm"));
+            const params = new URLSearchParams(formData).toString();
+            fetch(`/vtr/filter?${params}`)
+                .then(response => response.json())
+                .then(data => {
+                    const results = document.getElementById("results");
+                    results.innerHTML = "";
+                    data.content.forEach(record => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${record.vtrId}</td>
+                            <td>${record.mebId}</td>
+                            <td>${record.money}</td>
+                            <td>${record.transactionType}</td>
+                            <td>${record.createTime}</td>
+                        `;
+                        results.appendChild(row);
+                    });
+                });
+        }
+    </script>
+</body>
+</html>

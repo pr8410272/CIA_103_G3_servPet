@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>保母檢舉審核</title>
+<link rel="stylesheet" th:href="@{/css/psCompl/update_psCompl_input.css}"/>
+</head>
+
+<body>
+    <!--*************** table#header (上方深色) 區域 **************-->
+    <table id="header">
+        <tr>
+            <td>
+                <img th:src="@{/images/psCompl/pflogow.png}">
+                <font>保母檢舉審核</font>
+                <img th:src="@{/images/psCompl/pflogow.png}">
+                <h4><a th:href="@{/psCompl/listAllPsCompl}">回檢舉列表</a></h4>
+            </td>
+        </tr>
+    </table>
+
+    <!--**************** div#body (中間淺色) 區域 *****************-->
+    <div id="body">
+        <article>
+        
+        
+        
+            <h4><b>檢舉回覆為必填欄位</b></h4>
+            <!-- 第一個表單 -->
+            <form th:action="@{update}" method="post" th:object="${psComplVO}" enctype="multipart/form-data">
+             <div th:if="${#fields.hasErrors('psComplResult')}" th:errors="*{psComplResult}"></div>  <!-- 显示 psComplResult 错误 -->
+                
+                <!-- 隱藏字段: 把其他需要的資料作為隱藏表單傳入 -->
+				   <input type="hidden" th:name="psComplId" th:value="${psComplVO.psComplId}" />
+				   	<input type="hidden" name="psId" th:value="${psComplVO.psId}" />
+				   	<input type="hidden" name="mebId" th:value="${psComplVO.mebId}" />
+				   	<input type="hidden" th:name="psComplDate" th:value="${psComplVO.psComplDate}" />
+					<input type="hidden" th:name="psComplResDate" th:value="${psComplVO.psComplResDate}" />
+					<input type="hidden" th:name="psComplDes" th:value="${psComplVO.psComplDes}" />
+                
+                <div>
+                    <label id="des" for="psComplResult">檢舉回覆:</label>
+                    <textarea th:field="*{psComplResult}"></textarea><br/>
+                </div>
+                
+                 <div th:if="${#fields.hasErrors('psComplStatus')}" th:errors="*{psComplStatus}"></div>  <!-- 显示 psComplStatus 错误 -->
+                 
+                 <!-- 按鈕容器 -->
+            	<div id="form-buttons">
+                <!-- 按鈕1: 填入預設文本1 -->
+                <button type="button" onclick="fillText('您好，已經收到您的檢舉，\n詳閱提供的資料後，基於平台規約，\n無法處罰您所檢舉的保母，具體原因為:\n1.\n2.\n3.\n最後再次感謝您的反映，祝您愉快~','1')">不懲處</button>
+                
+                <!-- 按鈕2: 填入預設文本2 -->
+                <button type="button" onclick="fillText('您好，已經收到您的檢舉，\n詳閱提供的資料後，基於平台規約，\n本平台認為保母行為的確有不妥之處，\n已對該名保母作出懲處，\n以避免此類情形再次發生。\n未來將嚴格審視保母服務情況，\n最後再次對您再次致上歉意~','2')">處罰</button>
+                
+                <!-- 按鈕3: 填入預設文本3 -->
+                <button type="button" onclick="fillText('您好，已經收到您的檢舉，\n詳閱提供的資料後，基於平台規約，\n本平台認為保母行為有違其專業素養，\n已對該名保母作出懲處，\n以避免此類情形再次發生。\n未來將嚴格審視保母服務情況，\n最後再次對您再次致上歉意~','3')">加重處罰</button>
+            
+            	 <!-- 按鈕4: 填入預設文本4 -->
+                <button type="button" onclick="fillText('您好，已經收到您的檢舉，\n詳閱提供的資料後，基於平台規約，\n本平台認為此案茲事重大，\n並且已停止此保母的服務權限，\n對於造成您的損失，本平台深感抱歉，\n如需更進一步的協助，請致電客服。\n未來將嚴格審視保母服務情況，\n最後再次對您致上十二萬分的歉意~','4')">停權</button>
+            </div>
+                
+                <div>
+                    <label>檢舉狀態:</label>
+                    <select th:field="*{psComplStatus}">
+                        <option value="0" th:selected="${psComplVO.psComplStatus == 0}">未處理</option>
+                        <option value="1" th:selected="${psComplVO.psComplStatus == 1}">不懲處</option>
+                        <option value="2" th:selected="${psComplVO.psComplStatus == 2}">處罰</option>
+                        <option value="3" th:selected="${psComplVO.psComplStatus == 3}">加重處罰</option>
+                        <option value="4" th:selected="${psComplVO.psComplStatus == 4}">停權</option>
+                    </select><br/>
+                </div>
+                
+                <div><button type="submit" id="submit">送出審核結果</button></div>
+                
+            </form>
+            
+            <!-- 按鈕容器 -->
+            <div id="form-buttons">
+                <!-- 第二個表單的提交按鈕 -->
+                <form method="post" th:action="@{/psCompl/getOne_For_Display}">
+                    <input type="hidden" name="psComplId" th:value="${psComplVO.psComplId}" />
+                    <button type="submit">回到檢舉詳細</button>
+                </form>
+            </div>
+        </article>
+    </div>
+
+    <!--***************** footer (下方深色) 區域 *****************-->
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+    </footer>
+    
+  <script>
+    // JavaScript 函數，根據按鈕填入相應文本到 textarea 並更新檢舉狀態
+    function fillText(text, status) {
+        document.getElementById('psComplResult').value = text;
+
+        // 更新檢舉狀態
+        let selectElement = document.getElementById('psComplStatus');
+        selectElement.value = status;
+    }
+    
+    function showFormData() {
+        // 獲取表單元素
+        const form = document.getElementById('psComplForm');
+        const formData = new FormData(form);  // 使用 FormData 來收集表單數據
+
+        // 將表單資料顯示到頁面上
+        const displayDiv = document.getElementById('formDataDisplay');
+        displayDiv.innerHTML = '';  // 清空顯示區域
+        
+        // 顯示所有表單數據
+        formData.forEach((value, key) => {
+            const p = document.createElement('p');
+            p.textContent = key + ': ' + value;
+            displayDiv.appendChild(p);
+        });
+
+        // 或者你也可以將它們輸出到控制台
+        console.log('Form Data:');
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+    }
+    
+    
+    window.onload = function() {
+        // 讀取隱藏欄位的值
+        var psComplId = document.querySelector('input[name="psComplId"]').value;
+        var psComplDate = document.querySelector('input[name="psComplDate"]').value;
+        var psComplResDate = document.querySelector('input[name="psComplResDate"]').value;
+        var psComplDes = document.querySelector('input[name="psComplDes"]').value;
+        var mebId = document.querySelector('input[name="mebId"]').value;
+        var psId = document.querySelector('input[name="psId"]').value;
+
+        // 將值顯示到頁面上
+        document.body.insertAdjacentHTML('beforeend', 
+            '<p>psComplId: ' + psComplId + '</p>' +
+            '<p>psComplDate: ' + psComplDate + '</p>' +
+            '<p>psComplResDate: ' + psComplResDate + '</p>' +
+            '<p>psComplDes: ' + psComplDes + '</p>' +
+            '<p>mebId: ' + mebId + '</p>' +
+            '<p>psId: ' + psId + '</p>'
+        );
+    };
+    
+    
+</script>
+</body>
+</html>

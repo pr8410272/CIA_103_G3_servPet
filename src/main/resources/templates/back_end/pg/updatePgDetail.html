@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+<link rel="stylesheet" href="/css/pg/updatePgDetail.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+	<header>
+		<!-- ============登入檢查部分 ============ -->
+<!-- 		<div id="role"> -->
+<!-- 			<span th:if="${pgVO == null}" th:text="未知身分"></span> -->
+<!-- 		</div> -->
+<!-- 		<div id="role"> -->
+<!-- 			<span th:if="${pgVO != null}" th:text="美容師"></span> -->
+<!-- 		</div> -->
+
+<!-- 		<div id="name"> -->
+<!-- 			<span th:if="${pgVO != null}" th:text="${pgVO.pgName}"></span> <span -->
+<!-- 				th:if="${pgVO == null}" th:text="造訪者"></span> -->
+<!-- 		</div> -->
+
+		<!-- ================================ -->
+
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+				<li><a href="#"
+					th:href="@{/pg/listOnePg_back(pgId=${pgVO.pgId})}">美容師資料管理</a></li>
+				<li><a href="#"
+					th:href="@{/pg/pgSvcListManagement(pgId=${pgVO.pgId})}">美容師服務項目管理</a></li>
+				<li><a href="#"
+					th:href="@{/pg/pgOrderManagement(pgId=${pgVO.pgId})}">美容師訂單管理</a></li>
+				<li><a href="#" th:if="${pgVO == null}"
+					th:href="@{/back_end/topgLogin}">登入</a></li>
+				<li><a href="#" th:if="${pgVO != null}"
+					th:href="@{/back_end/logout}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+
+	<main>
+
+		<div class="view">
+			<!-- 返回按鈕 -->
+			<div class="return-button">
+				<a href="javascript:history.back()"> 
+				<img th:src="@{/images/paw.png}">
+				</a>
+
+			</div>
+			<!-- 圓形生活照 -->
+
+			<div class="profile-pic">
+				<img th:src="@{/pg/profileimg(pgId=${pgVO.pgId})}"
+					th:alt="${pgVO.pgName + ' 的生活照'}">
+			</div>
+
+			<div>
+				<!-- 美容師資料更新表單 -->
+				<form th:action="@{/pg/update?(pgId=${pgVO.pgId})}" method="post"
+					th:object="${pgVO}" class="form-container"
+					enctype="multipart/form-data">
+					<input type="hidden" id="pgId" th:field="${pgVO.pgId}" />
+
+					<!-- 文件上傳 -->
+					<label for="pgPicFile">上傳美容師封面照:</label> <input type="file"
+						id="pgPicFile" name="pgPicFile" accept="image/*" />
+
+					<!-- 美容師編號 -->
+					<label for="pgId">服務ID:</label> <input type="text" id="pgId"
+						name="pgId" th:value="${pgVO.pgId}" readonly>
+
+					<!-- 美容師姓名 -->
+					<label for="pgName">美容師姓名:</label> <input type="text" id="pgName"
+						name="pgName" th:value="${pgVO.pgName}">
+
+					<!-- 評價總星數 -->
+					<label for="totalStars">評價總星數:</label> <input type="text"
+						id="totalStars" name="totalStars" th:value="${pgVO.totalStars}"
+						readonly>
+
+					<!-- 評價總次數 -->
+					<label for="ratingTimes">評價總次數:</label> <input type="text"
+						id="ratingTimes" name="ratingTimes" th:value="${pgVO.ratingTimes}"
+						readonly>
+
+					<!-- 違規記點 -->
+					<label for="reportTimes">違規記點:</label> <input type="text"
+						id="reportTimes" name="reportTimes" th:value="${pgVO.reportTimes}"
+						readonly>
+
+					<!-- 營業狀態 -->
+					<label for="pgStatus">營業狀態:</label> <select id="pgStatus"
+						name="pgStatus">
+						<option value="0" th:selected="${pgVO.pgStatus == '0'}">暫休</option>
+						<option value="1" th:selected="${pgVO.pgStatus == '1'}">在職</option>
+					</select>
+
+
+					<div class="password-field">
+						<label for="pgPw">密碼:</label>
+						<div class="input-container">
+							<input type="password" id="pgPw" name="pgPw"
+								th:value="${pgVO.pgPw}">
+							<button type="button" id="togglePassword">👁️</button>
+						</div>
+					</div>
+					<!-- 電子信箱 -->
+					<label for="pgEmail">電子信箱:</label> <input type="email" id="pgEmail"
+						name="pgEmail" th:value="${pgVO.pgEmail}">
+
+					<!-- 服務地區 -->
+					<label for="pgArea">服務地區:</label> <select id="pgArea" name="pgArea">
+						<option value="0" th:selected="${pgVO.pgArea == '0'}">北部</option>
+						<option value="1" th:selected="${pgVO.pgArea == '1'}">中部</option>
+						<option value="2" th:selected="${pgVO.pgArea == '2'}">南部</option>
+						<option value="3" th:selected="${pgVO.pgArea == '3'}">東部</option>
+					</select>
+					<!-- 每週服務日 -->
+					<label for="schDate">每週服務日:</label>
+					<div id="schDate">
+
+						<label><input type="checkbox" name="schDate" value="0"
+							th:checked="${pgVO.schDate[0] == '1'}" /> (一)</label> <label><input
+							type="checkbox" name="schDate" value="1"
+							th:checked="${pgVO.schDate[1] == '1'}" /> (二)</label> <label><input
+							type="checkbox" name="schDate" value="2"
+							th:checked="${pgVO.schDate[2] == '1'}" /> (三)</label> <label><input
+							type="checkbox" name="schDate" value="3"
+							th:checked="${pgVO.schDate[3] == '1'}" /> (四)</label> <label><input
+							type="checkbox" name="schDate" value="4"
+							th:checked="${pgVO.schDate[4] == '1'}" /> (五)</label> <label><input
+							type="checkbox" name="schDate" value="5"
+							th:checked="${pgVO.schDate[5] == '1'}" /> (六)</label> <label><input
+							type="checkbox" name="schDate" value="6"
+							th:checked="${pgVO.schDate[6] == '1'}" /> (日)</label>
+
+
+					</div>
+
+
+					<!-- 可預約時段 -->
+					<label for="schTime">可預約時段:</label>
+					<div id="schTime">
+
+						<label><input type="checkbox" name="schTime" value="0"
+							th:checked="${pgVO.schTime[0] == '1'}" /> 早</label> <label><input
+							type="checkbox" name="schTime" value="1"
+							th:checked="${pgVO.schTime[1] == '1'}" /> 中</label> <label><input
+							type="checkbox" name="schTime" value="2"
+							th:checked="${pgVO.schTime[2] == '1'}" /> 晚</label>
+
+					</div>
+
+					<!-- 簡介 -->
+					<label for="pgBio">簡介:</label>
+					<textarea id="pgBio" name="pgBio" rows="4" th:text="${pgVO.pgBio}"></textarea>
+
+					<input type="hidden" name="schDateValue"> <input
+						type="hidden" name="schTimeValue">
+					<!-- 送出按鈕 -->
+					<button type="submit">儲存修改</button>
+				</form>
+			</div>
+
+			<div>
+
+				<!-- 新增作品集按鈕 -->
+
+				<form id="uploadPgPic"
+					th:action="@{/pg/uploadpicture/{pgId}(pgId=${pgVO.pgId})}"
+					method="post" enctype="multipart/form-data"
+					>
+					<input type="file" name="pictures" multiple accept="image/*">
+					<button type="submit">新增作品集</button>
+				</form>
+				<br>
+
+
+					<div class="gallery">
+					    <div th:if="${picId != null and !picId.isEmpty()}">
+					        <div th:each="picId : ${picId}" class="gallery-item">
+					            <form th:action="@{/pg/deletePicture}" method="get">
+					                <input type="hidden" name="picId" th:value="${picId}" />
+					                <input type="hidden" name="pgId" th:value="${pgVO.pgId}" />
+					                <a href="javascript:void(0);" onclick="confirmAndSubmit(this);">
+					                    <img th:src="@{'/pg/picture/' + ${picId}}" alt="作品圖片">
+					                </a>
+					            </form>
+					        </div>
+					    </div>
+					    <div th:if="${picId == null || picId.isEmpty()}">
+					        <p class="no-images">無圖片可顯示。</p>
+					    </div>
+					</div>
+
+			</div>
+
+
+		</div>
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+
+	<script>
+	// 防止未選取圖片時提交
+	document.addEventListener('DOMContentLoaded', function () {
+		const form = document.getElementById('uploadPgPic');
+		form.addEventListener('submit', function (event) {
+			const fileInput = form.querySelector('input[type="file"]');
+			if (!fileInput.files.length) {
+				event.preventDefault(); // 阻止表單提交
+				Swal.fire({
+					title: '提示',
+					text: '請至少新增一張照片！',
+					icon: 'warning',
+					confirmButtonText: '確定'
+				});
+			}
+		});
+	});
+	
+    // 找到密碼欄位和眼睛圖示按鈕
+    const passwordField = document.getElementById('pgPw');
+    const toggleButton = document.getElementById('togglePassword');
+
+    // 當按鈕被點擊時切換密碼顯示
+    toggleButton.addEventListener('click', function() {
+        // 如果密碼欄位是隱藏的，則改為顯示，否則隱藏
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text'; // 顯示密碼
+            toggleButton.textContent = '🙈'; // 改變按鈕顯示成「隱藏」圖示
+        } else {
+            passwordField.type = 'password'; // 隱藏密碼
+            toggleButton.textContent = '👁️'; // 改變按鈕顯示成「顯示」圖示
+        }
+    });
+    
+    function confirmAndSubmit(anchor) {
+        Swal.fire({
+            title: '確定要刪除此圖片嗎？',
+            text: "此操作無法恢復！",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '確定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 提交表單
+                anchor.closest('form').submit();
+            }
+        });
+    }
+  
+  
+   
+</script>
+
+</body>
+</html>

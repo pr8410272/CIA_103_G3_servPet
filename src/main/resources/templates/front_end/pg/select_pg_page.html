@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="/css/pg/selectPage.css">
+
+</head>
+<body>
+	<header>
+		<h1>servPet</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/}">首頁</a></li>
+				<li><a href="#" th:href="@{/ps/psList}">寵物保母</a></li>
+				<li><a href="#" th:href="@{/pg/showAllPgSvcItem}">寵物美容介紹</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+
+
+		<section class="view">
+			<div class="table_container">
+
+				<ul id="pgList" class="item_list">
+					<li th:each="pgVO : ${list}">
+						<div class="img_block">
+							<a th:href="@{/pg/listOnePg(pgId=${pgVO.pgId})}"
+								class="profileimg-button"> 
+							<img
+								th:if="${pgVO.pgPic != null}"
+								th:src="@{/pg/profileimg(pgId=${pgVO.pgId})}"
+								th:alt="${pgVO.pgName}">
+							<img th:if="${pgVO.pgPic == null}" src="/images/default.jpg" alt="預設圖片">
+							</a>
+						</div> 
+						<span class="item_text" th:text="${pgVO.pgName}"></span>
+						<span class="item_text">
+							  <div th:switch="${pgVO.pgArea}">
+							      <span th:case="0">北部</span>
+							      <span th:case="1">中部</span>
+							      <span th:case="2">南部</span>
+							      <span th:case="3">東部</span>
+							  </div>
+						</span> 
+						<span th:if="${pgVO.pgPic == null}">尚無圖片</span>
+
+			            <span class="item_text">
+			                <span th:if="${starDisplayMap[pgVO.pgId] != ''}" 
+			                      th:text="${starDisplayMap[pgVO.pgId]}"></span>
+			                <span th:if="${starDisplayMap[pgVO.pgId] == ''}">尚無評價</span>
+			            </span>
+
+					</li>
+				</ul>
+			</div>
+		</section>
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	
+
+</body>
+</html>

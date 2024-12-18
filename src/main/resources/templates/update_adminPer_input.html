@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>管理員權限修改</title>
+    <link rel="stylesheet" th:href="@{/css/adminPer/update_adminPer_input.css}" />
+</head>
+
+<body>
+    <!--*************** table#header (上方深色) 區域 **************-->
+    <table id="header">
+        <tr>
+            <td>
+                <img th:src="@{/images/admin/pflogow.png}">
+                <font>管理員權限修改</font>
+                <img th:src="@{/images/admin/pflogow.png}">
+                <h4><a th:href="@{/adminPer/listAllAdminPer}">回到權限列表</a></h4>
+            </td>
+        </tr>
+    </table>
+
+    <!--**************** div#body (中間淺色) 區域 *****************-->
+    <div id="body">
+        <article>
+            <h4><b>所有欄位皆為必填欄位</b></h4>
+            <form th:action="@{update}" method="post" th:object="${adminPerVO}" enctype="multipart/form-data">
+                
+                <!-- 權限ID -->
+                <div>
+                    <label>權限編號:</label>
+                    <input type="text" th:field="*{adminPerId}" readonly /><br />
+                </div>
+
+                <!-- 管理員選擇 -->
+                <div>
+                    <label>管理員:</label>
+                    <select th:field="*{adminVO.adminId}">
+                        <option th:each="admin : ${adminListData}" th:value="${admin.adminId}" th:text="${admin.adminName}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('adminVO')}" th:errors="*{adminVO.adminId}" class="error"></span>
+                </div>
+
+                <!-- 權限功能選擇 -->
+                <div>
+                    <label>功能權限:</label>
+                    <select th:field="*{fncVO.fncId}">
+                        <option th:each="fnc : ${fncList}" th:value="${fnc.fncId}" th:text="${fnc.fncName}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('fncVO')}" th:errors="*{fncVO.fncId}" class="error"></span>
+                </div>
+
+                <!-- 權限狀態 -->
+                <div>
+                    <label>權限狀態:</label>
+                    <input type="radio" th:field="*{adminAccStatus}" value="1" /> 啟用
+                    <input type="radio" th:field="*{adminAccStatus}" value="0" /> 停用
+                    <br />
+                    <span th:if="${#fields.hasErrors('adminAccStatus')}" th:errors="*{adminAccStatus}" class="error"></span>
+                </div>
+
+                <div>
+                    <div></div>
+                    <div><button type="submit" id="submit">送出修改</button></div>
+                    <div></div>
+                </div>      
+            </form>
+        </article>
+    </div>
+
+    <!--***************** footer (下方深色) 區域 *****************-->
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript 部分 -->
+    <script type="text/javascript">
+        // 清除提示信息
+        function hideContent(d) {
+            document.getElementById(d).style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

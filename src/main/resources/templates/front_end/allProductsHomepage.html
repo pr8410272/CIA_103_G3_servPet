@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>List All Products (Homepage)</title>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<style>
+/* 全域樣式 */
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: "Quicksand", sans-serif;
+}
+
+html, body {
+	min-height: 100vh; /* 保持高度填滿視窗 */
+	display: flex;
+	flex-direction: column;
+	background-color: #FFFDF9;
+}
+
+/* Header 樣式 */
+header {
+	background-color: #F8EAD3;
+	padding: 10px 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+header h1 {
+	color: #333;
+	font-size: 2rem;
+	margin-left: 25px;
+}
+
+header nav ul {
+	display: flex;
+	list-style: none;
+	margin-right: 25px;
+}
+
+header nav li {
+	margin-left: 20px;
+}
+
+header nav a {
+	background-color: #F8EAD3;
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+	padding: 10px 15px;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+header nav a:hover {
+	background-color: #e5d0b5;
+	text-decoration: underline;
+}
+
+/* Main 內容區域 */
+main {
+	flex: 1; /* 保證 main 填滿剩餘空間 */
+	padding: 1rem 5%;
+	display: flex;
+	flex-direction: column;
+}
+
+/* 商品卡片區域 */
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 1.5rem;
+	margin-bottom: auto; /* 保證分頁按鈕在底部 */
+}
+
+.product-card {
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background-color: #fff;
+	text-align: center;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	padding: 1rem;
+}
+
+.product-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+	width: 80%;
+	height: auto;
+	margin-bottom: 0.5rem;
+	border-radius: 5px;
+}
+
+.product-name {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin: 0.5rem 0;
+	color: #333;
+}
+
+.product-price {
+	font-size: 1rem;
+	color: #d9534f;
+	font-weight: bold;
+}
+
+.quantity-control {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 10px 0;
+}
+
+.quantity-control button {
+	width: 30px;
+	height: 30px;
+	border: none;
+	background-color: #ddd;
+	color: #333;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.quantity-control button:hover {
+	background-color: #007bff;
+	color: white;
+}
+
+.quantity-input {
+	width: 50px;
+	text-align: center;
+	margin: 0 5px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.add-to-cart-btn, .add-to-fav-btn {
+	background-color: #28a745;
+	color: white;
+	border: none;
+	padding: 8px 12px;
+	cursor: pointer;
+	margin: 5px;
+	border-radius: 5px;
+	font-size: 0.9rem;
+	transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover, .add-to-fav-btn:hover {
+	background-color: #218838;
+}
+
+.add-to-fav-btn {
+	background-color: #ffc107;
+}
+
+.add-to-fav-btn:hover {
+	background-color: #e0a800;
+}
+
+/* 分頁按鈕 */
+.pagination {
+	display: flex;
+	justify-content: center;
+	margin-top: auto; /* 保持在內容區域底部 */
+	padding: 10px 0; /* 保持與 footer 間隔 */
+	background-color: #FFFDF9;
+}
+
+.pagination button {
+	border: 1px solid #ddd;
+	background-color: #F8EAD3; /* 與 header/footer 一致 */
+	color: #333;
+	margin: 0 5px;
+	padding: 5px 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.pagination button.active {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
+}
+
+.pagination button:hover {
+	background-color: #007bff;
+	color: white;
+}
+
+/* Footer 固定在底部 */
+footer {
+	background-color: #F8EAD3;
+	color: #333;
+	text-align: center;
+	padding: 1rem 0;
+	width: 100%;
+	margin-top: auto; /* 保持 footer 在畫面底部 */
+}
+
+/* 搜尋與排序容器 */
+.search-and-sort {
+	display: flex;
+	justify-content: space-between; /* 左右對齊 */
+	align-items: center;
+	margin: 10px 0 20px 0; /* 上下間距 */
+}
+
+.search-bar {
+	display: flex;
+	gap: 10px; /* 搜尋框與分類下拉選單的間距 */
+}
+
+#categoryFilter, #searchInput {
+	padding: 8px;
+	font-size: 1rem;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+#searchInput {
+	width: 300px;
+}
+
+.sort-buttons {
+	display: flex;
+	gap: 10px; /* 按鈕之間的間距 */
+}
+
+.sort-buttons button {
+	background-color: #F8EAD3; /* 與 header 同色 */
+	color: #333;
+	border: 1px solid #ddd;
+	padding: 8px 12px;
+	cursor: pointer;
+	border-radius: 5px;
+	font-weight: bold;
+	transition: background-color 0.3s ease;
+}
+
+.sort-buttons button:hover {
+	background-color: #e5d0b5; /* 按鈕懸停效果 */
+	color: #000;
+}
+
+/* 燈箱 */
+/* 燈箱 */
+.lightbox {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+.lightbox.hidden {
+	display: none;
+}
+
+.lightbox-content {
+	background: #fff;
+	padding: 20px 30px;
+	border-radius: 8px;
+	max-width: 800px;
+	width: 90%;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* 大圖區域 */
+.lightbox-main-image img {
+	width: 400px; /* 調整主要圖片大小 */
+	height: 400px;
+	object-fit: contain;
+	margin-bottom: 20px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+}
+
+/* 小圖區域 */
+.lightbox-thumbnails {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.lightbox-thumbnails img {
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
+	border: 2px solid transparent;
+	transition: border-color 0.3s ease, transform 0.2s ease;
+	border-radius: 5px;
+	object-fit: cover;
+}
+
+.lightbox-thumbnails img:hover {
+	border-color: #007bff;
+	transform: scale(1.1); /* 滑鼠懸停時稍微放大 */
+}
+
+/* 文字資訊區域 */
+.lightbox-details {
+	width: 100%;
+	margin-top: 10px;
+	padding: 10px;
+	text-align: left;
+	line-height: 1.8;
+	color: #333;
+	font-size: 1rem;
+}
+
+.lightbox-details h2 {
+	font-size: 1.5rem;
+	margin-bottom: 10px;
+	color: #007bff;
+	border-bottom: 2px solid #eee;
+	padding-bottom: 5px;
+}
+
+.lightbox-details p {
+	margin: 5px 0;
+}
+
+.lightbox-details span {
+	font-weight: bold;
+	color: #555;
+}
+
+/* 關閉按鈕 */
+.close-btn {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	background: #333;
+	color: #fff;
+	border: none;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.2rem;
+	transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+	background: #f00;
+}
+</style>
+</head>
+<body>
+	<header>
+		<h1>servPet：購物車</h1>
+		<nav>
+			<ul style="margin-bottom: 0px;">
+				<li><a th:href="@{/}">寵寵唯跡 ServPET首頁</a></li>
+				<li><a href="#" th:href="@{/cartDetails/shoppingCart}"	class="btn btn-primary">購物車</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+
+
+	<main>
+		<div class="search-and-sort">
+			<div class="search-bar">
+				<select id="categoryFilter">
+					<option value="">全部分類</option>
+					<option th:each="category : ${categoryList}"
+						th:value="${category.pdCategory}"
+						th:text="${category.categoryName}"></option>
+				</select> <input type="text" id="searchInput" placeholder="搜尋商品...">
+
+
+				<div class="sort-buttons">
+					<button id="sortAsc" class="btn btn-primary">價格由低到高排序</button>
+					<button id="sortDesc" class="btn btn-secondary">價格由高到低排序</button>
+				</div>
+			</div>
+		</div>
+		<!-- 商品卡片列表 -->
+		<div id="productGrid" class="grid-container">
+			<th:block th:if="${pdDetailsList != null}"
+				th:each="pd : ${pdDetailsList}">
+				<div class="product-card"
+					th:data-category="${pd.pdCategVO != null ? pd.pdCategVO.pdCategory : 'uncategorized'}"
+					th:data-name="${pd.pdName}">
+					<img
+						th:src="@{/pdImg/DBGifReader(pdImgId=${defaultImages[pd.pdId] != null ? defaultImages[pd.pdId] : 0})}"
+						alt="商品圖片" class="product-image"
+						onerror="this.onerror=null;this.src='/images/no-image-available.png';" />
+					<p th:text="${pd.pdName}" class="product-name"></p>
+					<p th:text="'售價: $' + ${pd.pdPrice}" class="product-price"></p>
+
+					<!-- 數量調整區域 -->
+					<div class="quantity-control">
+						<button class="quantity-decrease">-</button>
+						<input type="number" class="quantity-input" min="1"
+							th:max="${pd.pdQty}" th:data-pd-qty="${pd.pdQty}" value="1">
+						<button class="quantity-increase">+</button>
+					</div>
+
+					<button class="add-to-cart-btn" th:data-pd-id="${pd.pdId}">加入購物車</button>
+					<!-- 立文的收藏商品 -->
+					<button class="add-to-fav-btn" th:data-pd-id="${pd.pdId}">加入收藏</button>
+				</div>
+			</th:block>
+		</div>
+
+
+		<!-- 分頁按鈕 -->
+		<div id="pagination" class="pagination"></div>
+
+		<!-- 燈箱結構 -->
+		<div id="productLightbox" class="lightbox" style="display: none;">
+			<div class="lightbox-content">
+				<span class="close-btn">&times;</span>
+
+				<!-- 大圖顯示區 -->
+				<div id="lightbox-main-image" class="lightbox-main-image">
+					<!-- 動態插入主圖片 -->
+				</div>
+
+				<!-- 文字資訊區域 -->
+				<div class="lightbox-details">
+					<h2 id="lightboxPdName">商品名稱</h2>
+					<p>
+						<span>描述：</span> <span id="lightboxPdDescr">商品描述內容</span>
+					</p>
+					<p>
+						<span>重量：</span> <span id="lightboxPdWeight">商品重量</span>
+					</p>
+					<p>
+						<span>尺寸：</span> <span id="lightboxPdSize">商品尺寸</span>
+					</p>
+					<p>
+						<span>顏色：</span> <span id="lightboxPdColor">商品顏色</span>
+					</p>
+				</div>
+
+				<!-- 小圖瀏覽區 -->
+				<div id="lightbox-thumbnails" class="lightbox-thumbnails">
+					<!-- 動態插入小圖 -->
+				</div>
+			</div>
+		</div>
+
+
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<script>
+    $(document).ready(function () {
+        const container = $("#productGrid");
+        const items = container.children(".product-card").toArray();
+        const itemsPerPage = 12; // 每頁顯示的商品數量
+        let currentPage = 1;
+        const formatNumberWithCommas = (number) => {
+            return number.toLocaleString('en-US'); // 將數字格式化為帶逗號的格式
+        };
+        
+	// 格式化所有的商品價格
+	$(".product-price").each(function () {
+	    const priceElement = $(this);
+	    const rawPrice = parseFloat(priceElement.text().replace(/[^0-9.]/g, "")); // 從文字中提取數字
+	    if (!isNaN(rawPrice)) {
+	        priceElement.text(`售價: $${formatNumberWithCommas(rawPrice)}`); // 使用反引號包裹字串
+	    }
+	});
+
+
+        // 分頁功能
+    const updatePagination = (totalPages, filteredItems) => {
+        const paginationContainer = $("#pagination");
+        paginationContainer.empty();
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = $("<button>").text(i).on("click", () => {
+                currentPage = i;
+                paginateItems(filteredItems);
+            });
+            if (i === currentPage) btn.addClass("active");
+            paginationContainer.append(btn);
+        }
+    };
+	
+    	// 分页显示
+ const paginateItems = (filteredItems) => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        // 清空九宫格并重新填充符合条件的商品
+        container.empty();
+        filteredItems.forEach((item, index) => {
+            if (index >= startIndex && index < endIndex) {
+                container.append(item);
+            }
+        });
+
+        const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+        updatePagination(totalPages, filteredItems);
+    };
+        
+        // 搜尋功能
+        $("#searchInput").on("input", function () {
+            const searchText = $(this).val().toLowerCase();
+            items.forEach((item) => {
+                const productName = $(item).attr("data-name").toLowerCase();
+                if (productName.includes(searchText)) {
+                    $(item).show();
+                } else {
+                    $(item).hide();
+                }
+            });
+        });
+
+     // 商品分類篩選功能
+		$("#categoryFilter").on("change", function () {
+		    const selectedCategory = $(this).val(); // 獲取選中的分類 ID
+		    const filteredItems = items.filter(item => {
+		        const itemCategory = $(item).attr("data-category"); // 商品分類 ID
+		        return !selectedCategory || itemCategory === selectedCategory;
+		    });
+		    currentPage = 1; // 篩選後重置到第一頁
+		    paginateItems(filteredItems);
+		});
+     
+     
+
+        // 商品排序功能
+        const sortItems = (asc) => {
+            items.sort((a, b) => {
+                const priceA = parseFloat($(a).find(".product-price").text().replace(/[^0-9.]/g, ""));
+                const priceB = parseFloat($(b).find(".product-price").text().replace(/[^0-9.]/g, ""));
+                return asc ? priceA - priceB : priceB - priceA;
+            });
+
+            container.empty().append(items);
+            currentPage = 1; // 排序後重置到第一頁
+            paginateItems(items); // 排序後顯示第一頁
+        };
+
+        $("#sortAsc").on("click", () => sortItems(true));
+        $("#sortDesc").on("click", () => sortItems(false));
+
+        // 初始化顯示
+        paginateItems(items);
+        
+        // 數量增加
+        $(document).on("click", ".quantity-increase", function () {
+            const input = $(this).siblings(".quantity-input");
+            const maxQty = parseInt(input.attr("data-pd-qty")); // 獲取庫存數量
+            let currentValue = parseInt(input.val());
+
+            if (currentValue < maxQty) {
+                input.val(currentValue + 1);
+            } else {
+                alert(`商品數量不能超過庫存數量 ${maxQty}！`);
+                input.val(maxQty);
+            }
+        });
+
+     // 數量減少
+     $(document).on("click", ".quantity-decrease", function () {
+        const input = $(this).siblings(".quantity-input");
+        let currentValue = parseInt(input.val());
+        if (currentValue > 1) {
+            input.val(currentValue - 1);
+        }
+   	});
+        
+     // 手動輸入數量限制
+        $(document).on("input", ".quantity-input", function () {
+            const maxQty = parseInt($(this).attr("data-pd-qty"));
+            let currentValue = parseInt($(this).val());
+
+            if (isNaN(currentValue) || currentValue < 1) {
+                $(this).val(1);
+            } else if (currentValue > maxQty) {
+                alert(`商品數量不能超過庫存數量 ${maxQty}！`);
+                $(this).val(maxQty);
+            }
+        });
+
+        
+     // 加入購物車按鈕事件
+        $(document).on("click", ".add-to-cart-btn", function () {
+            const productCard = $(this).closest(".product-card");
+            const productId = $(this).data("pd-id");
+            const pdName = productCard.find(".product-name").text().trim();
+            const pdPrice = parseFloat(productCard.find(".product-price").text().replace(/[^0-9.]/g, ""));
+            const quantityInput = productCard.find(".quantity-input");
+            const quantity = parseInt(quantityInput.val());
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert("請輸入有效的數量");
+                return;
+            }
+
+            if (isNaN(pdPrice)) {
+                alert("商品價格有誤，請稍後再試");
+                return;
+            }
+
+            const cartItem = {
+                pdDetailsVO: {
+                    pdId: productId,
+                    pdName: pdName,
+                    pdPrice: pdPrice,
+                },
+                quantity: quantity,
+            };
+
+            $.ajax({
+                url: 'http://localhost:8080/cartDetails/addToCart',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(cartItem),
+                success: function (response) {
+                    alert('商品已成功加入購物車！');
+                },
+                error: function (xhr, status, error) {
+                    alert('加入購物車失敗！請稍後再試。');
+                }
+            });
+        });
+     
+     // 收藏商品功能
+        $(document).on("click", ".add-to-fav-btn", function () {
+            const productId = $(this).data("pd-id");
+
+            $.ajax({
+                url: '/pdFav/add',  // 發送請求至後端 Controller
+                type: 'POST',
+                data: { pdId: productId },  // 傳送商品 ID
+                success: function (response) {
+                    if (response === "請先登入會員") {
+                        alert(response);
+                        window.location.href = "/front_end/login"; // 導向登入頁面
+                    } else {
+                        alert(response); // 收藏成功或其他訊息
+                    }
+                },
+                error: function () {
+                    alert("加入收藏失敗，請稍後再試！");
+                }
+            });
+        });
+
+     // 燈箱功能
+  
+            // 點擊商品圖片打開燈箱
+            $(document).on("click", ".product-image", function () {
+                const pdId = $(this).siblings(".add-to-cart-btn").data("pd-id");
+
+                // AJAX 請求取得商品資料
+                $.ajax({
+                    url: '/pdDetails/getOne_For_Update', // 後端 API 路徑
+                    type: 'POST',
+                    data: { pdId: pdId },
+                    success: function (response) {
+                        // 將商品資訊填入燈箱
+                        $("#lightboxPdName").text(response.pdName);
+                        $("#lightboxPdDescr").text(response.pdDescr);
+                        $("#lightboxPdWeight").text(response.pdWeight);
+                        $("#lightboxPdSize").text(response.pdSize);
+                        $("#lightboxPdColor").text(response.pdColor);
+
+                        // 顯示燈箱
+                        $("#productLightbox").fadeIn();
+                    },
+                    error: function () {
+                        alert("無法獲取商品資訊，請稍後再試。");
+                    }
+                });
+            });
+
+         // 點擊燈箱外圍關閉燈箱
+            $(document).on("click", "#productLightbox", function (event) {
+                // 判斷點擊的是否是燈箱背景區域 (lightbox) 本身
+                if (event.target === this) {
+                    $(this).fadeOut();
+                }
+            });
+
+            // 點擊關閉按鈕關閉燈箱
+            $(".close-btn").on("click", function () {
+                $("#productLightbox").fadeOut();
+            });
+	
+            
+            
+            $(document).on("click", ".product-image", function () {
+                const pdId = $(this).siblings(".add-to-cart-btn").data("pd-id");
+
+                // AJAX 請求獲取商品詳細資訊和圖片
+                $.ajax({
+                    url: '/pdDetails/getProductDetails', // 新增的方法路徑
+                    type: 'GET',
+                    data: { pdId: pdId },
+                    success: function (response) {
+                        // 填充商品詳細資訊
+                        $("#lightboxPdName").text(response.pdName);
+                        $("#lightboxPdDescr").text(response.pdDescr);
+                        $("#lightboxPdWeight").text(response.pdWeight);
+                        $("#lightboxPdSize").text(response.pdSize);
+                        $("#lightboxPdColor").text(response.pdColor);
+
+                     // 清空舊的內容
+                        $("#lightbox-main-image").empty();
+                        $("#lightbox-thumbnails").empty();
+
+                        // 取得圖片列表
+                        const images = response.images;
+
+                        if (images.length > 0) {
+                            // 生成主要大圖 (預設為第一張圖片)
+                            const mainImageUrl = `/pdImg/DBGifReader?pdImgId=${images[0]}`;
+                            $("#lightbox-main-image").html(`
+                                <img src="${mainImageUrl}" alt="主要圖片" style="max-width: 100%; height: auto; border-radius: 5px;">
+                            `);
+
+                            // 生成小圖縮略圖
+                            images.forEach((imgId, index) => {
+                                const thumbnailUrl = `/pdImg/DBGifReader?pdImgId=${imgId}`;
+                                const thumbnail = $(`
+                                    <img src="${thumbnailUrl}" alt="小圖" 
+                                        class="thumbnail" 
+                                        style="width: 60px; height: 60px; object-fit: cover; border: 2px solid transparent; cursor: pointer; border-radius: 5px;">
+                                `);
+
+                                // 預設將第一張圖片加上邊框
+                                if (index === 0) {
+                                    thumbnail.css("border-color", "blue");
+                                }
+
+                                // 點擊小圖切換主圖片
+                                thumbnail.on("click", function () {
+                                    $("#lightbox-main-image").html(`
+                                        <img src="${thumbnailUrl}" alt="主要圖片" style="max-width: 100%; height: auto; border-radius: 5px;">
+                                    `);
+
+                                    // 移除所有小圖的邊框並加上藍色邊框
+                                    $(".thumbnail").css("border-color", "transparent");
+                                    $(this).css("border-color", "blue");
+                                });
+
+                                // 添加到縮略圖區域
+                                $("#lightbox-thumbnails").append(thumbnail);
+                            });
+                        }
+
+                        // 顯示燈箱
+                        $("#productLightbox").fadeIn();
+                    },
+                    error: function () {
+                        alert("無法獲取商品資訊，請稍後再試。");
+                    }
+                });
+            });
+
+    });
+</script>
+</body>
+</html>

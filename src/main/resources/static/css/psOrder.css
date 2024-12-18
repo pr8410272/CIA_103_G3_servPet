@@ -1,0 +1,74 @@
+@charset "UTF-8";
+*{
+    font-family: "Quicksand",sans-serif;
+}
+
+body {
+    background-color: #F8EAD3;
+    color: black;
+}
+
+header {
+    background-color: #F8EAD3;
+    height: 80px;
+    width: 100%;
+}
+
+h1 {
+    color: black;
+    position: absolute;
+    left: 25px;
+    top: 0;
+    line-height: 80px;
+}
+
+header ul {
+    position: absolute;
+    right: 5vw;
+    top: 0;
+    line-height: 80px;
+}
+
+header li {
+    display: inline;
+    margin-right: 4vw;
+}
+
+header a {
+    color: black;
+    text-decoration: none;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background-color: #F8EAD3;
+    color: black;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+
+.view {
+    background-color: #FFFDF9;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+#datePicker {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button {
+    transition: opacity 0.2s ease-in-out;
+}

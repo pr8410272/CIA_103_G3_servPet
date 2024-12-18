@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>儲值頁面</title>
+    <style>
+        /* 全域樣式 */
+        html, body {
+            font-family: "Quicksand", sans-serif;
+            background-color: #FFFDF9;
+            color: #333;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: #F8EAD3;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        header h1 a {
+            text-decoration: none;
+            color: #3f3f3f;
+            transition: color 0.3s ease;
+        }
+
+        header h1 a:hover {
+            color: #F8A978;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #FFF8EE;
+            padding: 10px;
+        }
+
+        nav a {
+            color: #3f3f3f;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #F8A978;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #F8A978;
+            object-fit: cover;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section-block {
+            background-color: #F8EAD3;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="number"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #CCC;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #F8A978;
+            color: #FFFDF9;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #E7946D;
+        }
+
+        #transactionTable {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #transactionTable th, #transactionTable td {
+            border: 1px solid #CCC;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #transactionTable th {
+            background-color: #F8A978;
+            color: white;
+        }
+
+        #transactionTable tr:nth-child(even) {
+            background-color: #FFF8EE;
+        }
+
+        footer {
+            background-color: #F8EAD3;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+    <script>
+        function toggleTransactionTable() {
+            const table = document.getElementById("transactionTable");
+            table.style.display = table.style.display === "none" ? "table" : "none";
+        }
+        function confirmSubmit() {
+            const money = document.getElementById("money").value;
+            if (money === "" || parseInt(money) < 100) {
+                alert("請輸入正確的儲值金額，至少為 100 元！");
+                return false; // 阻止表單提交
+            }
+
+            return confirm(`確認要儲值 ${money} 元嗎？`); // 彈出確認框
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1><a href="/">儲值金系統</a></h1>
+    </header>
+
+    <!-- 用戶資訊 -->
+    <nav>
+<div class="user-info">
+    <div class="avatar">
+        <img th:if="${mebImg != null}" th:src="'data:image/jpeg;base64,' + ${mebImg}" alt="用戶頭像" />
+        <img th:if="${mebImg == null}" src="/images/avatar-placeholder.png" alt="預設頭像" />
+    </div>
+    <span th:text="${member.mebName}">用戶名</span>
+</div>
+        <div class="user-actions">
+            <a href="/logout">登出</a>
+        </div>
+    </nav>
+
+<main>
+    <div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; width: 100%;">
+        <!-- 儲值區域 (變小，靠左) -->
+        <div class="section-block" style="width: 30%; min-width: 300px;">
+            <p>目前餘額：<span id="currentBalance" th:text="${totalBalance}">0</span> 元</p>
+            <form action="/vtr/create" method="post" onsubmit="return confirmSubmit()">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <input type="hidden" id="mebId" name="mebId" th:value="${mebId}">
+                <label for="money">儲值金額：</label>
+                <input type="number" id="money" name="money" min="100" required>
+                <input type="hidden" id="transactionType" name="transactionType" value="儲值">
+                <button type="submit">提交儲值</button>
+            </form>
+            <!-- 成功或錯誤訊息 -->
+            <div th:if="${success}" style="color: green; text-align: center;">
+                <p th:text="${success}"></p>
+            </div>
+            <div th:if="${error}" style="color: red; text-align: center;">
+                <p th:text="${error}"></p>
+            </div>
+        </div>
+
+        <!-- 交易紀錄表格 (右側區域) -->
+        <div style="flex: 1; max-width: 70%;">
+            <!-- 顯示交易紀錄按鈕 -->
+            <button id="showRecordsBtn" onclick="toggleTransactionTable()" style="margin-bottom: 10px;">顯示/隱藏儲值紀錄</button>
+
+            <!-- 儲值紀錄表格 -->
+            <table id="transactionTable">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>金額</th>
+                        <th>交易類型</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="transaction : ${transactions}">
+                        <td th:text="${#temporals.format(transaction.createTime, 'yyyy-MM-dd HH:mm:ss')}">2024-01-01</td>
+                        <td th:text="${transaction.money}">1000</td>
+                        <td th:text="${transaction.transactionType}">儲值</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(transactions)}">
+                        <td colspan="3">目前沒有任何交易紀錄。</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 分頁控制 -->
+            <div class="pagination" style="text-align: center; margin-top: 20px;">
+                <a th:if="${currentPage > 1}" 
+                   th:href="@{'/vtr/create?page=' + ${currentPage - 1} + '&size=10'}">上一頁</a>
+                <span>第 <span th:text="${currentPage}"></span> 頁 / 共 <span th:text="${totalPages}"></span> 頁</span>
+                <a th:if="${currentPage < totalPages}" 
+                   th:href="@{'/vtr/create?page=' + ${currentPage + 1} + '&size=10'}">下一頁</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+    <footer>
+        &copy; 2024 儲值金系統
+    </footer>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    
+    <title>活動公告資料新增 - addEvent</title>
+
+     <style>
+        header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	#role, #name {
+             background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+        
+        nav {    
+		    margin-top: 0%;
+		}
+     	
+        /* 全局样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+           
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 顶部表格样式 */
+        table#table-1 {
+            width: 100%;
+            background-color: #334252;
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: none;
+            text-align: center;
+            padding: 20px;
+        }
+         table td {
+        padding: 15px;
+        vertical-align: top;
+        font-size: 1.2rem; /* 文字大小變大 */
+    }
+     
+     	
+        h3 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        h6 {
+        text-align: center;
+        	margin-bottom: 20px;
+            margin: 0;
+            font-size: 2rem;
+                border-bottom: 2px solid #334252;
+        }
+
+        h4 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        /* 表单样式 */
+          form {
+        background-color: #fff;
+        padding: 30px;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+    }
+    
+
+    table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-spacing: 0;
+    }
+
+    table td {
+        padding: 15px;
+        vertical-align: top;
+        font-size: 1.2rem; /* 文字大小變大 */
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+        padding: 15px;
+        width: calc(100% - 30px); /* 框大小變大 */
+        font-size: 1.2rem; /* 文字大小變大 */
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        resize: none; /* 禁止調整大小 */
+    }
+
+
+        input[type="text"],
+        select,
+      textarea {
+    padding: 10px;
+    width: 100%; /* 確保寬度與其他元素一致 */
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    resize: vertical; /* 允許垂直方向調整高度 */
+    box-sizing: border-box; /* 包括 padding 在內計算寬度 */
+}
+
+        input[type="submit"] {
+    background-color: #334252;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block; /* 設置為塊級元素 */
+    margin: 20px auto; /* 利用 auto 讓按鈕水平置中 */
+    text-align: center; /* 文字水平置中 */
+}
+
+        input[type="submit"]:hover {
+            background-color: #334252;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .logo-image {
+            width: auto;
+            height: auto;
+            max-width: 50%;
+            border-radius: 8px;
+        }
+          footer {
+	    background-color: #334252;
+	    color: #FFE4CA;
+	    text-align: center;
+/* 		    padding: 20px 0; */
+	    font-size: 16px;
+	    position: fixed; /* Fixed position at the bottom */
+	    bottom: 0; /* Located at the bottom of the screen */
+	    width: 100%; /* Full width */
+	    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+	}
+	a.back-link {
+	    display: inline-block;
+
+	    color: #6c757d; /* 字體白色 */
+	  
+	    text-decoration: none; /* 移除下劃線 */
+	    font-weight: bold; /* 粗體字 */
+	    font-size: 1rem; /* 字體大小 */
+	    margin: 20px auto; /* 上下留白 */
+	    text-align: center; /* 文字居中 */
+	
+	}
+	/* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		    z-index: 9999;
+		}
+		
+			.contact-icon img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 29%;
+    margin-left: -470%;
+    margin-top: 83%;
+}
+		
+		/* icon 文字樣式 */
+		.contact-icon span {
+    font-size: 20px;
+    color: #333;
+    margin-top: 5px;
+    text-align: center;
+    white-space: nowrap;
+    margin-left: -946%;
+}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+	
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.forms["form1"].onsubmit = function (event) {
+            var title = document.forms["form1"]["title"].value.trim();
+            var content = document.forms["form1"]["content"].value.trim();
+            var infType = document.forms["form1"]["infType"].value;
+
+            if (!title || !content || !infType) {
+                event.preventDefault(); // 阻止表單送出
+                Swal.fire({
+                    title: "必填欄位未完成",
+                    text: "請填寫所有必填欄位！",
+                    icon: "error",
+                    confirmButtonText: "確定"
+                });
+                return false;
+            }
+
+            // 可加入其他驗證邏輯，例如字數限制等
+            if (title.length > 50) {
+                event.preventDefault();
+                Swal.fire({
+                    title: "標題過長",
+                    text: "標題字數請勿超過 50 字！",
+                    icon: "warning",
+                    confirmButtonText: "我知道了"
+                });
+                return false;
+            }
+
+            return true; // 驗證通過，允許表單送出
+        };
+    });
+</script>
+
+
+    
+</head>
+
+<body>
+<header>
+			    <div class="header-container">
+			        <div class="home-button">最新消息管理
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+
+	<div th:include="@{/back_end/admin/dashboard}"></div>
+   
+<main>  
+    <!-- 顯示錯誤訊息 -->
+    <br>
+    <div th:if="${errorMsgs != null}">
+        <div class="error-message">請修正以下錯誤:</div>
+        <ul>
+            <li th:each="message : ${errorMsgs}" th:text="${message}"></li>
+        </ul>
+    </div>
+	<div class="contact-icon" id="icon-container">
+		    <a th:href="@{/back_end/index}">
+		        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+		    </a>
+		    <span>後台首頁</span>
+		</div>
+		        
+    <form method="post" th:action="@{/event/add}" name="form1">
+    <h6>最新消息發佈 發佈:</h6><br>
+        <div class="contact-icon" id="icon-container">
+				    <a th:href="@{/back_end/index}">
+				        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+				    </a>
+				    <span>後台首頁</span>
+				</div>
+        <br>
+        <table>
+            <tr>
+                <td>標題:</td>
+                <td>
+                    <input type="text" name="title"
+                           th:value="${eventVO?.title ?: ''}"
+                           placeholder="請輸入活動公告標題" size="30">
+                </td>
+            </tr>
+            <tr>
+                <td>公告類型:</td>
+                <td>
+                    <select name="infType">
+                        <option value="0" th:selected="${eventVO?.infType == 0}">最新消息</option>
+                        <option value="1" th:selected="${eventVO?.infType == 1}">常問QA</option>
+                        <option value="2" th:selected="${eventVO?.infType == 2}">專欄文章</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>內容:</td>
+                <td>
+                    <textarea name="content" rows="4" cols="30"
+                              placeholder="請輸入活動公告內容"
+                              th:text="${eventVO?.content ?: ''}"></textarea>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <input type="submit" value="送出新增">    
+        <div style="text-align: center; margin-top: 30px;">
+		    <a th:href="@{/event/select}" class="back-link">返回最新消息查詢</a>
+		</div>
+        </form>
+        
+</main>
+       <footer>
+	       <p>© 2024 寵寵唯跡友善平台</p>
+	   </footer>
+     
+</body>
+</html>

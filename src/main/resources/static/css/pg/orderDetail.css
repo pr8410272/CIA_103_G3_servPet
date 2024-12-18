@@ -1,0 +1,147 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+header {
+	background-color: #334252;
+	height: 80px;
+	width: 100%;
+}
+
+h1 {
+	color: antiquewhite;
+	position: absolute;
+	left: 25px;
+	top: 0;
+	line-height: 80px;
+}
+
+header ul {
+	position: absolute;
+	right: 5vw;
+	top: 0;
+	line-height: 80px;
+}
+
+header li {
+	display: inline;
+	margin-right: 4vw;
+	/* 視窗寬度4% */
+}
+
+header a {
+	color: antiquewhite;
+	text-decoration: none;
+}
+
+header a:hover {
+	text-decoration: underline;
+}
+
+footer {
+	background-color: #334252;
+	color: antiquewhite;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 14px;
+}
+
+.view {
+    background-color: #ffeedd;
+    width: 100%;
+    padding: 15px;
+    min-height: 100vh; /* 設置最小高度為 100vh，讓背景色自動填滿螢幕 */
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: flex-start; /* 垂直居中 */
+    flex-direction: column;
+    gap: 20px; /* 增加間距，確保表格與按鈕之間有足夠的空間 */
+}
+
+
+/* 訂單詳情表格 */
+.order-table {
+    width: 75%; /* 控制表格寬度 */
+    max-width: 1200px; /* 設置最大寬度 */
+    margin: 0 auto; /* 自動左右 margin，達到居中的效果 */
+    border-collapse: collapse;
+    background-color: #D9CBCB;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* 其他表格樣式不變 */
+.order-table th, .order-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-table th {
+    background-color: #555;
+    color: white;
+}
+
+.order-table td {
+    background-color: #f9f9f9;
+}
+
+.order-table tr:nth-child(even) td {
+    background-color: #ddd;
+}
+
+.order-table td:first-child {
+    font-weight: bold;
+}
+
+
+/* 確認按鈕區域 */
+.actions {
+    display: flex;
+    justify-content: center; /* 水平居中按鈕 */
+    align-items: center; /* 垂直居中 */
+    width: 100%; /* 確保它的寬度與父容器一致 */
+}
+
+/* 按鈕的樣式 */
+.btn {
+    padding: 10px 20px;
+    background-color: #334252;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+/* 按鈕懸停顏色 */
+.btn:hover {
+    background-color: #555;
+}
+
+
+
+
+.order-table th {
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.order-table td {
+    font-size: 14px;
+}
+
+.order-table td, .order-table th {
+    padding: 12px 15px;
+}

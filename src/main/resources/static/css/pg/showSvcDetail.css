@@ -1,0 +1,216 @@
+@charset "UTF-8";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Quicksand",sans-serif;
+}
+
+header {
+    background-color: #F8EAD3;
+    height: 80px;
+    width: 100%;
+}
+
+h1 {
+    color: black;
+    position: absolute;
+    left: 25px;
+    top: 0;
+    line-height: 80px;
+}
+
+header ul {
+    position: absolute;
+    right: 5vw;
+    top: 0;
+    line-height: 80px;
+}
+
+header li {
+    display: inline;
+    margin-right: 4vw;
+    /* 視窗寬度4% */
+}
+
+header a {
+    color: black;
+    text-decoration: none;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+footer{
+    background-color:#F8EAD3;
+    color: 3f3f3f;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+
+.search{
+    background-color: #F8EAD3;
+    padding: 15px;
+    display: flex; 
+    justify-content: flex-end;
+    align-items: center;
+    height:60px;
+}
+.search input{
+    background-color: white;
+    color: darkolivegreen;
+    border: 1px solid #949d9a;
+    padding: 6px 10px;
+    border-radius: 5px;
+    margin-right: 5px; 
+   
+} 
+.search button{
+    background-color: aliceblue;
+    color: darkolivegreen;
+    border: 1px solid #949d9a;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 1px 1px 3px lightblue;
+} 
+ button:hover {
+    background-color: white; /*滑鼠懸停效果 */ 
+} 
+
+
+ input:focus{
+    outline: none;
+}
+
+.search select{
+    background-color: white; 
+    color: darkolivegreen;
+    padding: 6px 10px;
+    border: 1px solid #949d9a;
+    border-radius: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; 
+}
+
+
+.view{
+    background-color: transparent;
+    width: 100%; /* 父容器滿版 */
+    padding: 15px;
+    display: flex; 
+    justify-content: center;
+    align-items:center;
+    overflow: hidden;
+	min-height: 100vh; /* 設置最小高度為 100vh，讓背景色自動填滿螢幕 */
+	justify-content: space-between; /* 讓子元素均勻分佈，確保 footer 在底部 */
+	background-image: url('/images/lebao.jpg'); /* 背景圖片路徑 */
+    background-size: cover; /* 確保圖片完全覆蓋區域 */
+    background-position: center; /* 圖片居中 */
+    background-repeat: no-repeat; /* 防止圖片重複 */
+
+} 
+
+
+
+.select-section {
+    background-color: transparent; /* 整個選擇區背景透明 */
+    color: FFFDF9;
+    height: 40px; /* 下拉選單區域的高度 */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: none; /* 移除陰影效果 */
+    margin-bottom: 20px; /* 增加與下方描述區的間距 */
+}
+
+.select-section label {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.select-section select {
+    flex: 1;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid transparent; /* 邊框樣式 */
+    border-radius: 4px;
+    background-color: transparent; /* 背景透明 */
+    color: FFFDF9; /* 字體顏色 */
+    appearance: none; /* 移除默認的下拉箭頭樣式 */
+    outline: none; /* 移除黑框 */
+    box-shadow: none; /* 移除陰影 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* 過渡效果 */
+    text-align: center; /* 文字水平置中 */
+    text-align-last: center; /* 選中項目文字置中（部分瀏覽器支持） */
+    max-height: 200px; /* 設置最大高度 */
+    overflow-y: auto; /* 當選項超出時，啟用滾動條 */
+}
+
+.select-section select option {
+    background-color: #F8EAD3; /* 半透明背景 */
+    color: FFFDF9; /* 字體顏色 */
+    text-align: center; /* 確保選項文字也置中 */
+    border: none;
+}
+
+
+
+.select-section select:focus {
+    border-color: transparent; /* 焦點時的邊框顏色#D9CBCB */
+    outline: none; /* 移除黑框 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加浮起效果的陰影 */
+    transform: scale(1.05); /* 放大效果 */
+}
+
+.select-section select option:checked {
+    background-color: #F8EAD3; /* 選中項目背景 */
+    color: FFFDF9;
+}
+
+
+
+.description-section {
+	position: absolute; /* 改用絕對定位 */
+    top: 250px;
+    left: 0;
+    right: 0;
+    height:250px;
+    background-color: rgba(217, 203, 203,0.7); /* 半透明背景 */
+    text-align: center;
+/*     background-color: #D9CBCB; */
+    padding: 65px;
+    border-radius: 0px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+}
+
+.default-image {
+    margin-top: 15px;
+    width: 800px; /* 圖片寬度，可調整 */
+    height: auto; /* 保持比例 */
+    border-radius: 8px; /* 可選，設置圓角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影 */
+}
+
+
+.description-section h2 {
+    font-size: 24px; /* 標題字體大小 */
+    margin-bottom: 15px; /* 與描述文字的間距 */
+    color: #334252; /* 標題字體顏色 */
+}
+
+.description-section p {
+    font-size: 16px; /* 描述文字字體大小 */
+    line-height: 1.6; /* 行高 */
+    color: #334252; /* 描述文字字體顏色 */
+    text-align:center;
+}
