@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>管理員權限列表</title>
+    <link rel="stylesheet" th:href="@{/css/adminPer/listAllAdminPer.css}" />
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script> <!-- jQuery -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script> <!-- DataTables JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" /> <!-- DataTables CSS -->
+
+    <!-- DataTables 設定 -->
+    <script>
+        $(document).ready(function() {
+            var table = $('#example').DataTable({
+                "lengthMenu": [3, 5, 7, 10],
+                "searching": true,
+                "paging": true,
+                "ordering": false,
+                "info": true,
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 筆結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 筆結果，共 <font color=red>_TOTAL_</font> 筆",
+                    "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                    "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                    "search": "搜尋:",
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <!-- *************** Header 區域 *************** -->
+    <table id="header">
+        <tr>
+            <td>
+                <img th:src="@{/images/admin/pflogow.png}"/>
+                <font>管理員權限列表</font>
+                <img th:src="@{/images/admin/pflogow.png}"/>
+                <h4><a th:href="@{/adminPer/select_adminPer_page}">回檢索管理頁</a></h4>
+            </td>
+        </tr>
+    </table>
+
+    <!-- *************** Table 列表區域 *************** -->
+    <div id="body">
+        <article>
+            <table id="example" class="display">
+                <thead>
+                    <tr>
+                        <th>計數</th>
+                        <th>管理員名稱</th>
+                        <th>權限功能</th>
+                        <th>管理員狀態</th>
+                        <!-- <th>修改</th>
+                         	<th>刪除</th>	-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="adminPerVO : ${adminPerListData}">
+                        <tr>
+                            <td th:text="${adminPerVO.adminPerId}"></td>
+                            <td th:text="${adminPerVO.adminVO.adminName}"></td>
+                            <td th:text="${adminPerVO.fncVO.fncName}"></td>
+                            
+                            <td>
+                                <span th:text="${adminPerVO.adminVO.adminAccStatus == '1' ? '啟用' : '停用'}"></span>
+                            </td>
+                            <!--  
+                            <td>
+                                <form method="post" th:action="@{/adminPer/getOne_For_Update}">
+                                    <input type="submit" value="修改">
+                                    <input type="hidden" name="adminPerId" th:value="${adminPerVO.adminPerId}" />
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post" th:action="@{/adminPer/delete}">
+                                    <input type="submit" value="刪除">
+                                    <input type="hidden" name="adminPerId" th:value="${adminPerVO.adminPerId}" />
+                                </form>
+                            </td>
+                            -->
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </article>
+    </div>
+
+    <!-- *************** Footer 區域 *************** -->
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>寵寵唯跡 寵物美容預約日曆</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<link rel="stylesheet" href="/css/frontend_index_styles.css">
+<link rel="stylesheet" href="/slick/slick.css" />
+<link rel="stylesheet" href="/slick/slick-theme.css" />
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<style>
+#calendar {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.completed-booking {
+	background-color: #4CAF50 !important;
+	border-color: #4CAF50 !important;
+}
+
+.ongoing-booking {
+	background-color: #FFA500 !important;
+	border-color: #FFA500 !important;
+}
+
+.cancelled-booking {
+	background-color: #ADADAD !important;
+	border-color: #ADADAD !important;
+}
+
+.rating {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+}
+
+.rating>input {
+	display: none;
+}
+
+.rating>label {
+	position: relative;
+	width: 1.1em;
+	font-size: 2em;
+	color: #ddd;
+	cursor: pointer;
+}
+
+.rating>label:before {
+	content: "\2605";
+	position: absolute;
+	opacity: 1;
+}
+
+.rating>label:hover:before, .rating>label:hover ~ label:before {
+	color: #FFD700;
+}
+
+.rating>input:checked ~ label:before {
+	color: #FFD700;
+}
+
+.ready-booking {
+	background-color: #007BFF !important;
+	border-color: #007BFF !important;
+}
+
+#bookingList {
+	margin-top: 30px;
+}
+
+.star-rating {
+	color: #FFD700;
+}
+</style>
+</head>
+<body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寵寵唯跡友善平台</title>
+<link rel="stylesheet" href="/css/frontend_index_styles.css">
+<link rel="stylesheet" href="/slick/slick.css" />
+<link rel="stylesheet" href="/slick/slick-theme.css" />
+</head>
+<body>
+	<header>
+		<h1>
+			<a th:href="@{/}">寵寵唯跡 ServPET</a>
+		</h1>
+	</header>
+
+	<nav>
+		<div class="dropdown">
+			<button class="dropbtn">關於平台</button>
+			<div class="dropdown-content">
+				<a th:href="@{/頁面位址放這}">平台介紹</a> <a
+					th:href="@{/member/cs-issues/add}">問題反應</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">最新消息</button>
+			<div class="dropdown-content">
+				<a th:href="@{/member/event/list}">平台公告消息</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">寵物商城</button>
+			<div class="dropdown-content">
+				<a th:href="@{/頁面位址放這}">商品列表</a> <a th:href="@{/頁面位址放這}">購物車</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">寵物美容</button>
+			<div class="dropdown-content">
+				<a th:href="@{/pg/showAllPgSvcItem}">寵物美容服務</a> <a th:href="@{/pg}">預約</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">寵物保母</button>
+			<div class="dropdown-content">
+				<a th:href="@{/ps/psList}">寵物保母服務</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">會員專區</button>
+			<div class="dropdown-content">
+				<a th:href="@{/profile}">會員個人資訊</a>
+				<a th:href="@{/pets}">寵物資訊</a>
+				<a th:href="@{/ntfy/member}">會員訊息匣</a>
+				<a th:href="@{/mebPdo/mebPdo}">商城訂單</a>
+				<a th:href="@{/booking/calendar}">我的寵物美容月曆</a>
+				<a th:href="@{/pdFav/list}">商品收藏</a> <a th:href="@{/pgFav/list}">寵物美容師收藏</a>
+				<a th:href="@{/頁面位址放這}">寵物保母收藏</a>
+				<a th:href="@{/頁面位址放這}">我的錢包</a>
+				<a th:href="@{/apply/create}">成為美容師/保母</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">登入</button>
+			<div class="dropdown-content">
+				<a th:href="@{/login}">會員登入</a> <a th:href="@{/admin/login}">後台登入</a>
+			</div>
+		</div>
+	</nav>
+
+
+
+	<main>
+
+		<div class="container mt-5">
+			<h1 class="text-center mb-4">我的寵物美容月曆 🐕</h1>
+			<div class="mb-3">
+				<div class="d-flex justify-content-around">
+					<span class="text-end"> <i
+						class="fas fa-circle text-primary"></i> 預約準備中.. <i
+						class="fas fa-circle text-warning"></i> 進行中.. <i
+						class="fas fa-circle text-success"></i> 已完成,可送評價囉!
+					</span>
+				</div>
+			</div>
+
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation"><a
+					class="nav-link active" id="calendar-tab" data-toggle="tab"
+					href="#calendar" role="tab" aria-controls="calendar"
+					aria-selected="true">月曆視圖</a></li>
+				<li class="nav-item" role="presentation"><a class="nav-link"
+					id="list-tab" data-toggle="tab" href="#bookingList" role="tab"
+					aria-controls="list" aria-selected="false">列表視圖</a></li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="calendar" role="tabpanel"
+					aria-labelledby="calendar-tab">
+					<div id="calendarView"></div>
+				</div>
+				<div class="tab-pane fade" id="bookingList" role="tabpanel"
+					aria-labelledby="list-tab">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>寵物名</th>
+								<th>美容師</th>
+								<th>預約日期</th>
+								<th>預約項目</th>
+								<th>預約時段</th>
+								<th>狀態</th>
+								<th>評分</th>
+								<th>評分內容</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="bookingTableBody">
+							<!-- 預約列表將在這裡動態生成 -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- 修改預約表單 -->
+		<div class="modal fade" id="updateForm" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">修改預約</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form id="updateBookingForm">
+							<input type="hidden" id="updatePgoId" name="pgoId" />
+							<div class="form-group">
+								<label>預約日期</label> <input type="date" id="updateBookingDate"
+									name="bookingDate" class="form-control" required />
+							</div>
+							<div class="form-group">
+								<label>預約時段</label> <select id="updateBookingTime"
+									name="bookingTime" class="form-control" required>
+									<option value="0">早</option>
+									<option value="1">中</option>
+									<option value="2">晚</option>
+								</select>
+							</div>
+							<button type="submit" class="btn btn-primary">修改預約</button>
+							<button type="button" class="btn btn-danger" id="cancelBooking">取消預約</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 評價表單 -->
+		<div class="modal fade" id="ratingForm" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">服務評價</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<form id="submitRating">
+							<input type="hidden" id="ratingPgoId" name="pgoId" />
+							<div class="rating mb-3">
+								<input type="radio" id="star5" name="star" value="5" /><label
+									for="star5">★</label> <input type="radio" id="star4"
+									name="star" value="4" /><label for="star4">★</label> <input
+									type="radio" id="star3" name="star" value="3" /><label
+									for="star3">★</label> <input type="radio" id="star2"
+									name="star" value="2" /><label for="star2">★</label> <input
+									type="radio" id="star1" name="star" value="1" /><label
+									for="star1">★</label>
+							</div>
+							<div class="form-group">
+								<label>評價內容</label>
+								<textarea id="ratingComment" name="comment" class="form-control"
+									required></textarea>
+							</div>
+							<button type="submit" class="btn btn-primary">提交評價</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯跡 All Rights Reserved.</p>
+	</footer>
+
+	<script th:inline="javascript">
+        $(document).ready(function() {
+            const timeSlotMap = {
+                '0': '早上',
+                '1': '中午',
+                '2': '晚上'
+            };
+            const statusMap = {
+                '0': '預約準備中',
+                '1': '已完成',
+                '2': '進行中',
+                '3': '已取消'
+            };
+            let bookings = /*[[${bookings}]]*/ [];
+
+            function initializeCalendar() {
+                $('#calendarView').fullCalendar({
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                    },
+                    events: function(start, end, timezone, callback) {
+                        var events = bookings.map(function(booking) {
+                            var className = '';
+                            switch(booking.bookingStatus) {
+                                case '1': className = 'completed-booking'; break;
+                                case '2': className = 'ongoing-booking'; break;
+                                case '3': className = 'cancelled-booking'; break;
+                                default: className = 'ready-booking';
+                            }
+                            var timeSlot = timeSlotMap[booking.bookingTime] || booking.bookingTime;
+                            return {
+                                id: booking.pgoId,
+                                title: '寵物名: '+booking.petName  + '\n' + '美容師: ' + booking.pgName + '\n' + 
+                                       '預約時段: ' + timeSlot,
+                                start: booking.bookingDate,
+                                className: className,
+                                bookingStatus: booking.bookingStatus
+                            };
+                        });
+                        callback(events);
+                    },
+                    eventClick: function(calEvent, jsEvent, view) {
+                        handleEventClick(calEvent);
+                    }
+                });
+            }
+
+            function initializeBookingList() {
+                const tableBody = $('#bookingTableBody');
+                tableBody.empty();
+                bookings.forEach(function(booking) {
+                    const row = $('<tr>').attr('data-pgo-id', booking.pgoId);
+                    row.append($('<td>').text(booking.petName));
+                    row.append($('<td>').text(booking.pgName));
+                    row.append($('<td>').text(booking.bookingDate));
+                    row.append($('<td>').text(booking.svcName));
+                    row.append($('<td>').text(timeSlotMap[booking.bookingTime] || booking.bookingTime));
+                    row.append($('<td>').text(statusMap[booking.bookingStatus]));
+        
+                    // Add star rating display
+                    const ratingCell = $('<td>');
+                    if (booking.star) {
+                        const stars = '★'.repeat(booking.star) + '☆'.repeat(5 - booking.star);
+                        ratingCell.html(`<span class="star-rating">${stars}</span>`);
+                    }
+                    row.append(ratingCell);
+        
+                    row.append($('<td>').text(booking.ratingComment || ''));
+        
+                    const actionCell = $('<td>');
+                    if (booking.bookingStatus === '1') {
+                        actionCell.append($('<button>').addClass('btn btn-sm btn-primary mr-2').text('點我評價').click(function() {
+                            $('#ratingPgoId').val(booking.pgoId);
+                            $('#ratingForm').modal('show');
+                        }));
+                    } else if (booking.bookingStatus !== '2' && booking.bookingStatus !== '3') {
+                        actionCell.append($('<button>').addClass('btn btn-sm btn-warning mr-2').text('修改預約').click(function() {
+                            handleEventClick({id: booking.pgoId, start: booking.bookingDate, bookingStatus: booking.bookingStatus});
+                        }));
+                    }
+                    row.append(actionCell);
+        
+                    tableBody.append(row);
+                });
+            }
+
+
+            function handleEventClick(calEvent) {
+                if (calEvent.bookingStatus === '1') {
+                    $('#ratingPgoId').val(calEvent.id);
+                    $('#ratingForm').modal('show');
+                } else if (calEvent.bookingStatus === '2') {
+                	Swal.fire('訂單進行中不能修改時間!');
+                } else if (calEvent.bookingStatus !== '3') {
+                    const selectedDate = moment(calEvent.start).format('YYYY-MM-DD');
+                    const today = moment().format('YYYY-MM-DD');
+                    
+                    $('#updatePgoId').val(calEvent.id).data('status', calEvent.bookingStatus);
+                    $('#updateBookingDate').val(selectedDate);
+                    $('#updateBookingDate').attr('min', today);
+                    $('#updateForm').modal('show');
+                }
+            }
+
+            initializeCalendar();
+            initializeBookingList();
+
+            $('#updateBookingForm').submit(function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '確定要修改這個預約嗎？',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '確定',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var formData = new FormData(this);
+                        var bookingDate = $('#updateBookingDate').val();
+                        var bookingTime = $('#updateBookingTime').val();
+                        var pgoId = $('#updatePgoId').val();
+                        $.ajax({
+                            url: '/booking/update/' + pgoId,
+                            method: 'PUT',
+                            data: {
+                                bookingDate: bookingDate,
+                                bookingTime: bookingTime
+                            },
+                            success: function(response) {
+                                $('#updateForm').modal('hide');
+                                Swal.fire({
+                                    title: '成功！',
+                                    text: '預約修改成功！',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    willClose: () => {
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 1000); // 2秒後重新載入頁面
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire('修改失敗！', xhr.responseText, 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#cancelBooking').click(function() {
+                Swal.fire({
+                    title: '確定要取消這個預約嗎？',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '確定',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/booking/cancel/' + $('#updatePgoId').val(),
+                            method: 'POST',
+                            success: function(response) {
+                                $('#updateForm').modal('hide');
+                                Swal.fire({
+                                    title: '成功！',
+                                    text: '預約取消成功！',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    willClose: () => {
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 1000); // 2秒後重新載入頁面
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire('取消失敗！', xhr.responseText, 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#submitRating').submit(function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: '確定提交評價嗎？',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '提交',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/booking/rate/' + $('#ratingPgoId').val(),
+                            method: 'POST',
+                            data: $(this).serialize(),
+                            success: function(response) {
+                                $('#ratingForm').modal('hide');
+                                Swal.fire({
+                                    title: '成功！',
+                                    text: '評價提交成功！',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    willClose: () => {
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 1000); // 2秒後重新載入頁面
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire('評價提交失敗！', xhr.responseText, 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+
+</html>
+

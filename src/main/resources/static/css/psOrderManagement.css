@@ -1,0 +1,241 @@
+@charset "UTF-8";
+
+* {
+    /*box-sizing: border-box;*/
+    margin: 0;
+    padding: 0;
+    font-family: "Quicksand",sans-serif;
+}
+body {
+    /*font-family: Arial, sans-serif;*/
+    background-color: #FFEEDD;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 保證內容至少滿足視窗高度 */
+    margin: 0;
+}
+
+header {
+    background-color: #334252;
+    height: 80px;
+    width: 100%;
+}
+
+h1 {
+    color: antiquewhite;
+    position: absolute;
+    left: 25px;
+    top: 0;
+    line-height: 80px;
+}
+
+header ul {
+    position: absolute;
+    right: 5vw;
+    top: 0;
+    line-height: 80px;
+}
+
+header li {
+    display: inline;
+    margin-right: 4vw;
+}
+
+header a {
+    color: antiquewhite;
+    text-decoration: none;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+    flex: 1; /* 主內容區域自動填充剩餘空間 */
+}
+
+footer {
+    background-color: #334252;
+    color: antiquewhite;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-top: auto; /* 確保 footer 位於內容之後 */
+}
+
+/* 表格基本樣式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #D9CBCB;
+    color: #333;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+/* 按鈕置中 */
+td a {
+    display: inline-block;
+    text-align: center;
+    width: 100px;  /* 可以根據需要調整按鈕寬度 */
+    margin: 0 5px;  /* 按鈕之間的間距 */
+}
+
+/* 表格按鈕樣式 */
+.btn {
+    padding: 8px 16px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 0 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px #fddeb5;
+    transition: background-color 0.3s ease;
+}
+
+/* 按鈕懸停樣式 */
+.btn:hover {
+    background-color: #555;  /* 懸停時改變背景顏色 */
+    transform: scale(1.05);  /* 當滑鼠懸停時，按鈕輕微放大 */
+}
+
+.btn-view {
+    background-color: #555;
+}
+
+.btn-cancel {
+    background-color: #e74c3c;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.search-form select, .search-form input {
+    padding: 5px;
+}
+
+/* 調整 DataTables 搜尋框與表格的間距 */
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 20px; /* 調整搜尋框與表格的間距 */
+    margin-left: 10px; /* 搜尋框向左靠一點 */
+}
+
+/* 調整搜尋框與其他 DataTables 功能區塊的對齊 */
+.dataTables_wrapper .dataTables_length {
+    margin-bottom: 20px;
+    margin-left: 10px;
+}
+
+/* DataTables 整體字型與表格顏色 */
+.dataTables_wrapper {
+    font-family: 'Arial', sans-serif; /* 設定字型 */
+    color: #333; /* 設定文字顏色 */
+}
+
+/* 移除搜尋框與顯示筆數選擇框的黑框 */
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    outline: none; /* 移除點選時的外框 */
+    border: 1px solid #ccc; /* 可選：添加更柔和的邊框 */
+    border-radius: 4px; /* 可選：讓邊角圓滑 */
+    padding: 5px; /* 可選：增加內部間距 */
+}
+
+/* 當元素獲得焦點時的樣式（可選，讓焦點樣式更美觀） */
+.dataTables_wrapper .dataTables_filter input:focus,
+.dataTables_wrapper .dataTables_length select:focus {
+    border: 1px solid #D9CBCB; /* 焦點時的邊框顏色 */
+    box-shadow: 0 0 5px rgba(217, 203, 203, 0.5); /* 可選：增加淡淡的陰影 */
+}
+
+/* 調整 DataTables 分頁按鈕的樣式 */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-color: transparent; /* 保持按鈕透明 */
+    border: 1px solid #D9CBCB; /* 設置邊框顏色 */
+    color: #333; /* 按鈕文字顏色 */
+    border-radius: 10px; /* 邊角更圓潤 */
+    padding: 5px 10px; /* 增加內部間距 */
+    margin: 2px; /* 增加按鈕之間的間距 */
+    cursor: pointer; /* 滑鼠移到按鈕時顯示為點擊手型 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 添加平滑過渡效果 */
+}
+
+/* 當滑鼠移到按鈕上方時 */
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #fddeb5 !important; /* 背景變為指定顏色 */
+    color: #fff !important; /* 按鈕文字顏色變為白色 */
+}
+
+/* 當前頁按鈕（current）的樣式 */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #fddeb5 !important; /* 啟用按鈕背景色 */
+    color: #fff !important; /* 啟用按鈕文字顏色 */
+    border-color: #fddeb5 !important; /* 啟用按鈕邊框顏色 */
+    cursor: default; /* 當前頁按鈕無法點擊 */
+}
+
+/* 禁用按鈕（例如“上一頁”或“下一頁”） */
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    background-color: transparent !important; /* 禁用按鈕透明 */
+    color: #999 !important; /* 禁用按鈕文字顏色 */
+    cursor: not-allowed; /* 禁用狀態下顯示禁止符號 */
+    opacity: 0.5; /* 減少透明度以顯示禁用狀態 */
+    border: 1px solid #D9CBCB; /* 確保禁用按鈕邊框顏色一致 */
+}
+
+.details-row {
+    display: none;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    color: #000;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    transition: max-height 0.5s ease, padding 0.5s ease;
+}
+
+.details-row div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.details-row div strong {
+    font-weight: bold;
+}
+
+.details-row div span {
+    margin-left: 10px;
+}
+
+tr.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    background-color: #e0e0e0;
+}

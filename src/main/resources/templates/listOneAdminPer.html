@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理員權限 - listOneAdminPer.html</title>
+    <link rel="stylesheet" th:href="@{/css/adminPer/listOneAdminPer.css}"/>
+</head>
+<body>
+
+    <!--*************** table#header (上方深色) 區域 **************-->
+    <table id="header">
+        <tr>
+            <td>
+                <img th:src="@{/images/adminPer/pflogow.png}"/>
+                <font>管理員權限</font>
+                <img th:src="@{/images/adminPer/pflogow.png}"/>
+                <h4><a th:href="@{/adminPer/select_adminPer_page}">回檢索管理頁</a></h4>
+            </td>
+        </tr>
+    </table>
+
+    <!--**************** div#body (中間淺色) 區域 *****************-->
+    <div id="body" th:fragment="listOneAdminPer-div">
+    <article>
+        <h3><span>查詢結果 :</span></h3>
+        <table id="body">
+            <!-- 表格表頭 -->
+            <thead>
+                <tr>
+                    <th>管理員編號</th>
+                    <th>管理員姓名</th>
+                    <th>功能名稱</th>
+                    <th>功能描述</th>
+                </tr>
+            </thead>
+            <!-- 表格資料 -->
+            <tbody>
+                <!-- 檢查 adminPerListData 是否為空 -->
+                <tr th:each="adminPer : ${adminPerListData}">
+                    <td th:text="${adminPer.adminVO.adminId}"></td>
+                    <td th:text="${adminPer.adminVO.adminName}"></td>
+                    <td th:text="${adminPer.fncVO.fncName}"></td>
+                    <td th:text="${adminPer.fncVO.fncDescription}"></td>
+                </tr>
+                <!-- 如果 list 是空的，顯示提示訊息 -->
+                <tr th:if="${#lists.isEmpty(adminPerListData)}">
+                    <td colspan="4" style="text-align: center; color: red;">沒有符合的結果</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</div>
+
+    <!--***************** footer (下方深色) 區域 *****************-->
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

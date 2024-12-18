@@ -1,0 +1,171 @@
+@charset "UTF-8";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Quicksand",sans-serif;
+}
+
+header {
+    background-color: #F8EAD3;
+    height: 80px;
+    width: 100%;
+}
+
+h1 {
+    color: black;
+    position: absolute;
+    left: 25px;
+    top: 0;
+    line-height: 80px;
+}
+
+header ul {
+    position: absolute;
+    right: 5vw;
+    top: 0;
+    line-height: 80px;
+}
+
+header li {
+    display: inline;
+    margin-right: 4vw;
+    /* 視窗寬度4% */
+}
+
+header a {
+    color: black;
+    text-decoration: none;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+footer {
+	background-color: #F8EAD3;
+	color: 3f3f3f;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 14px;
+}
+.search{
+	height:60px;
+    background-color:#F8EAD3;
+    padding: 15px;
+    display: flex; 
+    justify-content: flex-end;
+    align-items: center; 
+}
+
+.view {
+	background-color: #FFFDF9;
+	width: 100%; /* 父容器滿版 */
+	padding: 15px;
+	min-height: 100vh; /* 設置最小高度為 100vh，讓背景色自動填滿螢幕 */
+	justify-content: space-between; /* 讓子元素均勻分佈，確保 footer 在底部 */
+	/* display: flex;  */
+	/*     justify-content: flex-end; */
+	/*     align-items:center; */
+}
+
+/* 表單外框樣式 */
+.form-container {
+	width: 80%;
+	margin: 20px auto;
+	font-family: Arial, sans-serif;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+	padding: 20px;
+	background-color: #D9CBCB; /* 表單背景顏色 */
+	overflow: hidden;
+}
+
+/* 表單標題樣式 */
+.form-container h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+/* 表單欄位的標籤樣式 */
+.form-container label {
+	font-weight: bold;
+	display: block;
+	margin-bottom: 5px;
+	color: #555;
+}
+
+/* 表單欄位樣式 */
+.form-container input[type="text"], .form-container input[type="date"],
+	.form-container select {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 15px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-sizing: border-box;
+	background-color: #f9f9f9; /* 欄位背景顏色 */
+}
+
+input:focus {
+	outline: none; /* 移除外框 */
+	border: 1px solid transparent; /* 可設定透明邊框來避免其他樣式干擾 */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 增加陰影效果 */
+	transform: translateY(-2px); /* 輕微上移以呈現浮起感 */
+	transition: box-shadow 0.2s ease, transform 0.2s ease; /* 平滑過渡效果 */
+}
+
+select:focus {
+	outline: none; /* 移除外框 */
+	border: 1px solid transparent; /* 可設定透明邊框來避免其他樣式干擾 */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 增加陰影效果 */
+	transform: translateY(-2px); /* 輕微上移以呈現浮起感 */
+	transition: box-shadow 0.2s ease, transform 0.2s ease; /* 平滑過渡效果 */
+}
+
+/* 按鈕樣式 */
+.form-container button {
+	width: 100%;
+	padding: 10px;
+	background-color: #334252;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	transition: background-color 0.3s ease;
+}
+
+/* 按鈕懸停樣式 */
+.form-container button:hover {
+	background-color: #DDD1D1;
+}
+
+/* 錯誤訊息樣式 */
+.form-container .error-message {
+	color: red;
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+.return-button img {
+	top: 180px;
+	left: 30px;
+	width: 60px;
+	height: 60px;
+	margin: 5px;
+	border-radius: 50%;
+	transition: transform 0.3s;
+	cursor: pointer;
+	position: fixed;
+}
+
+.return-button img:hover {
+	transform: scale(1.1);
+}

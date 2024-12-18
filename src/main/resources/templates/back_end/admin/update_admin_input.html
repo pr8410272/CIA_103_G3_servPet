@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>管理員修改 - update_admin_input.html</title>
+<link rel="stylesheet" th:href="@{/css/update_admin_input.css}" />
+<link rel="stylesheet" th:href="@{/css/adminData.css}" />
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+</head>
+
+<body>
+	<!--*************** table#header (上方深色) 區域 **************-->
+	<table id="header">
+		<tr>
+			<td><img th:src="@{/images/admin/pflogow.png}"> <font>管理員資料修改</font>
+				<img th:src="@{/images/admin/pflogow.png}">
+			<td>
+		<tr>
+	</table>
+
+	<div th:include="@{back_end/admin/adminData}"></div>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+	<div th:include="@{back_end/admin/dashboard}"></div>
+	<div id="body">
+		<article id="BGcat">
+			<img id="BGcat" th:src="@{/images/admin/BGcat.png}" />
+		</article>
+
+		<article id="body">
+			<h2>修改資料</h2>
+			<hr>
+
+			<form th:action="@{update}" method="post" th:object="${adminVO}"
+				enctype="multipart/form-data">
+				<!-- 管理員編號 -->
+				<div>
+					<label>管理員編號:</label> <input type="text" th:field="*{adminId}"
+						readonly /><br />
+				</div>
+
+				<!-- 管理員姓名 -->
+				<div>
+					<label>管理員姓名:</label> <input type="text" th:field="*{adminName}"
+						onclick="hideContent('adminName.errors');" /><br /> <span
+						th:if="${#fields.hasErrors('adminName')}" th:errors="*{adminName}"
+						class="error" id="adminName.errors"></span>
+				</div>
+
+				<!-- 管理員角色 -->
+				<div>
+					<label>管理員角色:</label> <input type="text" th:field="*{adminRole}"
+						onclick="hideContent('adminRole.errors');" readonly /><br /> <span
+						th:if="${#fields.hasErrors('adminRole')}" th:errors="*{adminRole}"
+						class="error" id="adminRole.errors"></span>
+				</div>
+
+				<!-- 管理員狀態 -->
+			<div>
+			    <label>管理員狀態:</label> 
+			    <select th:if="${adminVO.adminId != 1001}" th:field="*{adminAccStatus}" onchange="hideContent('adminAccStatus.errors');">
+			        <option value="1" th:selected="${adminVO.adminAccStatus == 1}">啟用</option>
+			        <option value="0" th:selected="${adminVO.adminAccStatus == 0}">停用</option>
+			    </select>
+			    
+			    <select th:if="${adminVO.adminId == 1001}" th:field="*{adminAccStatus}" onchange="hideContent('adminAccStatus.errors');">
+			        <option value="1" th:selected="${adminVO.adminAccStatus == 1}">啟用</option>
+			    </select> 
+			    <br /> 
+			    <span th:if="${#fields.hasErrors('adminAccStatus')}" th:errors="*{adminAccStatus}" class="error" id="adminAccStatus.errors"></span>
+			</div>
+
+				<!-- 管理員帳號 -->
+				<div>
+					<label>管理員帳號:</label> <input type="text" th:field="*{adminAcc}"
+						onclick="hideContent('adminAcc.errors');" /><br /> <span
+						th:if="${#fields.hasErrors('adminAcc')}" th:errors="*{adminAcc}"
+						class="error" id="adminAcc.errors"></span>
+				</div>
+
+				<!-- 管理員密碼 -->
+				<div>
+					<label>管理員密碼:</label> <input type="text" th:field="*{adminPwd}"
+						onclick="hideContent('adminPwd.errors');" /><br /> <span
+						th:if="${#fields.hasErrors('adminPwd')}" th:errors="*{adminPwd}"
+						class="error" id="adminPwd.errors"></span>
+				</div>
+
+				<!-- 管理員照片 -->
+				<div>
+					<label>管理員照片:</label> <input type="file" th:field="*{upFiles}"
+						onclick="previewImage()" multiple="multiple"
+						onchange="hideContent('upFiles.errors');" /> <span
+						th:if="${#fields.hasErrors('upFiles')}" th:errors="*{upFiles}"
+						class="error" id="upFiles.errors"></span>
+					<div id="blob_holder">
+						<img
+							th:src="@{/admin/DBGifReader} + '?adminId=' + ${adminVO.adminId}">
+					</div>
+				</div>
+
+				<!-- 送出按鈕 -->
+				<div>
+					<button type="submit" id="submit">送出修改</button>
+				</div>
+			</form>
+
+			<!-- 回到管理頁 -->
+			<form action="#" th:action="@{/admin/select_admin_page}" method="get">
+				<button type="submit" class="btn btn-primary">回管理頁</button>
+			</form>
+		</article>
+
+		<article id="BGdog">
+			<img id="BGdog" th:src="@{/images/admin/BGdog.png}" />
+		</article>
+	</div>
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<script type="text/javascript">
+//清除提示信息
+function hideContent(d) {
+     document.getElementById(d).style.display = "none";
+}
+
+//照片上傳-預覽用
+var filereader_support = typeof FileReader != 'undefined';
+if (!filereader_support) {
+	alert("No FileReader support");
+}
+acceptedTypes = {
+		'image/png' : true,
+		'image/jpeg' : true,
+		'image/gif' : true
+};
+function previewImage() {
+	var upfile1 = document.getElementById("upFiles");
+	upfile1.addEventListener("change", function(event) {
+		var files = event.target.files || event.dataTransfer.files;
+		for (var i = 0; i < files.length; i++) {
+			previewfile(files[i])
+		}
+	}, false);
+}
+function previewfile(file) {
+	if (filereader_support === true && acceptedTypes[file.type] === true) {
+		var reader = new FileReader();
+		reader.onload = function(event) {
+			var image = new Image();
+			image.src = event.target.result;
+			image.width = 100;
+			image.height = 75;
+			image.border = 2;
+			if (blob_holder.hasChildNodes()) {
+				blob_holder.removeChild(blob_holder.childNodes[0]);
+			}
+			blob_holder.appendChild(image);
+		};
+		reader.readAsDataURL(file);
+		document.getElementById('submit').disabled = false;
+	} else {
+		blob_holder.innerHTML = "<div  style='text-align: left;'>" + "● filename: " + file.name
+				+ "<br>" + "● ContentTyp: " + file.type
+				+ "<br>" + "● size: " + file.size + "bytes"
+				+ "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
+		document.getElementById('submit').disabled = true;
+	}
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>更新申請狀態</title>
+</head>
+<body>
+    <h2>更新申請狀態</h2>
+    <form th:action="@{'/apply/' + ${applyId} + '/status'}" method="post">
+        <label for="status">狀態:</label>
+        <select id="status" name="status">
+            <option value="PENDING" th:selected="${currentStatus == 'PENDING'}">待審核</option>
+            <option value="APPROVED" th:selected="${currentStatus == 'APPROVED'}">通過</option>
+            <option value="REJECTED" th:selected="${currentStatus == 'REJECTED'}">拒絕</option>
+        </select>
+        <br><br>
+        <div th:if="${currentStatus == 'REJECTED'}">
+            <label for="rejectReason">拒絕理由:</label>
+            <textarea id="rejectReason" name="rejectReason" rows="4" cols="50" th:text="${rejectReason}"></textarea>
+        </div>
+        <br>
+        <button type="submit">提交</button>
+    </form>
+</body>
+</html>

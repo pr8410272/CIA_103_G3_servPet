@@ -1,0 +1,341 @@
+@charset "UTF-8";
+/******************<< 全域設定 >>******************/
+/* 引入 Google Fonts 字型 */
+@import
+	url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap')
+	;
+
+html, body {
+	font-weight: bold;
+	width:100%;
+	height: 100%;
+	margin: 0;
+	padding: 0; /* 將網頁padding歸0，以免留下邊框 */
+}
+
+body {
+	font-family: 'Zen Maru Gothic', sans-serif; /* 設置整個頁面的字型 */
+	background-color: #334252; /*設置整個頁面的背景色*/
+}
+.error{
+	color:red;
+	font-weight: normal;
+	padding: 0px;
+	margin: 0px;
+}
+
+div#error{
+	color:red;
+	font-weight: normal;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+/****************** table#header (上方深色) 區域 ******************/
+table#header {
+	background-color: #334252;
+	text-align: center;
+	width: 100%; /* 根據圖片和標題的寬度進行調整 */
+	min-width: 500px; /* 最小寬度 */
+	height: 50px; 
+	margin : 0;
+	padding-top: 20px;
+	margin: 0;
+}
+
+/*header圖片 */
+table#header img {
+	width: 60px;
+	height: 60px;
+	border: 0;
+	vertical-align: bottom; 
+}
+
+/*header文字字體 */
+table#header font {
+	font-size: 50px; 
+	color: #FFFAF4;
+	border: 0;
+	width: 60px;
+	height: 60px;
+	margin: 0;
+	vertical-align: bottom; 
+}
+
+table#header h1 {
+	color: #FFFAF4;
+	display: block;
+	margin: 10px;
+}
+
+table#header h2 {
+	color: #FFFAF4;
+	display: block;
+}
+
+/*****************<< div#body (中間淺色) 區域 >>*****************/
+div#body {
+    color: #334252; /* 設置文字顏色為藍 */
+    text-align: center; /* 文字左右置中 */
+    background: linear-gradient(to top, #FFE4CA, #FFEEDD, #FFFAF4);
+    height: auto;
+    min-height: 400px;
+    padding:40px 0 0px 0;
+    width: 100%;
+    min-width: 600px; /* 固定寬度 */
+    /* 使用 Flexbox 讓內容垂直與水平置中 */
+    display:flex;
+    flex-direction: row; /* 使用橫向排列 */
+    justify-content: center; /* 左對齊 */
+    align-items: flex-start; /* 頂部對齊 */
+}
+
+div#body img#BGcat {
+	padding-bottom:0px;
+    width: 500px; /* 根據需要調整圖片大小 */
+    height: auto;
+    object-fit: cover; /* 裁切圖片保持比例 */
+    object-position: center; /* 圖片中心裁切 */
+}
+
+div#body article#BGcat {
+    flex-grow: 1; /* 使 BGdog 填滿可用空間 */
+    max-width: 800px; /* 設定最大寬度 */
+    height: 600px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* 將內容（圖片）水平居中 */
+    align-items: center; /* 將內容（圖片）垂直居中 */
+    position: relative;
+}
+
+div#body img#BGdog {
+	padding-bottom:0px;
+    width: 500px; /* 根據需要調整圖片大小 */
+    height: auto;
+    object-fit: cover; /* 裁切圖片保持比例 */
+    object-position: center; /* 圖片中心裁切 */
+}
+
+div#body article#BGdog {
+     flex-grow: 1; /* 使 BGdog 填滿可用空間 */
+    max-width: 800px; /* 設定最大寬度 */
+    height: 600px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* 將內容（圖片）水平居中 */
+    align-items: center; /* 將內容（圖片）垂直居中 */
+    position: relative;
+}
+
+div#body article#body {
+    width: 500px;
+    min-width: 500px;
+    height: 670px;
+    border: 2px solid #334252;
+    border-top: 4px solid #334252;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom:50px;
+    position: relative;
+}
+
+/**********BLOB READER 圖片***********/
+div#blob_holder {
+	margin:10px;
+}
+
+/*上傳預覽用的圖片*/
+div#body div#blob_holder img {
+	border: 2px solid #334252;
+	text-align: center; /* 文字左右置中 */
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	}
+	
+/*資料庫讀取出來的圖片*/
+div#body img#pic {
+	border: 2px solid #334252;
+	text-align: center; /* 文字左右置中 */
+	vertical-align: middle;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+/**********BLOB READER 圖片結束***********/
+
+div#body form {
+	max-height: 100%;
+}
+
+div#body h2 {
+	color: #334252;
+	height:30px;
+	text-align: center; /* 使文字置中 */
+	font-size: 24px; /* 字體大小 */
+	margin: 0px;
+	padding-top: 10px; /* 去掉預設邊距 */
+	padding-bottom: 10px;
+}
+
+/********** 各式按鈕設定 ***********/
+
+div#body input[type="text"] { /* 文字輸入框 */
+	width:150px;
+	font-size: 16px;
+	font-family: 'Zen Maru Gothic', sans-serif;
+	padding: 1px 0px;
+    border-width: 1px;
+    border-style: inset;
+    border-color: #334252;
+    border-image: initial;
+  	background-color: #FFFAF4;
+  	margin-top: 5px;
+  	margin-bottom: 5px;
+  	padding: 5px 10px;
+  	border-radius: 5px;
+  	cursor: pointer;
+}
+
+div#body input#two { /* 文字輸入框2 */
+	width:210px;
+	font-size: 16px;
+	font-family: 'Zen Maru Gothic', sans-serif;
+	padding: 1px 0px;
+    border-width: 1px;
+    border-style: inset;
+    border-color: #334252;
+    border-image: initial;
+  	background-color: #FFFAF4;
+  	margin-top: 5px;
+  	margin-bottom: 5px;
+  	padding: 5px 10px;
+  	border-radius: 5px;
+  	cursor: pointer;
+}
+
+div#body input[type="datetime-local"] {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	border: 1px solid #334252;
+	font-size: 16px; /* 放大字型 */
+	width:210px;
+	margin: 5px 5px;
+	padding: 5px 10px; /* 設定內邊距，上下10px，左右20px */
+	background-color: #FFFAF4; /* 背景顏色 */
+	color: #334252; /* 字體顏色 */
+	border-radius: 5px; /* 圓角邊框 */
+	cursor: pointer; /* 鼠標懸停時顯示為指針 */
+}
+
+div#body input[type="file"] { /* 上傳圖片的文字框 */
+	width:220px;
+	font-size: 16px;
+	font-family: 'Zen Maru Gothic', sans-serif;
+	padding: 1px 0px;
+    border-width: 1px;
+    border-style: inset;
+    border-color: #334252;
+    border-image: initial;
+  	background-color: #FFFAF4;
+  	margin-top: 5px;
+  	margin-bottom: 5px;
+  	padding: 5px 10px;
+  	border-radius: 5px;
+  	cursor: pointer;
+}
+
+div#body input[type="submit"] {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	margin: 5px 5px;
+	font-size: 16px; /* 放大字型 */
+	padding: 5px 10px; /* 設定內邊距，上下10px，左右20px */
+	background-color: #334252; /* 背景顏色 */
+	color: #F0F8FF; /* 字體顏色 */
+	border: none; /* 去掉邊框 */
+	border-radius: 5px; /* 圓角邊框 */
+	cursor: pointer; /* 鼠標懸停時顯示為指針 */
+}
+
+div#body input[type="submit"]:hover {
+	background-color: #778899; /* 懸停時的背景顏色 */
+	transform: scale(1.05); /* 按鈕輕微放大 */
+}
+
+div#body input[type="submit"]:active {
+	background-color: #778899; /* 按下時的背景顏色 */
+	transform: scale(1.02); /* 按下時按鈕縮小 */
+}
+
+div#body button[type="submit"] {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	margin: 5px; /* 額外的上邊距 */
+	font-size: 20px; /* 放大字型 */
+	padding: 10px 20px; /* 設定內邊距，上下10px，左右20px */
+	background-color: #334252; /* 背景顏色 */
+	color: #F0F8FF; /* 字體顏色 */
+	border: none; /* 去掉邊框 */
+	border-radius: 5px; /* 圓角邊框 */
+	cursor: pointer; /* 鼠標懸停時顯示為指針 */
+}
+
+div#body button[type="submit"]:hover {
+	background-color: #778899; /* 懸停時的背景顏色 */
+	transform: scale(1.05); /* 按鈕輕微放大 */
+}
+
+div#body button[type="submit"]:active {
+	background-color: #778899; /* 按下時的背景顏色 */
+	transform: scale(1.02); /* 按下時按鈕縮小 */
+}
+
+div#body select#one {
+	color: #334252; /* 字體顏色 */
+	font-family: 'Zen Maru Gothic', sans-serif;
+	font-size: 16px; /* 放大字型 */ 
+	width: 175px;
+	margin-top: 0px; /* 額外的上邊距 */
+	padding: 5px 10px; /* 設定內邊距，上下10px，左右20px */
+	background-color: #FFFAF4; /* 背景顏色 */
+	border: 1px solid #334252; /* 去掉邊框 */
+	border-radius: 5px; /* 圓角邊框 */
+	cursor: pointer; /* 鼠標懸停時顯示為指針 */
+}
+div#body select#two {
+	color: #334252; /* 字體顏色 */
+	font-family: 'Zen Maru Gothic', sans-serif;
+	font-size: 16px; /* 放大字型 */ 
+	width: 230px;
+	margin-top: 0px; /* 額外的上邊距 */
+	padding: 5px 10px; /* 設定內邊距，上下10px，左右20px */
+	background-color: #FFFAF4; /* 背景顏色 */
+	border: 1px solid #334252; /* 去掉邊框 */
+	border-radius: 5px; /* 圓角邊框 */
+	cursor: pointer; /* 鼠標懸停時顯示為指針 */
+}
+/********登入者資料區結束**********/
+
+/***************** footer (下方深色) 區域 *****************/
+footer {
+	background-color: #334252;
+	text-align: center;
+	width: 100%; /* 根據圖片和標題的寬度進行調整 */
+	min-width: 500px; /* 最小寬度 */
+	height: 80px;
+	padding-top: 20px;
+}
+
+footer p {
+	font-size: 16px; /* 字體大小 */
+	font-weight: normal;
+	color: #FFE4CA; /* 字體顏色 */
+	border: 0;
+	vertical-align: middle; /* 將圖片垂直置中 */
+}

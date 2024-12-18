@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审批申请</title>
+</head>
+<body>
+    <h1>审批申请</h1>
+    <div>
+        <p>申请 ID: <span th:text="${apply.id}"></span></p>
+        <p>申请人: <span th:text="${apply.member.name}"></span></p>
+        <p>申请状态: <span th:text="${apply.status}"></span></p>
+        <p>申请说明: <span th:text="${apply.description}"></span></p>
+    </div>
+
+    <!-- 提交审批通过 -->
+    <form th:action="@{/apply/approve/__{id}(id=${apply.id})}" method="POST">
+        <button type="submit">通过申请</button>
+    </form>
+
+    <!-- 提交驳回申请 -->
+    <form th:action="@{/apply/reject/__{id}(id=${apply.id})}" method="POST">
+        <label for="rejectReason">驳回原因:</label>
+        <input type="text" id="rejectReason" name="rejectReason" required>
+        <button type="submit">驳回申请</button>
+    </form>
+</body>
+</html>

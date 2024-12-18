@@ -1,0 +1,29 @@
+/**********登入者資料區***********/
+
+div#headshot{
+	position: absolute; /* 使用 absolute 定位圖片 */
+	padding-left:20px;
+	margin-top: -25px;
+	margin-right:0px; 
+	text-align:left;
+	background-color: transparent; /* 確保背景是透明的 */
+    z-index: 5;
+}
+
+img#headshot{
+	width: 100px;
+    height: 100px;
+    border-radius: 50%; 
+    border: 10px solid #334252;
+}
+
+div#role{
+	color:#FFFAF4;
+	font-size:20px;
+	padding-left:165px;
+	margin-top: 0px;
+	margin-bottom: -30px;
+	margin-right:0px; 
+	text-align:left;
+}
+/********登入者資料區結束**********/

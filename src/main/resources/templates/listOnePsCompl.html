@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>檢舉詳細資料</title>
+<link rel="stylesheet" th:href="@{/css/psCompl/listOnePsCompl.css}"/>
+</head>
+<body>
+
+    <!--*************** table#header (上方深色) 區域 **************-->
+    <table id="header">
+        <tr>
+            <td>
+                <img th:src="@{/images/psCompl/pflogow.png}"/>
+                <font>檢舉詳細資料</font>
+                <img th:src="@{/images/psCompl/pflogow.png}"/>
+                <h4><a th:href="@{/psCompl/select_psCompl_page}">回檢舉管理頁</a></h4>
+            </td>
+        </tr>
+    </table>
+
+    <!--**************** div#body (中間淺色) 區域 *****************-->
+    <div id="body" th:fragment="listOnePsCompl-div">
+        <article>
+            <h3><span>檢舉資料詳情 :</span></h3>
+            <!-- 顯示訊息 -->
+			    <div th:if="${message}" class="alert alert-success">
+			        <p th:text="${message}"></p>
+			    </div>
+            <table id="body">
+                <!-- 表格表頭 -->
+                <thead>
+                    <tr>
+                        <th>檢舉編號</th>
+                        <th>保母</th>
+                        <th>會員</th>
+                        <th>提出時間</th>
+                        <th>處理時間</th>
+                        <th>檢舉描述</th>
+                        <th>檢舉回覆</th>
+                        <th>狀態</th>
+                    </tr>
+                </thead>
+                <!-- 表格資料 -->
+                <tbody>
+                    <tr>
+                        <td th:text="${psComplVO.psComplId}"></td>
+                        <td th:text="${psComplVO.psId}"></td>
+                        <td th:text="${psComplVO.mebId}"></td>
+                        <td th:text="${#temporals.format(psComplVO.psComplDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${#temporals.format(psComplVO.psComplResDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td id="des" th:text="${psComplVO.psComplDes}"></td>
+                        <td id="des" th:text="${psComplVO.psComplResult}"></td>
+                        <td>
+					        <span th:switch="${psComplVO.psComplStatus}">
+					            <span th:case="'0'">未處理</span>
+							        <span th:case="'1'">不懲處</span>
+							        <span th:case="'2'">處罰</span>
+							        <span th:case="'3'">加重處罰</span>
+							        <span th:case="'4'">停權</span>
+							        <span th:case="*">未知狀態</span>
+					        </span>
+					    </td>
+                    </tr>
+                </tbody>
+            </table>
+			<br><br>
+            <!-- 顯示檢舉圖片 -->
+            <table id="body">
+                <thead>
+                   <tr>
+                    	<th>檢舉照片</th>
+                   </tr>
+                </thead>
+                <tbody>
+                   <tr>
+                     <td>
+                         <!-- 使用 div 來包裹圖片並使其橫向排列 -->
+                         <div style="display: flex; gap: 10px;">
+                             <!-- 檢查圖片1是否存在 -->
+                             <span th:if="${psComplVO.psComplUpfiles1 != null}">
+                                 <img th:src="@{/psCompl/DBGifReader} + '?psComplId=' + ${psComplVO.psComplId}" width="300px" alt="檢舉圖片1">
+                             </span>
+                             <span th:unless="${psComplVO.psComplUpfiles1 != null}">
+                                 <div id="noimages">無圖片</div>
+                             </span>
+
+                             <!-- 檢查圖片2是否存在 -->
+                             <span th:if="${psComplVO.psComplUpfiles2 != null}">
+                                 <img th:src="@{/psCompl/DBGifReader} + '?psComplId=' + ${psComplVO.psComplId}" width="300px" alt="檢舉圖片2">
+                             </span>
+                             <span th:unless="${psComplVO.psComplUpfiles2 != null}">
+                                 <div id="noimages">無圖片</div>
+                             </span>
+
+                             <!-- 檢查圖片3是否存在 -->
+                             <span th:if="${psComplVO.psComplUpfiles3 != null}">
+                                 <img th:src="@{/psCompl/DBGifReader} + '?psComplId=' + ${psComplVO.psComplId}" width="300px" alt="檢舉圖片3">
+                             </span>
+                             <span th:unless="${psComplVO.psComplUpfiles3 != null}">
+                                 <div id="noimages">無圖片</div>
+                             </span>
+
+                             <!-- 檢查圖片4是否存在 -->
+                             <span th:if="${psComplVO.psComplUpfiles4 != null}">
+                                 <img th:src="@{/psCompl/DBGifReader} + '?psComplId=' + ${psComplVO.psComplId}" width="300px" alt="檢舉圖片4">
+                             </span>
+                             <span th:unless="${psComplVO.psComplUpfiles4 != null}">
+                                 <div id="noimages">無圖片</div>
+                             </span>
+                         </div>
+                     </td>
+                   </tr>
+               </tbody>
+            </table>
+			<br>
+			    <!-- 按鈕觸發表單提交到審核頁面 -->
+			     <form method="post" th:action="@{/psCompl/getOne_For_Update}">
+                <!-- 隱藏按鈕僅在狀態為 "未處理" 時顯示 -->
+                <input type="submit" value="開始審核" th:if="${psComplVO.psComplStatus == '0'}" />
+                <input type="hidden" name="psComplId" th:value="${psComplVO.psComplId}" />
+            </form>
+			
+			        </article>
+			    </div>
+
+    <!--***************** footer (下方深色) 區域 *****************-->
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

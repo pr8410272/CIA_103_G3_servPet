@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>結帳頁面</title>
+<!-- 引入 jQuery 函式庫 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- SweetAlert2 樣式表 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+/* 全局樣式 */
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: "Quicksand", sans-serif;
+}
+
+html, body {
+	min-height: 100vh; /* 保持高度填滿視窗 */
+	display: flex;
+	flex-direction: column;
+	background-color: #FFFDF9;
+}
+
+/* 頁面容器 */
+.container {
+	width: 90%; /* 適應小屏幕，最大寬度 600px */
+	max-width: 600px;
+	background: #ffffff;
+	margin: 40px auto; /* 上下外邊距 40px，左右自動置中 */
+	padding: 20px 30px;
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+/* Header 樣式 */
+header {
+	background-color: #F8EAD3;
+	padding: 10px 0;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+header h1 {
+	color: #333;
+	font-size: 2rem;
+	margin-left: 25px;
+}
+
+header nav ul {
+	display: flex;
+	list-style: none;
+	margin-right: 25px;
+}
+
+header nav li {
+	margin-left: 20px;
+}
+
+header nav a {
+	background-color: #F8EAD3;
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+	padding: 10px 15px;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+header nav a:hover {
+	background-color: #e5d0b5;
+	text-decoration: underline;
+}
+
+/* Main 內容區域 */
+main {
+	flex: 1; /* 保證 main 填滿剩餘空間 */
+	padding: 1rem 5%;
+	display: flex;
+	flex-direction: column;
+}
+
+/* 主要內容 */
+p {
+	font-size: 16px;
+	margin: 10px 0;
+	line-height: 1.6;
+}
+
+/* 高亮的文字 */
+span {
+	font-weight: bold;
+	color: #334252;
+}
+
+/* 集中美化的付款狀態/總金額/儲值金 */
+.info-box {
+	border: 1px solid #334252; /* 添加框線 */
+	border-radius: 10px;
+	padding: 20px;
+	margin-top: 20px; /* 與上方保持距離 */
+	background-color: #f9f9fc; /* 輕微背景色提升區域辨識度 */
+}
+
+.info-box p {
+	margin: 10px 0;
+	font-size: 18px;
+}
+
+.info-box span {
+	font-size: 20px;
+	color: #2c7dfa; /* 數字高亮 */
+}
+
+/* 按鈕區域 */
+.button-group {
+	display: flex;
+	justify-content: center; /* 水平置中 */
+	gap: 20px; /* 按鈕之間的間距 */
+	margin-top: 20px; /* 與其他內容保持距離 */
+}
+
+/* 按鈕樣式 */
+.button-group a {
+	display: inline-block;
+	text-decoration: none;
+	color: #333;
+	background-color: #F8EAD3;
+	padding: 10px 20px;
+	border-radius: 5px;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+}
+
+button {
+	display: inline-block;
+	text-decoration: none;
+	color: #333;
+	background-color: #F8EAD3;
+	padding: 10px 20px;
+	border-radius: 5px;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+	border: none;
+}
+
+button:hover {
+	background-color: #e63946;
+}
+
+.button-group a:nth-child(1):hover {
+	background-color: #2a9d8f; /* 回商城按鈕 hover 狀態顏色 */
+}
+
+/* Footer 固定在底部 */
+footer {
+	background-color: #F8EAD3;
+	color: #333;
+	text-align: center;
+	padding: 1rem 0;
+	width: 100%;
+	margin-top: auto; /* 保持 footer 在畫面底部 */
+}
+
+footer p {
+	margin: 0;
+	font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+	<header>
+		<h1>servPet：儲值金扣款結帳成功</h1>
+		<nav>
+			<ul style="margin-bottom: 0px;">
+				<li><a th:href="@{/}">寵寵唯跡 ServPET首頁</a></li>
+				<li><a th:href="@{/pdDetails/allProductsHomepage}"
+					class="btn continue-shopping">回購物商城</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+
+	<div class="container">
+			<!-- 隱藏欄位傳遞 orderId 和其他參數 -->
+			<input type="hidden" name="orderId" th:value="${orderId}" /> 
+			<input type="hidden" name="mebId" th:value="${mebId}" /> 
+			<input type="hidden" name="totalPrice" th:value="${pdo.pdTotalPrice}" />
+			<!-- 主要內容 -->
+			<div class="content">
+				<p>感謝您的訂購！儲值金扣款成功</p>
+				<p>
+					訂單編號：<span th:text="${orderId}"></span>
+				</p>
+				<p>
+					會員名字：<span th:text="${mebName}"></span>
+				</p>
+
+				<p>
+					運輸方式： <span th:switch="${pdo.shippingMethod}"> <span
+						th:case="'0'">宅配</span> <span th:case="'1'">超商取貨</span> <span
+						th:case="*">未知方式</span>
+					</span>
+				</p>
+				<p>
+					收件人地址：<span th:text="${pdo.shippingAddr}"></span>
+				</p>
+
+				<!-- 集中框線區域 -->
+				<div class="info-box">
+					<p>
+						訂單付款狀態：<span th:switch="${pdo.paymentStatus}"> <span
+							th:case="'0'">未付款</span> <span th:case="'1'" style="color:#e63946">已付款</span> <span
+							th:case="'2'">已退款</span> <span th:case="*">未知狀態</span>
+						</span>
+					</p>
+					<p>
+						總金額：<span th:text="${pdo.pdTotalPrice}" id="totalPrice"></span> 元
+					</p>
+					<p>
+						儲值金餘額：<span th:text="${bal}" id="userBalance">0</span> 元
+					</p>
+				</div>
+
+				<!-- 按鈕組 -->
+				<div class="button-group">
+					<a href="/pdDetails/allProductsHomepage">回商城首頁</a>
+<!-- 					<button type="submit" id="submitBtn" class="btn btn-primary">確認扣款</button> -->
+				</div>
+			</div>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

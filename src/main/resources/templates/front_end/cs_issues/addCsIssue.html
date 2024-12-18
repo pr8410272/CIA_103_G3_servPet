@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寵寵唯跡友善平台</title>
+<link rel="stylesheet" href="/css/frontend_index_styles.css">
+<link rel="stylesheet" href="/slick/slick.css"/>
+<link rel="stylesheet" href="/slick/slick-theme.css"/>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    
+<style>
+
+
+		body {
+			font-family: Arial, sans-serif;
+			
+			margin: 0;
+			padding: 0;
+		}
+
+
+		.container {
+           
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            
+            
+        }
+        img{
+        	width: 800px;
+        	height:auto;
+        	margin-top: auto;
+   		 	margin-bottom: auto;
+        }
+
+		h1 {
+			text-align: center;
+			color: #333;
+			margin-bottom: 20px;
+		}
+		
+		label {
+			display: block;
+			margin-top: 15px;
+			font-weight: bold;
+		}
+		
+		textarea, input {
+			width: 600px;
+			padding: 10px;
+			margin-top: 10px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 1rem;
+		}
+		textarea{
+			height:184px
+			}
+		
+		.button-group {
+			
+			text-align: center;
+		}
+		
+		button {
+			background-color: #4caf50;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			font-size: 1rem;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		
+		button:hover {
+			background-color: #45a049;
+		}
+		
+		img {
+		    width: 70%;
+		    height: auto;
+		    margin-top: auto;
+		    margin-bottom: auto;
+		    margin-left: 14%;
+		}
+		/* 容器樣式 */
+		.image-container {
+			margin-TOP:50PX ATUO;
+		    max-width: 900px; /* 限制容器的最大寬度 */
+		    margin: 50px auto; /* 居中 */
+		    padding: 10px; /* 圖片與容器邊距 */
+		    background-color: #fff; /* 白色背景 */
+		    border-radius: 10px; /* 圓角 */
+		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 陰影 */
+		    border: 1px solid #ddd; /* 灰色邊框 */
+		    overflow: hidden; /* 確保內容不超出容器 */
+		    text-align: center; /* 文字與圖片居中 */
+		}
+		
+		/* 圖片樣式 */
+		.image-container img {
+		    width: 100%; /* 圖片寬度自適應容器 */
+		    height: auto; /* 保持圖片比例 */
+		    border-radius: 8px; /* 圓角，與容器一致 */
+		    display: inline-block; /* 保證圖片在文字中對齊 */
+		}
+		
+		.swiper-slide img {
+		    width: 100%;
+		    height: 500px;
+		    object-fit: cover;
+		    border-radius: 10px;
+		}
+		
+		.carousel {
+		    max-width: 900px;
+		    margin: 50px auto; /* 水平與垂直居中 */
+		    border-radius: 10px;
+		    overflow: hidden; /* 確保內容不超出邊界 */
+		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		}
+		
+		.contact-icon img {
+		    width: 100PX;
+		    height: AUTO;
+		    object-fit: cover;
+		    border-radius: 100%;
+		    MARGIN-LEFT: -200%;
+		}
+		
+		.contact-icon {
+		/*     position: fixed; /* 固定在螢幕右下角 */ 
+		    bottom: 70px; /* 距離底部 */
+		     right: 80px; /* 距離右側 */ 
+		    width: 80px; /* 圓形大小 */
+		    height: 80px; /* 圓形大小 */
+		    display: flex; /* 彈性盒子 */
+		    flex-direction: column; /* 垂直排列 */
+		    align-items: center; /* 水平置中 */
+		    justify-content: center; /* 垂直置中 */
+		    cursor: pointer; /* 滑鼠指標 */
+		}
+		
+		.contact-icon img {
+		    width: 100px;
+		    height: 100px;
+		    object-fit: cover;
+		    border-radius: 100%;
+		    margin-left: 460%;
+		    margin-top: 140%;
+		}
+		.contact-icon span {
+		    margin-top: -15px;
+		    font-size: 12px;
+		    color: #2c2a2a;
+		    text-align: center;
+		    white-space: nowrap;
+		    font-size: 17px;
+		    margin-right: -1154%;
+		    font-weight: bold;
+		}
+
+				
+		@media screen and (max-width: 768px) {
+		    nav {
+		        flex-direction: column;
+		        align-items: flex-start;
+		    }
+		
+		    nav .dropdown {
+		        width: 100%;
+		    }
+		
+		    nav .dropdown-content {
+		        position: relative;
+		        width: 100%;
+		    }
+		
+		    nav .dropbtn {
+		        text-align: left;
+		        width: 100%;
+		    }
+		}
+
+</style>
+</head>
+<body>
+	
+    <body>
+        <header>
+            <h1>
+                <a href="/front_end/index">寵寵唯跡 ServPet Forever</a>
+            </h1>
+        </header>
+        
+        <nav>
+            <div class="dropdown">
+                <button class="dropbtn">關於平台</button>
+                <div class="dropdown-content">
+                    <a href="#頁面位址放這">平台介紹</a>
+                    <a href="/member/cs-issues/add">問題反應</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">平台公告</button>
+                <div class="dropdown-content">
+                    <a href="/member/event/list">平台公告</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物商城</button>
+                <div class="dropdown-content">
+                    <a href="/frontend/product.html">商品列表</a>
+                    <a href="#頁面位址放這">購物車</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物美容</button>
+                <div class="dropdown-content">
+                    <a href="#頁面位址放這">美容服務</a>
+                    <a href="#頁面位址放這">預約</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物保母</button>
+                <div class="dropdown-content">
+                    <a href="#頁面位址放這">保母服務</a>
+                    <a href="#頁面位址放這">預約</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">會員專區</button>
+                <div class="dropdown-content">
+                    <a href="@{/front_end/profile}">會員個人資訊</a>
+                    <a href="#頁面位址放這">寵物資訊</a>
+                    <a href="#頁面位址放這">會員訊息匣</a>
+                    <a href="#頁面位址放這">預約日曆</a>
+                    <a href="@{/templates/frontend/mebpdo.html}">商城訂單查詢</a>
+                    <a href="#頁面位址放這">寵物美容訂單查詢</a>
+                    <a href="#頁面位址放這">寵物保母訂單查詢</a>
+                    <a href="/templates/frontend/pdFav.html">商品收藏列表</a>
+                    <a href="#頁面位址放這">寵物美容師收藏列表</a>
+                    <a href="#頁面位址放這">寵物保母收藏列表</a>
+                    <a href="#頁面位址放這">我的儲值金</a>
+                    <a href="/apply/create">成為美容師/保母</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">登入</button>
+                <div class="dropdown-content">
+                    <a href="/front_end/login">會員登入</a>
+                    <a href="#頁面位址放這">後台登入</a>
+                </div>
+            </div>
+        </nav>
+            
+
+     
+    
+      <main>
+      
+	    <div class="carousel">
+		    <div><img th:src="@{/images/BIRDIE-1.JPG}" alt="圖片1"></div>
+		    <div><img th:src="@{/images/BIRDIE-2.JPG}" alt="圖片2"></div>
+		    <div><img th:src="@{/images/BIRDIE-3.JPG}" alt="圖片3"></div>
+		    <div><img th:src="@{/images/BIRDIE-5.JPG}" alt="圖片4"></div>
+		    <div><img th:src="@{/images/BIRDIE-6.JPG}" alt="圖片5"></div>
+		</div>
+
+				
+      
+
+      
+<!--         <div class="form-wrapper"> -->
+<!--             圖片部分 -->
+<!--             <div class="image-container"> -->
+<!--                 <img th:src="@{/images/R.jpg}" style="width:100%; max-width:900px; height:auto; margin:0 auto; display:block;"> -->
+<!--                </div> -->
+<!--         	</div> -->
+          
+            <!-- 表單部分 -->
+    <div class="container">
+            <div class="form-container">
+            
+					<div class="contact-icon" id="icon-container">
+					    <a th:href="@{/member/cs-issues/list}">
+					        <img id="pet1" th:src="@{/images/event11.jpg}" width="50px" height="50px" alt="Pet Image">
+					    </a>
+					    <span>我的記錄</span>
+					</div>
+					
+                <h1>客服表單</h1>
+                <form th:action="@{/member/cs-issues/insert}" method="post">
+                    <!-- 顯示會員名稱 -->
+                    <div class="form-group">
+                        <label for="memberName">會員:</label>
+                        <input id="memberName" type="text" name="memberName" readonly th:value="${member.mebName}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="memberEmail">Email:</label>
+                        <input id="memberEmail" type="text" name="member.mebMail" readonly th:value="${member.mebMail}" />
+                    </div>
+                    <!-- 問題內容 -->
+                    <div class="form-group">
+                        <label for="qaContent">問題內容</label>
+                        <textarea id="qaContent" name="qaContent" required placeholder="請輸入問題內容..."></textarea>
+                    </div>
+                    <!-- 提交按鈕 -->
+                    <div class="button-group">
+                        <button type="submit">提交問題</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+</main>
+
+<script>
+
+// 取得圖示容器
+const iconContainer = document.getElementById('icon-container');
+
+let isDragging = false; // 是否正在拖曳
+let offsetX = 0; // 滑鼠與圖示的水平距離
+let offsetY = 0; // 滑鼠與圖示的垂直距離
+
+// 開始拖曳
+iconContainer.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - iconContainer.offsetLeft; // 計算點擊時的偏移量
+    offsetY = e.clientY - iconContainer.offsetTop;
+    iconContainer.style.cursor = 'grabbing'; // 拖曳游標
+});
+
+// 拖曳移動
+document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+        // 更新圖示位置
+        iconContainer.style.left = `${e.clientX - offsetX}px`;
+        iconContainer.style.top = `${e.clientY - offsetY}px`;
+        iconContainer.style.position = 'absolute'; // 確保位置可變動
+    }
+});
+
+// 結束拖曳
+document.addEventListener('mouseup', () => {
+    isDragging = false; // 停止拖曳
+    iconContainer.style.cursor = 'pointer'; // 還原游標樣式
+});
+</script>
+
+
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/slick/slick.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('.carousel').slick({
+        dots: true,        // 顯示導航點
+        infinite: true,    // 循環播放
+        speed: 500,        // 切換速度
+        slidesToShow: 1,   // 一次顯示一張圖片
+        autoplay: true,    // 自動播放
+        autoplaySpeed: 3000, // 自動播放間隔
+        arrows: true,      // 顯示左右箭頭
+    });
+});
+</script>
+
+    
+     
+<br>
+    <footer>
+        <p>© 2024 寵寵唯跡友善平台</p>
+    </footer>
+	</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寵寵唯跡友善平台</title>
+<link rel="stylesheet" href="/css/frontend_index_styles.css">
+<link rel="stylesheet" href="/slick/slick.css" />
+<link rel="stylesheet" href="/slick/slick-theme.css" />
+<link rel="stylesheet" href="/css/psFavo.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+<body>
+	<header>
+		<h1>
+
+			<a href="/front_end/index">寵寵唯跡 ServPet Forever</a>
+		</h1>
+	</header>
+
+	<nav>
+		<div class="dropdown">
+			<button class="dropbtn">關於平台</button>
+			<div class="dropdown-content">
+				<a href="#頁面位址放這">平台介紹</a> <a href="/member/cs-issues/add">問題反應</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">平台公告</button>
+			<div class="dropdown-content">
+				<a href="/member/event/list">平台公告</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">寵物商城</button>
+			<div class="dropdown-content">
+				<a href="/frontend/product.html">商品列表</a> <a href="#頁面位址放這">購物車</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">寵物美容</button>
+			<div class="dropdown-content">
+				<a href="#頁面位址放這">美容服務</a> <a href="#頁面位址放這">預約</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">寵物保母</button>
+			<div class="dropdown-content">
+				<a href="#頁面位址放這">保母服務</a> <a href="#頁面位址放這">預約</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">會員專區</button>
+			<div class="dropdown-content">
+				<a href="@{/front_end/profile}">會員個人資訊</a> <a href="#頁面位址放這">寵物資訊</a>
+				<a href="#頁面位址放這">會員訊息匣</a> <a href="#頁面位址放這">預約日曆</a> <a
+					href="@{/templates/frontend/mebpdo.html}">商城訂單查詢</a> <a
+					href="#頁面位址放這">寵物美容訂單查詢</a> <a href="#頁面位址放這">寵物保母訂單查詢</a> <a
+					href="/templates/frontend/pdFav.html">商品收藏列表</a> <a href="#頁面位址放這">寵物美容師收藏列表</a>
+				<a href="#頁面位址放這">寵物保母收藏列表</a> <a href="#頁面位址放這">我的儲值金</a> <a
+					href="/apply/create">成為美容師/保母</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn">登入</button>
+			<div class="dropdown-content">
+				<a href="/front_end/login">會員登入</a> <a href="#頁面位址放這">後台登入</a>
+			</div>
+		</div>
+	</nav>
+
+
+
+	<main>
+
+		<div class="container">
+		
+			<h1>寵物保母收藏列表 ❤️</h1>
+			<!-- 搜尋列 -->
+			<div class="search-container">
+				<label for="searchBox">搜尋保母:</label> <input type="text"
+					id="searchBox" placeholder="輸入保母名稱">
+			</div>
+			
+			<!-- 篩選列 -->
+			<div class="filter-container">
+				<label for="areaFilter">篩選地區:</label> <select id="areaFilter"
+					onchange="filterFavorites()">
+					<option value="">所有地區</option>
+					<option value="0">北部</option>
+					<option value="1">中部</option>
+					<option value="2">南部</option>
+					<option value="3">東部</option>
+				</select> <label for="ratingFilter">篩選評價:</label> <select id="ratingFilter"
+					onchange="filterFavorites()">
+					<option value="">所有評價</option>
+					<option value="5">★★★★★</option>
+					<option value="4">★★★★</option>
+					<option value="3">★★★</option>
+					<option value="2">★★</option>
+					<option value="1">★</option>
+				</select>
+			</div>
+			
+			<!-- 收藏列表 -->
+			<div id="favoriteList" class="favorite-grid"></div>
+			
+			<!-- 摺疊小圓鈕 -->
+			<div class="toggle-btn" onclick="toggleRemovedList()">♡</div>
+			
+			<!-- 已移除收藏側邊欄 -->
+			<div class="removed-container" id="removedContainer">
+			    <div class="removed-header">已移除收藏</div>
+			    <div id="removedList" class="removed-list"></div>
+			</div>
+
+			
+		</div>
+	</main>
+
+	<script>
+	const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+	const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+	
+		let favoriteData = []; // 收藏資料
+		const mebId = '[[${mebId}]]'; // Thymeleaf 將 mebId 注入
+		console.log("mebId:", mebId); // 確保 mebId 正確顯示在控制台
+
+		//加入收藏
+	function addFavorite(psId) {
+    fetch(`/favorites/add?psId=${psId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: '收藏已成功加入！',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: '加入失敗！',
+                text: '可能已經加入過收藏。'
+            });
+        }
+    })
+    .catch(error => console.error('Error adding favorite:', error));
+}
+
+
+		// 地區轉換
+		function translateArea(areaCode) {
+		    const areas = ["北部", "中部", "南部", "東部"];
+		    return areas[areaCode] || "未知地區";
+		}
+
+		// 星星評價
+		function generateStars(rating) {
+		    return Array.from({ length: 5 }, (_, i) =>
+		        `<span class="star" style="color:${i < rating ? '#f4c150' : '#ddd'};">★</span>`
+		    ).join('');
+		}
+
+		// 顯示收藏
+		function loadFavorites() {
+		    fetch(`/favorites/list?mebId=${mebId}`)
+		        .then(response => response.json())
+		        .then(data => {
+		            favoriteData = data;
+		            renderFavorites(data);
+		        })
+		        .catch(error => console.error('Error loading favorites:', error));
+			}
+		
+	
+		// 加載移除紀錄
+			function loadRemovedFavorites() {
+		    	fetch(`/favorites/removed?mebId=${mebId}`)
+		        .then(response => response.json())
+		        .then(data => {
+		            removedData = data;
+		            renderRemovedFavorites(data);
+		        })
+		        .catch(error => console.error('Error loading removed favorites:', error));
+			}
+
+			// 篩選功能表
+	
+			function filterFavorites() {
+		    const areaFilter = document.getElementById('areaFilter').value;
+		    const ratingFilter = document.getElementById('ratingFilter').value;
+		    const searchValue = document.getElementById('searchBox').value.trim().toLowerCase();
+	
+		    const filteredData = favoriteData.filter(fav => {
+	        const matchesArea = !areaFilter || String(fav.psArea) === areaFilter;
+	        const matchesRating = !ratingFilter || String(fav.totalStars) === ratingFilter;
+	        const matchesSearch = !searchValue || fav.psName.toLowerCase().includes(searchValue);
+			        return matchesArea && matchesRating && matchesSearch;
+			    });
+		
+			    renderFavorites(filteredData);
+			}
+
+			// 渲染收藏列表
+	
+			function renderFavorites(data) {
+			const list = document.getElementById('favoriteList');
+			    list.innerHTML = '';
+		
+			    if (data.length === 0) {
+			        list.innerHTML = '<p style="text-align:center;">無符合條件的保母</p>';
+			        return;
+			    }
+		
+			    list.innerHTML = data.map(fav => `
+			        <div class="favorite-card" id="favorite-${fav.sitterFavoId}">
+			            <img src="data:image/jpeg;base64,${fav.psLicenses}" alt="${fav.psName}">
+			            <p class="name">${fav.psName}</p>
+			            <p>地區: ${translateArea(Number(fav.psArea))}</p>
+			            <p>${generateStars(fav.totalStars)}</p>
+			            <button class="remove-favorite-btn" onclick="removeFavorite(${fav.sitterFavoId})">移除收藏</button>
+			        </div>
+			    `).join('');
+			}
+	 
+	
+			//移除收藏
+			 
+			function removeFavorite(sitterFavoId) {
+				fetch(`/favorites/remove?sitterFavoId=${sitterFavoId}&mebId=${mebId}`, { method: 'DELETE' })
+
+	        .then(response => {
+	            if (response.ok) {
+	                Swal.fire({
+	                    icon: 'success',
+	                    title: '已移除收藏',
+	                    showConfirmButton: false,
+	                    timer: 1500
+	                });
+
+	                // 更新前端資料並重新渲染
+	                favoriteData = favoriteData.filter(fav => fav.sitterFavoId !== sitterFavoId);
+	                filterFavorites(); // 確保重新篩選和渲染
+	            } else {
+	                Swal.fire({
+	                    icon: 'error',
+	                    title: '移除失敗',
+	                    text: '請稍後再試！'
+	                });
+	            }
+	        })
+	        .catch(error => console.error('Error removing favorite:', error));
+	}
+
+		// 渲染移除紀錄
+			function renderRemovedFavorites(data) {
+		    const list = document.getElementById('removedList');
+		    if (data.length === 0) {
+		        list.innerHTML = '<p style="text-align:center;">目前沒有已移除的收藏記錄</p>';
+		        return;
+		    }
+		
+		    list.innerHTML = data.map(fav => `
+		        <div class="removed-card">
+		            <img src="data:image/jpeg;base64,${fav.psLicenses || ''}" alt="${fav.psName || '圖片缺失'}">
+		            <p class="name">${fav.psName || '名稱缺失'}</p>
+		            <button class="restore-favorite-btn" onclick="restoreFavorite(${fav.psId})">加回收藏</button>
+		        </div>
+		    `).join('');
+		}
+		
+		
+			
+			fetch(`/favorites/removed?mebId=${mebId}`)
+		    .then(response => response.json())
+		    .then(data => {
+		        removedData = data; // 存儲已移除的收藏列表
+		        renderRemovedFavorites(data);
+		    })
+		    .catch(error => console.error('Error fetching removed favorites:', error));
+
+	
+		// 切換移除列表的顯示
+			function toggleRemovedList() {
+		    const list = document.getElementById('removedList');
+		    if (list.style.display === 'block') {
+		        list.style.display = 'none';
+		    } else {
+		        loadRemovedFavorites(); // 加載已移除的收藏紀錄
+		        list.style.display = 'block';
+		    }
+		}
+
+
+			// 加回收藏
+			function restoreFavorite(psId) {
+				 console.log('Restore process started for psId:', psId); // 檢查傳入參數
+		
+			    fetch(`/favorites/restore`, {
+			        method: 'POST',
+			        headers: { 'Content-Type': 'application/json' },
+			        body: JSON.stringify({ mebId, psId }) // 傳遞會員ID和保母ID
+			    })
+			        .then(response => {
+			            if (response.ok) {
+			                Swal.fire({
+			                    icon: 'success',
+			                    title: '已加回收藏',
+			                    showConfirmButton: false,
+			                    timer: 1500
+			                });
+			
+			                // 更新前端列表數據
+			                removedData = removedData.filter(fav => fav.psId !== psId); // 從移除列表移除
+			                loadFavorites(); // 重新加載收藏列表
+			                renderRemovedFavorites(removedData);
+			            } else {
+			                Swal.fire({
+			                    icon: 'error',
+			                    title: '加回失敗',
+			                    text: '請稍後再試！'
+			                });
+			            }
+			        })
+			        .catch(error => console.error('Error restoring favorite:', error));
+			}
+			
+			//按鈕綁定
+			
+			document.addEventListener("DOMContentLoaded", function () {
+	        const toggleBtn = document.querySelector('.toggle-btn');
+	        const removedContainer = document.querySelector('.removed-container');
+	
+	        toggleBtn.addEventListener('click', () => {
+	            removedContainer.classList.toggle('open');
+	        });
+	    });
+	
+	
+		document.getElementById('searchBox').addEventListener('input', filterFavorites);
+	
+		loadFavorites();
+		loadRemovedFavorites();
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>美容師個人頁面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>美容師個人頁面</h1>
+    <p>美容師名稱：<span id="pgName">John Doe</span></p>
+
+    <button id="favoriteBtn" data-mebid="123" data-pgid="456">檢查收藏狀態...</button>
+
+    <script>
+        $(document).ready(function () {
+            const mebId = $("#favoriteBtn").data("mebid");
+            const pgId = $("#favoriteBtn").data("pgid");
+
+            // 檢查收藏狀態
+            $.get("/pgFav/isFavorite", { mebId, pgId }, function (isFavorite) {
+                updateButtonState(isFavorite);
+            });
+
+            // 點擊按鈕切換收藏狀態
+            $("#favoriteBtn").click(function () {
+                $.post("/pgFav/toggleFavorite", { mebId, pgId }, function (response) {
+                    alert(response); // 提示收藏狀態更新
+                    // 更新按鈕狀態
+                    $.get("/pgFav/isFavorite", { mebId, pgId }, function (isFavorite) {
+                        updateButtonState(isFavorite);
+                    });
+                });
+            });
+
+            function updateButtonState(isFavorite) {
+                if (isFavorite) {
+                    $("#favoriteBtn").text("取消收藏");
+                } else {
+                    $("#favoriteBtn").text("加入收藏");
+                }
+            }
+        });
+    </script>
+</body>
+</html>

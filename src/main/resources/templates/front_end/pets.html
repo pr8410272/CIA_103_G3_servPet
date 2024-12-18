@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>寵物管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <style>
+        /* 全域樣式 */
+        html, body {
+            font-family: "Quicksand", sans-serif;
+            background-color: #FFFDF9;
+            color: #333;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        h3 {
+            color: #F8A978;
+        }
+
+        .table {
+            background-color: #FFF8EE;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background-color: #F8EAD3;
+            color: #333;
+        }
+
+        .btn-primary {
+            background-color: #F8A978;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #E7946D;
+        }
+
+        .btn-danger {
+            background-color: #D9534F;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #C9302C;
+        }
+
+        .modal-content {
+            background-color: #FFF8EE;
+            border-radius: 10px;
+        }
+
+        .modal-header, .modal-footer {
+            background-color: #F8EAD3;
+        }
+
+        .modal-title {
+            color: #333;
+        }
+        /* Header 樣式 */
+header {
+    font-family: "Quicksand", sans-serif;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.75rem;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.nav-link {
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.nav-link:hover {
+    color: #FFF8EE !important;
+    transform: translateY(-2px);
+}
+
+.btn-outline-light {
+    border: 2px solid white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background-color: white;
+    color: #E7946D;
+}
+
+/* 漸層背景效果 */
+header {
+    background: linear-gradient(to right, #F8A978, #E7946D);
+}
+        
+    </style>
+</head>
+<body>
+<header class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(to right, #F8A978, #E7946D);">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold text-light" href="/">
+            🐾 我的寵物管理
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="切換導覽">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active text-light" href="/">首頁</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="#addPetModal" data-bs-toggle="modal">新增寵物</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="#">我的帳戶</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-light ms-3" href="/logout">登出</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+    <div class="container mt-3">
+        <!-- 會員資訊 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-secondary d-flex justify-content-between align-items-center">
+                    <span><strong>會員資訊:</strong></span>
+                    <span><strong>ID:</strong> <span th:text="${member.mebId}"></span></span>
+                    <span><strong>名稱:</strong> <span th:text="${member.mebName}">未提供</span></span>
+                    <span><strong>Email:</strong> <span th:text="${member.mebMail}">未提供</span></span>
+                    <span><strong>狀態:</strong> <span th:text="${member.mebStatus}">未提供</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成功與錯誤消息 -->
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <!-- 寵物列表 -->
+        <h3 class="mb-4">寵物列表</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>名稱</th>
+                    <th>品種</th>
+                    <th>照片</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pet : ${pets}">
+                    <td th:text="${pet.petName}"></td>
+                    <td th:text="${pet.petType}"></td>
+                    <td>
+                        <img th:src="@{/pets/image/{id}(id=${pet.petId})}" alt="寵物照片" class="img-thumbnail" style="width: 150px; height: 150px;">
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" th:attr="onclick=|openEditPetModal('${pet.petId}', '${pet.petName}', '${pet.petType}')|">
+                            修改
+                        </button>
+                        <a class="btn btn-danger" th:href="@{/delete/{id}(id=${pet.petId})}" onclick="return confirm('確定要刪除此寵物嗎？');">
+                            刪除
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 新增寵物按鈕 -->
+        <div class="text-end mt-4">
+            <button class="btn btn-lg btn-success" data-bs-toggle="modal" data-bs-target="#addPetModal">新增寵物</button>
+        </div>
+
+        <!-- 新增寵物模態框 -->
+        <div class="modal fade" id="addPetModal" tabindex="-1" aria-labelledby="addPetModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addPetModalLabel">新增寵物</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/pets/add" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                            <div class="mb-3">
+                                <label for="petName" class="form-label">寵物名稱</label>
+                                <input type="text" class="form-control" id="petName" name="petName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="petType" class="form-label">品種</label>
+                                <input type="text" class="form-control" id="petType" name="petType">
+                            </div>
+                            <div class="mb-3">
+                                <label for="petImageFile" class="form-label">照片</label>
+                                <input type="file" class="form-control" id="petImageFile" name="petImageFile" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-primary">新增</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 修改寵物模態框 -->
+        <div class="modal fade" id="editPetModal" tabindex="-1" aria-labelledby="editPetModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPetModalLabel">修改寵物資訊</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editPetForm">
+                            <input type="hidden" id="editPetId" name="petId">
+                            <div class="mb-3">
+                                <label for="editPetName" class="form-label">寵物名稱</label>
+                                <input type="text" class="form-control" id="editPetName" name="petName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editPetType" class="form-label">品種</label>
+                                <input type="text" class="form-control" id="editPetType" name="petType">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editPetImageFile" class="form-label">照片</label>
+                                <input type="file" class="form-control" id="editPetImageFile" name="petImageFile" accept="image/*">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="submitEditPet()">儲存變更</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openEditPetModal(petId, petName, petType) {
+            document.getElementById('editPetId').value = petId;
+            document.getElementById('editPetName').value = petName;
+            document.getElementById('editPetType').value = petType;
+
+            const editPetModal = new bootstrap.Modal(document.getElementById('editPetModal'));
+            editPetModal.show();
+        }
+
+        function submitEditPet() {
+            const petId = document.getElementById('editPetId').value;
+            const petName = document.getElementById('editPetName').value;
+            const petType = document.getElementById('editPetType').value;
+            const imageInput = document.getElementById('editPetImageFile');
+            const formData = new FormData();
+
+            formData.append("petId", petId);
+            formData.append("petName", petName);
+            formData.append("petType", petType);
+
+            if (imageInput.files.length > 0) {
+                formData.append("petImageFile", imageInput.files[0]);
+            }
+
+            fetch(`/pets/update`, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="_csrf"]').content
+                },
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("寵物資訊更新成功！");
+                    location.reload();
+                } else {
+                    return response.text().then(text => { throw new Error(text); });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("更新失敗：" + error.message);
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

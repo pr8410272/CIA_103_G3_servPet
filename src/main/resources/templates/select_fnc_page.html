@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>功能檢索管理 - select_fnc_page.html</title>
+<link rel="stylesheet" th:href="@{/css/fnc/select_fnc_page.css}"/>
+</head>
+
+<body>
+
+  <!--*************** table#header (上方深色) 區域 **************-->
+    <table id="header">
+      <tr>
+        <td>
+          <img th:src="@{/images/fnc/pflogow.png}"/>
+          <font>功能檢索管理</font>
+          <img th:src="@{/images/fnc/pflogow.png}"/>
+          <h4><a th:href="@{/}">回首頁</a></h4>
+        </td>
+      </tr>
+    </table>
+    
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+	<div id="body">
+		<article>
+		<h2><span>功能檢索</span></h2>
+		<font>單一條件檢索:</font><br>
+		<!-- 錯誤表列 -->
+		<!--<div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div><br>-->
+		<table id="body">
+			<form method="post" th:action="@{getOne_For_Display}">
+				輸入功能編號:
+				<input type="text" name="fncId" th:value="${param.fncId}" > 
+				<input type="submit" value="送出">
+			</form><br>
+			
+			<form method="post" th:action="@{getOne_For_Display}">
+				選擇功能編號:
+				<select name="fncId">
+				     <option th:each="fncVO : ${fncListData}" th:value="${fncVO.fncId}" th:text="${fncVO.fncId}" />
+			    </select>
+				<input type="submit" value="送出">
+			</form><br>
+			
+			<form method="post" th:action="@{getOne_For_Display}">
+				選擇功能名稱:
+				<select name="fncId">
+				     <option th:each="fncVO : ${fncListData}" th:value="${fncVO.fncId}" th:text="${fncVO.fncName}" />
+			    </select>
+				<input type="submit" value="送出">
+			</form><br>
+			
+			<!--  萬用複合查詢-以下欄位-可隨意增減 -->    
+			    <form method="post" th:action="@{listFncs_ByCompositeQuery}"><br>
+			    
+			        <font>多條件檢索:</font><br>
+			        輸入功能編號: 
+			        <input type="text" name="fncId" value="16001"><br>
+			           
+			        輸入功能名稱: 
+			        <input type="text" name="fncName" value="會員資料管理"><br>
+			     
+			      <input type="submit" value="送出">
+			     </form><br>
+	
+      		<h2><span>功能管理</span></h2>
+			<button type="submit" onclick="window.location.href='addFnc'">功能新增</button>
+			<button type="submit" onclick="window.location.href='listAllFnc'">功能列表</button>
+			<br><br>
+	  	</table>
+	  </article>
+	</div>
+    
+    <!-- 旗標getOne_For_Display見fncnoController.java的第74行 -->
+    <div class="b" th:if="${getOne_For_Display}">
+        <!--使用listOneFnc.html網頁的listOneFnc-div片段--> <!-- 見listOneFnc.html的第35行的th:fragment="listOneFnc-div" --> <!-- 使用th:replace也可 -->
+        <div th:insert="~{/back_end/fnc/listOneFnc :: listOneFnc-div}"></div>
+
+    </div>
+    
+    	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+	  <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

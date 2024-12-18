@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>會員詳細資訊</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .member-info {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .member-info p {
+            margin: 10px 0;
+        }
+
+        .member-info span {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 200px;
+            margin: 0 auto;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>會員詳細資訊</h1>
+
+    <div class="member-info">
+        <p>會員 ID: <span th:text="${member.mebId}"></span></p>
+        <p>姓名: <span th:text="${member.mebName}"></span></p>
+        <p>Email: <span th:text="${member.mebMail}"></span></p>
+        <p>電話: <span th:text="${member.mebPhone}"></span></p>
+        <p>地址: <span th:text="${member.mebAddress}"></span></p>
+        <p>性別: <span th:text="${member.mebSex}"></span></p>
+        <p>餘額: <span th:text="${member.bal}"></span></p>
+    </div>
+
+    <p>
+        <a class="back-link" href="/members">返回會員列表</a>
+    </p>
+</div>
+
+</body>
+</html>

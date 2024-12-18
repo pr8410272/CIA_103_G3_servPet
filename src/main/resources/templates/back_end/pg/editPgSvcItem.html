@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link rel="stylesheet" href="/css/pg/editPgSvcItem.css">
+
+</head>
+<body>
+	<header>
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/pg/listRealAllPgSvcItem}">美容師服務項目管理</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+
+		<div class="view">
+			<!-- 返回按鈕 -->
+			<div class="return-button">
+				<a th:href="@{/pg/listRealAllPgSvcItem}"> 
+				<img th:src="@{/images/heart.png}">
+				</a>
+
+			</div>
+
+
+			<div>
+				<!-- 修改服務項目表單 -->
+				<form th:action="@{/pg/savePgSvcItem}" method="post" class="form-container">
+					<input type="hidden" name="svcId" th:value="${item.svcId}" />
+					<div>
+						<label for="svcName">項目名稱:</label>
+						<input type="text" id="svcName" name="svcName" th:value="${item.svcName}" required />
+					</div>
+					<div>
+						<label for="svcDescr">項目描述:</label>
+						<textarea id="svcDescr" name="svcDescr" required th:text="${item.svcDescr}"></textarea>
+					</div>
+					<div>
+						<button type="submit">更新</button>
+					</div>
+				</form>
+			</div>
+
+	
+
+		</div>
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

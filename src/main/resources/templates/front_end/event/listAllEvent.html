@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵寵唯跡友善平台</title>
+    <link rel="stylesheet" href="/css/frontend_index_styles.css">
+    <style>
+       .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        	.profile-picture {
+		    width: 30px; /* 調整寬度，例如 50px */
+		    height: 30px; /* 調整高度，與寬度保持一致 */
+		    border-radius: 50%; /* 如果需要圓形頭像，保留此屬性 */
+		    object-fit: cover; /* 確保圖片不會被拉伸 */
+			}
+
+        h1 {
+            text-align: center;
+            font-size:3em; /* 增大標題字體 */
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px; /* 卡片之間的間距 */
+        }
+
+        .event-card {
+            background: #ffffff; /* 卡片背景顏色 */
+            padding: 25px; /* 增加內邊距 */
+            border-radius: 12px; /* 更柔和的圓角 */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* 柔和的陰影 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 320px; /* 固定卡片高度 */
+        }
+
+        .event-card h2 {
+            font-size: 1.8em; /* 增大標題字體 */
+            font-weight: bold;
+            color: #5ea5d9; /* 強調標題顏色 */
+            margin-bottom: 10px;
+        }
+
+        .event-card p {
+            font-size: 1.1rem; /* 增大描述文字字體 */
+            color: #555; /* 文字顏色 */
+            line-height: 1.8; /* 提升行距 */
+            margin-bottom: 15px; /* 增加段落間距 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* 限制顯示行數 */
+            -webkit-box-orient: vertical;
+        }
+
+        .event-card time {
+            font-size: 1rem;
+            color: #888; /* 時間文字顏色 */
+            margin-top: auto;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* 增強卡片懸浮效果 */
+        }
+
+        @media (max-width: 1024px) {
+            .event-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em; /* 手機上的標題縮小 */
+            }
+
+            .event-card h2 {
+                font-size: 1.5em; /* 手機上的標題縮小 */
+            }
+
+            .event-card p {
+                font-size: 1rem; /* 手機上的描述文字縮小 */
+            }
+
+            .event-card time {
+                font-size: 0.9rem;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    
+  <header>
+            <h1>
+                <a th:href="@{/}">寵寵唯跡 ServPET</a>
+            </h1>
+        </header>
+        
+        <nav>
+            <div class="dropdown">
+                <button class="dropbtn">最新消息</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/event/list}">平台公告消息</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物商城</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pdDetails/allProductsHomepage}">商品列表</a>
+                    <a th:href="@{/cartDetails/shoppingCart}">購物車</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物美容</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pg/showAllPgSvcItem}">寵物美容服務</a>
+                    <a th:href="@{/pg}">預約</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物保母</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/ps/psList}">寵物保母服務</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">會員專區</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/profile}">會員個人資訊</a>
+                    <a th:href="@{/pets}">寵物資訊</a>
+                    <a th:href="@{/ntfy/member}">會員訊息匣</a>
+                    <a th:href="@{/mebPdo/mebPdo}">商城訂單</a>
+                    <a th:href="@{/booking/calendar}">我的寵物美容月曆</a>
+                    <a th:href="@{/pdFav/list}">商品收藏</a>
+                    <a th:href="@{/pgFav/list}">寵物美容師收藏</a>
+                    <a th:href="@{/favorites/psfav}">寵物保母收藏</a>
+                    <a th:href="@{/vtr/create}">我的錢包</a>
+                    <a th:href="@{/apply/create}">成為美容師/保母</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">聯絡我們</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/cs-issues/add}">問題反應</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">登入</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/login}">會員登入</a>
+                    <a th:href="@{/back_end/login}">後台登入</a>
+                </div>
+            </div>
+              <div class="user-info">
+            <div class="user-profile">
+        <!-- 顯示會員頭像或預設圖片 -->
+        <img th:src="${mebImg != null ? 'data:image/png;base64,' + mebImg : '/images/defaultavatar.png'}" 
+             alt="會員頭像" 
+             class="profile-picture" />
+     </div>
+         <div class="user-actions">
+<!--         <a th:if="${!isLoggedIn}" th:href="@{/login}">登入</a>  -->
+             <a href="#" onclick="confirmLogout()">會員登出</a> 
+         </div>
+     </div>
+        </nav>
+
+
+	
+	
+    <main>
+        <div class="container">
+            <h1>平台最新消息</h1>
+            <div class="event-grid">
+                <a th:each="event : ${events}" th:if="${event.infType != 99}" 
+                   th:href="@{/member/event/display(infid=${event.infId})}" 
+                   class="event-card">
+                    <h2 th:text="${event.title}"></h2>
+                    <p th:text="${event.content}"></p>
+                    <time th:text="${#dates.format(event.created, 'yyyy-MM-dd HH:mm')}"></time>
+                </a>
+            </div>
+        </div>
+    </main>
+
+	<img id="pet1" th:src="@{/images/event6.jpg}" width="auto" height="40%" alt="Pet Image">
+
+
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯跡 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

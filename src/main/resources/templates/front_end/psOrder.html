@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>預約畫面</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+  <link rel="stylesheet" href="/css/psOrder.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<header>
+  <h1>servPet</h1>
+  <nav>
+    <ul>
+      <li><a href="#" th:href="@{/}">首頁</a></li>
+      <li><a href="#" th:href="@{/}">寵物美容師</a></li>
+      <!--     <li><a href="#" th:href="@{/pg/getOne_For_Update(pgId=${pgVO.pgId})}">保母資料管理</a></li> -->
+      <li><a href="#" th:href="@{/ps/psList}">保母</a></li>
+      <li><a href="#" th:href="@{/}">商城</a></li>
+      <li><a href="#" th:href="@{/}">會員專區</a></li>
+      <li><a href="#" th:href="@{/}">登出</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="view">
+  <div class="container mt-5">
+    <form id="bookingForm" th:action="@{/ps/updateOrder}" method="post">
+      <input type="hidden" id="psId" name="psVO.psId" th:value="${psId}" />
+      <input type="hidden" id="mebId" name="mebVO.mebId" th:value="${mebId}" />
+
+      <div class="mb-3">
+        <label for="petSelect" class="form-label">選擇寵物：</label>
+        <select id="petSelect" name="petVO.petId" class="form-select" required>
+          <option value="">請選擇寵物</option>
+          <option th:each="pet : ${petList}" th:value="${pet.petId}" th:text="${pet.petName}"></option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="datePicker" class="form-label">選擇日期：</label>
+        <input type="text" id="datePicker" name="bookingDate" class="form-control" placeholder="請選擇日期" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">選擇時間：</label>
+        <div>
+          <label><input type="radio" name="bookingTime" value="0" required> 早</label>
+          <label><input type="radio" name="bookingTime" value="1"> 中</label>
+          <label><input type="radio" name="bookingTime" value="2"> 晚</label>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="svcSelect" class="form-label">選擇服務：</label>
+        <select id="svcSelect" name="svcId" class="form-select" required>
+          <option value="">請選擇服務</option>
+          <option th:each="svc : ${serviceList}"
+                  th:value="${svc.psSvcId.psSvcItemVO.svcId}"
+                  th:data-price="${svc.svcPrice}"
+                  th:text="${svc.psSvcId.psSvcItemVO.svcName}"></option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">儲值金餘額：</label>
+        <span id="userBalance" th:text="${userBalance}">0</span> 元
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">總價格：</label>
+        <input type="text" id="totalPrice" name="svcPrice" class="form-control" readonly required>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn btn-primary">送出預約</button>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+</footer>
+
+<script>
+  $(function () {
+    let bookedSlots = {}; // 存儲已預約的日期與時間段
+    let userBalance = parseInt($('#userBalance').text()); // 獲取儲值金餘額
+    let totalPrice = 0;
+
+    // 從後端獲取保母的已預約時間數據
+    $.getJSON(`/ps/bookedSlots/${$('#psId').val()}`, function (data) {
+      bookedSlots = data;
+
+      // 初始化日期選擇器
+      $("#datePicker").datepicker({
+        minDate: 1,
+        dateFormat: "yy-mm-dd",
+        beforeShowDay: function (date) {
+          const formattedDate = $.datepicker.formatDate("yy-mm-dd", date);
+          const fullyBooked = bookedSlots[formattedDate] && bookedSlots[formattedDate].length === 3;
+          return [!fullyBooked, fullyBooked ? "fully-booked" : ""]; // 禁用已完全預約的日期
+        },
+        onSelect: function (dateText) {
+          updateTimeSlots(dateText);
+        }
+      });
+    });
+
+    // 更新時間選項的狀態
+    function updateTimeSlots(selectedDate) {
+      const bookedTimes = bookedSlots[selectedDate] || [];
+      $("input[name='bookingTime']").each(function () {
+        const timeValue = $(this).val(); // "0", "1", "2"
+        if (bookedTimes.includes(timeValue)) {
+          $(this).prop("disabled", true);
+        } else {
+          $(this).prop("disabled", false);
+        }
+      });
+    }
+
+    // 更新總價格
+    function updateTotalPrice() {
+      const selectedOption = $('#svcSelect').find(':selected');
+      totalPrice = parseInt(selectedOption.data('price')) || 0;
+      $('#totalPrice').val(totalPrice);
+    }
+
+    // 當服務選擇改變時更新價格
+    $(document).on('change', '#svcSelect', function () {
+      updateTotalPrice();
+    });
+
+    // 表單提交處理
+    $('#bookingForm').on('submit', function (e) {
+      e.preventDefault(); // 阻止默認提交行為
+      if (totalPrice > userBalance) {
+        // 餘額不足情況
+        Swal.fire({
+          icon: 'error',
+          title: '餘額不足',
+          text: '您的儲值金餘額不足，請儲值。',
+          showCancelButton: true,
+          confirmButtonText: '去儲值',
+          cancelButtonText: '取消'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/vtr/create"; // 替換為儲值頁面URL
+          }
+        });
+      } else {
+        // 餘額足夠，確認提交
+        Swal.fire({
+          icon: 'success',
+          title: '確認預約',
+          text: '餘額足夠，是否確認提交？',
+          showCancelButton: true,
+          confirmButtonText: '確認',
+          cancelButtonText: '取消'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $('#bookingForm')[0].submit(); // 提交表單
+          }
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>

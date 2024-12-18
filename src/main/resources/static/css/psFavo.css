@@ -1,0 +1,283 @@
+html, body {
+  font-family: "Quicksand", sans-serif;
+  background-color: #FFFDF9;
+  color: #333;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+header {
+  background-color: #F8EAD3;
+  padding: 0px;
+  text-align: center;
+  width: 100%;
+}
+
+header h1 a {
+  text-decoration: none; /* 移除下劃線 */
+  color: #3f3f3f; /* 繼承主題顏色 */
+  transition: color 0.3s ease; /* 增加滑鼠移上去時的顏色變化 */
+}
+
+header h1 a:hover {
+  color: #F8A978; /* 滑鼠移上時的顏色變化 */
+}
+
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: #FFF8EE;
+  padding: 10px;
+  position: relative;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  background: none;
+  border: none;
+  color: #3f3f3f;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: color 0.3s ease;
+}
+
+.dropbtn:hover {
+  color: #F8A978; /* 滑鼠移上時顏色變化 */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background-color: #FFF8EE;
+  min-width: 180px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: #3f3f3f;
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+  background-color: #F8A978;
+  color: #FFFDF9;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown .dropdown-content .dropdown {
+  position: relative;
+}
+
+.dropdown .dropdown-content .dropdown .dropdown-content {
+  left: 100%;
+  top: 0;
+  margin-left: -1px; /* 確保次級選單不與主選單重疊 */
+}
+
+nav a {
+  color: #3f3f3f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin: 50px;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.filter-container, .search-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+select, input[type="text"] {
+    padding: 8px;
+    margin: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.favorite-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-content: center;
+}
+
+.favorite-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    padding: 10px;
+}
+
+.favorite-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.favorite-card .name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.star {
+    font-size: 18px;
+    color: #f4c150;
+}
+
+.favorite-card button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #BF0060;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.favorite-card button:hover {
+    transform: scale(1.1);
+}
+
+/* 已移除收藏列表的排版 */
+
+.removed-list {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; /* 每個項目之間的間距 */
+    padding: 10px;
+}
+
+.removed-card {
+    display: flex;
+    align-items: center;
+    gap: 30px; 
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.removed-card img {
+    width: 50px; 
+    height: 50px;
+    border-radius: 50%; /* 圓形頭像 */
+    object-fit: cover;
+}
+
+.removed-card .name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.removed-card button {
+    padding: 6px 12px;
+    background-color: #BF0060;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.removed-card button:hover {
+    background-color: #218838;
+}
+
+/* 左側摺疊小圓鈕 */
+.toggle-btn {
+    position: fixed;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: #FF69B4;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 1001;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #FFB6C1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.removed-container {
+    position: fixed;
+    top: 50%;
+    left: -300px;
+    width: 300px;
+    height: 400px;
+    background: #fff;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow-y: auto;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.removed-container.open {
+    left: 10px;
+}
+
+.removed-header {
+    background-color: #FF69B4;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}

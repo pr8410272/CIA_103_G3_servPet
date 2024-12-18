@@ -1,0 +1,163 @@
+/* 全局樣式 */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom, #fff5f8, #fceaff);
+    color: #4a4a4a;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #ff6f9b;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.container {
+    max-width: 1200px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* 卡片樣式 */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+    transition: all 0.3s ease;
+    background: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 182, 193, 0.4);
+}
+
+/* 按鈕樣式 */
+.btn-primary, .btn-warning, .btn-danger {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #ff9aa2, #ff6f9b);
+    border: none;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #ff6f9b, #ff4b75);
+    transform: scale(1.05);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffdab9, #ffc3a0);
+    border: none;
+    color: #4a4a4a;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #ffc3a0, #ffb284);
+    transform: scale(1.05);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ffb3ba, #ff6f61);
+    border: none;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #ff6f61, #ff4c41);
+    transform: scale(1.05);
+}
+
+/* 表格樣式 */
+.table-hover tbody tr:hover {
+    background-color: #ffeff6;
+    transition: background-color 0.3s ease;
+}
+
+.table th {
+    background: #ff9aa2;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: none;
+}
+
+.table td {
+    background: #ffffff;
+    border: none;
+    color: #4a4a4a;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* 表單樣式 */
+.form-control, .form-select {
+    border-radius: 8px;
+    box-shadow: none;
+    border: 1px solid #ffd1dc;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #ff6f9b;
+    box-shadow: 0 0 5px rgba(255, 111, 155, 0.5);
+}
+
+/* Modal 樣式 */
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+    background-color: #fff9fb;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #ff9aa2, #ff6f9b);
+    color: #ffffff;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+.modal-body {
+    background: #fffafc;
+}
+
+.modal-footer {
+    background: #fff3f5;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+}
+
+/* 警告框樣式 */
+.alert {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(255, 182, 193, 0.3);
+    font-weight: 500;
+}
+
+/* 分頁按鈕樣式 */
+.pagination .page-link {
+    color: #ff6f9b;
+    border: none;
+    border-radius: 8px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover, .pagination .page-item.active .page-link {
+    background: #ff6f9b;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(255, 182, 193, 0.3);
+}

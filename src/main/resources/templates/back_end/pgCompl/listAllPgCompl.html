@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>檢舉列表</title>
+<link rel="stylesheet" th:href="@{/css/listAllCompl.css}" />
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<!-- jQuery -->
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<!-- DataTables JS -->
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+<!-- DataTables CSS -->
+<link rel="stylesheet" th:href="@{/css/adminData.css}" />
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+
+<!-- DataTables 設定 -->
+<script>
+    $(document).ready(function() {
+        var table = $('#example').DataTable({
+            "lengthMenu": [3, 5, 7, 10],  // 設定每頁顯示的資料筆數選項
+            "searching": true,  // 開啟搜尋功能
+            "paging": true,     // 開啟分頁功能
+            "ordering": false,  // 禁用排序功能
+            "info": true,       // 顯示當前頁面信息
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 筆結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+                "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+    });
+    </script>
+</head>
+
+<body>
+
+	<!--*************** table#header (上方深色) 區域 **************-->
+	<table id="header">
+		<tr>
+			<td><img th:src="@{/images/admin/pflogow.png}" /> <font>檢舉列表</font>
+				<img th:src="@{/images/admin/pflogow.png}" /></td>
+		</tr>
+	</table>
+
+	<div th:include="@{back_end/admin/adminData}"></div>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+
+	<div th:include="@{back_end/admin/dashboard}"></div>
+
+	<div id="body">
+
+		<article id="BGcat">
+			<img id="BGcat" th:src="@{/images/admin/BGcat.png}" />
+		</article>
+
+		<article id="body">
+			<table id="example" class="display">
+				<thead>
+					<tr>
+						<th>計數</th>
+						<th>檢舉編號</th>
+						<th>保母編號</th>
+						<th>會員編號</th>
+						<th>檢舉日期</th>
+						<th>處理日期</th>
+						<th>檢舉描述</th>
+						<th>處理結果</th>
+						<th>狀態</th>
+						<th>審核</th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="pgComplVO : ${pgComplListData}">
+						<tr>
+							<td th:text="${pgComplVOStat.count}"></td>
+							<td th:text="${pgComplVO.pgComplId}"></td>
+							<td th:text="${pgComplVO.pgId}"></td>
+							<td th:text="${pgComplVO.mebId}"></td>
+							<td
+								th:text="${#temporals.format(pgComplVO.pgComplDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+							<td
+								th:text="${#temporals.format(pgComplVO.pgComplResDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+							<td id="des" th:text="${pgComplVO.pgComplDes}"></td>
+							<td id="des" th:text="${pgComplVO.pgComplResult}"></td>
+							<td><span
+								th:switch="${pgComplVO != null ? pgComplVO.pgComplStatus : null}">
+									<span th:case="'0'">未處理</span> <span th:case="'1'">不懲處</span> <span
+									th:case="'2'">處罰</span> <span th:case="'3'">加重處罰</span> <span
+									th:case="'4'">停權</span> <span th:case="*">未知狀態</span>
+							</span></td>
+							<td>
+								<form method="post" th:action="@{/pgCompl/getOne_For_Display}">
+									<input type="submit" value="審核">
+									<!-- 隱藏 pgComplId，並將其值放入隱藏欄位中 -->
+									<input type="hidden" name="pgComplId"
+										th:value="${pgComplVO.pgComplId}" />
+								</form>
+							</td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+			<button type="submit"
+				onclick="window.location.href='/pgCompl/select_pgCompl_page'">回管理頁</button>
+		</article>
+
+		<article id="BGdog">
+			<img id="BGdog" th:src="@{/images/admin/BGdog.png}" />
+		</article>
+
+	</div>
+
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

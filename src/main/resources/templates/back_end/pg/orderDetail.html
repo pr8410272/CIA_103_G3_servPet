@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link rel="stylesheet" href="/css/pg/orderDetail.css">
+
+</head>
+<body>
+	<header>
+	
+					<!-- ================================ -->
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+
+				<li><a href="#" th:if="${pgVO == null}" th:href="@{/back_end/topgLogin}">登入</a></li>
+				<li><a href="#" th:if="${pgVO != null}" th:href="@{/back_end/logout}">登出</a></li>  
+
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+        <div class="view">
+			<table class="order-table">
+                <thead>
+                    <tr>
+                        <th>欄位名稱</th>
+                        <th>資料內容</th>
+                    </tr>
+                </thead>
+                <tbody>
+<!--                 	<div class="profile-pic"> -->
+<!-- 					<img th:src="@{/pg/profileimg(pgId=${pgVO.pgId})}" -->
+<!-- 						th:alt="${pgVO.pgName + ' 的生活照'}"> -->
+<!-- 					</div> -->
+
+					<tr>
+					    <td>寵物照片</td>
+					    <td>
+					        <!-- 顯示寵物圖片 -->
+					        <div th:if="${petImgBase64 != null}">
+					            <img th:src="'data:image/jpeg;base64,' + ${petImgBase64}" alt="寵物圖片" style="max-width: 200px; max-height: 200px;">
+					        </div>
+					        <!-- 如果沒有圖片，顯示提示文字 -->
+					        <div th:if="${petImgBase64 == null}">
+					            無照片
+					        </div>
+					    </td>
+					</tr>
+                    <tr>
+                        <td>美容師訂單編號</td>
+                        <td th:text="${orderDetails.pgoId}"></td>
+                    </tr>
+                     <tr>
+                        <td>美容師編號</td>
+                        <td th:text="${orderDetails.pgId}"></td>
+                    </tr>
+                    <tr>
+                        <td>會員編號</td>
+                        <td th:text="${orderDetails.mebId}"></td>
+                    </tr>
+                    <tr>
+                        <td>會員姓名</td>
+                        <td th:text="${otherDetails.mebName}"></td>
+                    </tr>
+                    <tr>
+                        <td>寵物編號</td>
+                        <td th:text="${orderDetails.petId}"></td>
+                    </tr>
+                    <tr>
+                        <td>寵物名</td>
+                        <td th:text="${otherDetails.petName}"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>寵物種類</td>
+                        <td th:text="${otherDetails.petType}"></td>
+                    </tr>
+                   
+                    <tr>
+                        <td>預約日期</td>
+                        <td th:text="${orderDetails.bookingDate}"></td>
+                    </tr>
+                    <tr>
+                        <td>預約時段</td>
+                        <td th:switch="${orderDetails.bookingTime}">
+							<span th:case="0">早</span>
+							<span th:case="1">中</span>
+							<span th:case="2">晚</span> 
+							</td>
+                    </tr>
+                    <tr>
+                        <td>服務清單編號</td>
+                        <td th:text="${orderDetails.pgSvcId}"></td>
+                    </tr>
+                    <tr>
+                        <td>服務項目名稱</td>
+                        <td th:text="${otherDetails.svcName}"></td>
+                    </tr>
+                    <tr>
+                        <td>服務項目適用體型</td>
+                        <td th:switch="${otherDetails.svcType}">
+							<span th:case="0">迷你（3kg以下）</span>
+							<span th:case="1">小型（3-5kg）</span>
+							<span th:case="2">中小型（5-10kg）</span> 
+							<span th:case="3">中型（10-16kg）</span>
+							<span th:case="4">中大型（16-22kg）</span>
+							<span th:case="5">大型（22-27kg）</span> 
+							<span th:case="6">特大型（27kg以上）</span></td>
+                    </tr>
+                    <tr>
+                        <td>訂單狀態</td>
+                        <td th:switch="${orderDetails.bookingStatus}">
+							<span th:case="0">未完成</span>
+							<span th:case="1">已完成</span>
+							<span th:case="2">進行中</span> 
+							<span th:case="3">已取消</span></td>
+                    <tr>
+                        <td>撥款狀態</td>
+                        <td th:switch="${orderDetails.apprStatus}">
+							<span th:case="0">處理中</span>
+							<span th:case="1">已撥款</span></td>
+                    </tr>
+                    <tr>
+                        <td>總金額</td>
+                        <td th:text="'$' + ${orderDetails.svcPrice}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="actions">
+                <a href="javascript:history.back()" class="btn">確認 (返回上一頁)</a>
+            </div>
+            
+			
+		</div>
+
+
+		
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+</body>
+</html>

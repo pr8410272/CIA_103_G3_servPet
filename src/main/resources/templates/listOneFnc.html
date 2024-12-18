@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>功能資料 - listOneFnc.html</title>
+<link rel="stylesheet" th:href="@{/css/fnc/listOneFnc.css}"/>
+</head>
+<body>
+
+    <!--*************** table#header (上方深色) 區域 **************-->
+    <table id="header">
+        <tr>
+            <td>
+                <img th:src="@{/images/fnc/pflogow.png}">
+                <font>功能資料</font>
+                <img th:src="@{/images/fnc/pflogow.png}">
+                <h4><a th:href="@{/fnc/select_fnc_page}">回檢索管理頁</a></h4>
+            </td>
+        </tr>
+    </table>
+
+    <!--**************** div#body (中間淺色) 區域 *****************-->
+    <div id="body" th:fragment="listOneFnc-div">
+        <article>
+            <h3><span>檢索結果 :</span></h3>
+            <table id="body">
+                <!-- 表格表頭 -->
+                <thead>
+                    <tr>
+                        <th>功能編號</th>
+                        <th>功能名稱</th>
+                        <th>功能描述</th>
+                        <th>功能創建時間</th>
+                        <th>功能更新時間</th>
+                    </tr>
+                </thead>
+                <!-- 表格資料 -->
+                <tbody>
+                    <tr>
+                        <td th:text="${fncVO.fncId}"></td>
+                        <td th:text="${fncVO.fncName}"></td>
+                        <td th:text="${fncVO.fncDes}"></td>
+                        <td th:text="${#temporals.format(fncVO.fncCreAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+						<td th:text="${#temporals.format(fncVO.fncUpdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </div>
+
+    <!--***************** footer (下方深色) 區域 *****************-->
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

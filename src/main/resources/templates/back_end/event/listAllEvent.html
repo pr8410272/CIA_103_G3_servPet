@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<head>
+    <meta charset="UTF-8">
+    <title>所有活動公告</title>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+
+    <!-- 通用樣式 -->
+    <style>
+       nav {    
+		    margin-top: 0%;
+		}
+    header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	#role, #name {
+          background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+	
+	
+
+
+    html, body {
+    margin: 0 !important;
+		}
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+           color: #333;
+        }
+     
+
+     
+		/* 回首頁按鈕樣式 */
+		.home-button a {
+/* 		    display: flex; /* 水平排列 */ 
+	    align-items: center; /* 垂直居中 */ 
+		    text-decoration: none; /* 移除下劃線 */
+		    color: white; /* 字體顏色為白色 */
+		    font-size: 1.2rem; /* 回首頁字體大小 */
+		    font-weight: bold; /* 粗體 */
+		    gap: 10px; /* 圖片和文字之間的間距 */
+		}
+		
+	
+		/* Title 的樣式 */
+		.title {
+		    font-size: 3rem; /* 大字體標題 */
+		    font-weight: bold; /* 粗體 */
+		    color: white; /* 白色文字 */
+		    margin-bottom: 20px; /* 與圖片間的距離 */
+		}
+		
+		/* 特別標注部分 (servPet) */
+		.title .highlight {
+		    color: #ffd54f; /* 亮黃色 */
+		    font-style: italic; /* 斜體 */
+		}
+		
+		/* 圖片區域 */
+		.header-image img {
+		    width: 100%; /* 讓圖片寬度填滿容器 */
+		    max-width: 1000px; /* 圖片的最大寬度 */
+		    height: auto; /* 高度自動調整，保持比例 */
+		    border-radius: 12px; /* 圖片添加圓角效果 */
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影效果 */
+		    margin: 0 auto; /* 水平居中 */
+		}
+
+    main {
+    border: 2px solid #334252;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    width: 90%; /* 與表格寬度相符 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* 確保當表格過寬時可以水平滾動 */
+}
+
+        h2 {
+        font-size: 2em;
+        margin: 20px 0;
+        color: #333;
+        text-align: left;
+        padding-left: 3%;
+    }
+        h4 {
+        font-size: 0.2em;
+        margin: 20px 0;
+        color: #333;
+        text-align: left;
+        padding-left: 3%;
+    }
+
+      .button-container {
+		    display: flex;
+		    justify-content: center; /* 水平居中 */
+		    gap: 20px; /* 按钮之间的间距 */
+		    margin-bottom: 20px;
+		    flex-wrap: wrap; /* 允许按钮在小屏幕上换行 */
+		}
+		
+		.button-filter {
+		    padding: 12px 25px;
+		    color: white;
+		    border: none;
+		    border-radius: 8px;
+		    font-size: 1rem;
+		    font-weight: bold;
+		    cursor: pointer;
+		    transition: all 0.3s ease-in-out;
+		    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		    margin-bottom: 10px; /* 按钮之间的垂直间距 */
+		}
+		
+		.button-filter:hover {
+		    transform: translateY(-2px); /* 悬停效果 */
+		    opacity: 0.9;
+		}
+
+        .filter-all {
+            background-color: #6c757d;
+        }
+
+        .filter-news {
+            background-color: #007bff;
+        }
+
+        .filter-qa {
+            background-color: #ffc107;
+        }
+
+        .filter-article {
+            background-color: #17a2b8;
+        }
+
+        .filter-unpublish {
+            background-color: #dc3545;
+        }
+
+        table {
+    width: 100%; /* 使表格完全填滿 main 的寬度 */
+    margin: 0; /* 去除表格的 margin */
+    border-collapse: collapse;
+    font-size: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+		/* 搜索框樣式 */
+.dataTables_filter input[type="search"] {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px; /* 圓角 */
+    outline: none;
+    transition: all 0.3s ease;
+    margin:10px;
+}
+
+        
+    th, td {
+        padding: 15px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+
+        tr:hover {
+            background-color: #e8f5e9;
+            cursor: pointer;
+        }
+        	a.button-edit {
+	        background-color:  #17a2b8; /* 綠色編輯按鈕 */
+	        padding: 8px 15px;
+	        border-radius: 6px;
+	        text-decoration: none;
+	        color: white;
+	        font-weight: bold;
+	        font-size: 0.9rem;
+	        transition: background-color 0.3s ease;
+	    }
+	
+	    a.button-edit:hover {
+	        background-color:  #17a2b8;
+	    }
+	
+	    form button {
+	        background-color: #dc3545; /* 紅色下架按鈕 */
+	        padding: 8px 15px;
+	        color: white;
+	        border-radius: 6px;
+	        font-size: 0.9rem;
+	        border: none;
+	        cursor: pointer;
+	        transition: background-color 0.3s ease;
+	    }  form button:hover {
+	        background-color: #b71c1c;
+	    }
+	    a.back-link {
+	    display: inline-block;
+	    background-color: #6c757d; /* 藍色背景 */
+	    color: white; /* 字體白色 */
+	    padding: 10px 20px; /* 增加內邊距讓按鈕大小適中 */
+	    border-radius: 6px; /* 圓角 */
+	    text-decoration: none; /* 移除下劃線 */
+	    font-weight: bold; /* 粗體字 */
+	    font-size: 1rem; /* 字體大小 */
+	    margin: 20px auto; /* 上下留白 */
+	    text-align: center; /* 文字居中 */
+	    transition: background-color 0.3s ease, transform 0.3s ease; /* 動畫效果 */
+	    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 按鈕陰影 */
+	}
+	
+	a.back-link:hover {
+	    background-color:#6c757d; /* 懸停時的深藍色 */
+	    transform: translateY(-2px); /* 懸浮效果 */
+	}
+	    
+
+      footer {
+			margin-top: 40px;
+			text-align: center;
+			color: #888;
+			font-size: 0.9em;
+		}
+
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 1.5em;
+        }
+
+        table {
+            font-size: 0.9rem;
+        }
+
+        .button-filter {
+            font-size: 0.85rem;
+            padding: 10px 15px;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+    }
+       footer {
+		background-color: #334252;
+		padding:1%;
+		color: #FFE4CA;
+		text-align: center;
+		font-size: 0.9em;
+	}
+	
+	  /* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		    z-index: 9999;
+		}
+		
+			.contact-icon img {
+		    width: 100px;
+		    height: 100px;
+		    object-fit: cover;
+		    border-radius: 29%;
+		    margin-left: 1%;
+		    margin-top: -60%;
+		}
+		
+		/* icon 文字樣式 */
+		.contact-icon span {
+		    font-size: 20px;
+		    color: #333;
+		    margin-top: 5px;
+		    text-align: center;
+		    white-space: nowrap;
+		    margin-left: -399%;
+		    z-index: 9999;
+		}
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+	
+    </style>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        $(document).ready(function() {
+            const table = $('#eventTable').DataTable({
+                "lengthMenu": [15, 10, 5,3],
+                "searching": true,
+                "paging": true,
+                "ordering": true,
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 筆結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 筆結果，共<font color='red'> _TOTAL_ </font>筆",
+                    "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                    "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                    "search": "搜尋:",
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    }
+                }
+            });
+
+            // 篩選按鈕邏輯
+            function filterTable(status) {
+                table.rows().every(function() {
+                    const row = $(this.node());
+                    const rowStatus = row.find('td:nth-child(6)').text().trim(); // 獲取狀態文字
+                    if (status === '全部' || rowStatus === status) {
+                        row.show();
+                    } else {
+                        row.hide();
+                    }
+                });
+            }
+	
+            
+            
+            // 綁定按鈕事件
+            $('#filterAll').click(() => filterTable('全部'));
+            $('#filterNews').click(() => filterTable('最新消息'));
+            $('#filterQA').click(() => filterTable('常見QA'));
+            $('#filterArticle').click(() => filterTable('專欄文章'));
+            $('#filterUnpublish').click(() => filterTable('下架'));
+        });
+    </script>
+    <body>
+<header>
+			    <div class="header-container">
+			        <div class="home-button">最新消息管理
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+
+
+   <div th:include="@{/back_end/admin/dashboard}"></div>
+<main>  
+					<br>
+
+			<!-- 篩選按鈕區 -->
+			<div class="button-container">
+			    <button id="filterAll" class="button-filter filter-all">顯示全部</button>
+			    <button id="filterNews" class="button-filter filter-news">最新消息</button>
+			    <button id="filterQA" class="button-filter filter-qa">常見QA</button>
+			    <button id="filterArticle" class="button-filter filter-article">專欄文章</button>
+			    <button id="filterUnpublish" class="button-filter filter-unpublish">下架</button>
+			</div>
+			
+			<!-- 表格 -->
+			<table id="eventTable">
+			    <thead>
+			        <tr>
+			            <th>公告編號</th>
+			            <th>標題</th>
+			            <th>內容</th>
+			            <th>創建時間</th>
+			            <th>修改時間</th>
+			            <th>狀態</th>
+			            <th>操作</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr th:each="eventVO : ${events}">
+			            <td th:text="${eventVO.infId}">公告編號</td>
+			            <td th:text="${eventVO.title}">公告標題</td>
+			            <td th:text="${eventVO.content}">公告內容</td>
+			            <td th:text="${#dates.format(eventVO.created, 'yyyy-MM-dd HH:mm')}">創建時間</td>
+			            <td th:text="${#dates.format(eventVO.updated, 'yyyy-MM-dd HH:mm')}">修改時間</td>
+			            <td>
+			                <span th:if="${eventVO.infType == 0}">最新消息</span>
+			                <span th:if="${eventVO.infType == 1}">常見QA</span>
+			                <span th:if="${eventVO.infType == 2}">專欄文章</span>
+			                <span th:if="${eventVO.infType == 99}">下架</span>
+			            </td>
+			            <td>
+			                <a th:href="@{/event/display(infid=${eventVO.infId})}" class="button button-edit">查看</a>
+			                |
+			                <a th:href="@{/event/edit(infid=${eventVO.infId})}" class="button button-edit">編輯</a>
+			                |
+			                <form th:action="@{/event/unpublish}" method="post" style="display:inline;">
+			                    <input type="hidden" name="infid" th:value="${eventVO.infId}" />
+			                    <button type="submit">下架</button>
+			                </form>
+			            </td>
+			        </tr>
+			    </tbody>
+			</table>
+			<div style="text-align: center; margin-top: 30px;">
+			    <a th:href="@{/event/select}" class="back-link">返回最新消息查詢</a>
+			</div>
+			
+				<div class="contact-icon" id="icon-container">
+				    <a th:href="@{/back_end/index}">
+				        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+				    </a>
+				    <span>後台首頁</span>
+				</div>
+			
+			</main>
+			<footer>
+		       <p>© 2024 寵寵唯跡友善平台</p>
+		   </footer>
+		</body>
+		</html>

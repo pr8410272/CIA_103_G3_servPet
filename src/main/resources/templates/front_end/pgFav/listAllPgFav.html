@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美容師收藏列表</title>
+    <link th:href="@{/css/mebpdo_style.css}" rel="stylesheet">
+    
+    <!-- 右側會員大頭照 -->
+    <style type="text/css">
+        	.profile-picture {
+		    width: 30px; /* 調整寬度，例如 50px */
+		    height: 30px; /* 調整高度，與寬度保持一致 */
+		    border-radius: 50%; /* 如果需要圓形頭像，保留此屬性 */
+		    object-fit: cover; /* 確保圖片不會被拉伸 */
+			}
+	</style>
+    
+    <!-- DataTables 和 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+
+    <!-- DataTables 設定 -->
+    <script>
+    $(document).ready(function() {
+        $('.order-table').DataTable({
+            "lengthMenu": [3, 5, 10, 20],
+            "searching": true,
+            "paging": true,
+            "ordering": false,
+            "language": {
+                "lengthMenu": "顯示 _MENU_ 筆結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 筆結果，共 _TOTAL_ 筆",
+                "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+                "infoFiltered": "(從 _MAX_ 筆結果中過濾)",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                }
+            }
+        });
+    });
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>
+            <a th:href="@{/}">寵寵唯跡 ServPET</a>
+        </h1>
+    </header>
+
+    <nav>
+           <div class="dropdown">
+               <button class="dropbtn">最新消息</button>
+               <div class="dropdown-content">
+                   <a th:href="@{/member/event/list}">平台公告消息</a>
+               </div>
+           </div>
+           <div class="dropdown">
+               <button class="dropbtn">寵物商城</button>
+               <div class="dropdown-content">
+                   <a th:href="@{/pdDetails/allProductsHomepage}">商品列表</a>
+                   <a th:href="@{/cartDetails/shoppingCart}">購物車</a>
+               </div>
+           </div>
+           <div class="dropdown">
+               <button class="dropbtn">寵物美容</button>
+               <div class="dropdown-content">
+                   <a th:href="@{/pg/showAllPgSvcItem}">寵物美容服務</a>
+                   <a th:href="@{/pg}">預約</a>
+               </div>
+           </div>
+           <div class="dropdown">
+               <button class="dropbtn">寵物保母</button>
+               <div class="dropdown-content">
+                   <a th:href="@{/ps/psList}">寵物保母服務</a>
+               </div>
+           </div>
+           <div class="dropdown">
+               <button class="dropbtn">會員專區</button>
+               <div class="dropdown-content">
+                   <a th:href="@{/profile}">會員個人資訊</a>
+                   <a th:href="@{/pets}">寵物資訊</a>
+                   <a th:href="@{/ntfy/member}">會員訊息匣</a>
+                   <a th:href="@{/mebPdo/mebPdo}">商城訂單</a>
+                   <a th:href="@{/booking/calendar}">我的寵物美容月曆</a>
+                   <a th:href="@{/pdFav/list}">商品收藏</a>
+                   <a th:href="@{/pgFav/list}">寵物美容師收藏</a>
+                   <a th:href="@{/favorites/psfav}">寵物保母收藏</a>
+                   <a th:href="@{/vtr/create}">我的錢包</a>
+                   <a th:href="@{/apply/create}">成為美容師/保母</a>
+               </div>
+           </div>
+           <div class="dropdown">
+               <button class="dropbtn">聯絡我們</button>
+               <div class="dropdown-content">
+                   <a th:href="@{/member/cs-issues/add}">問題反應</a>
+               </div>
+           </div>
+           <div class="dropdown">
+               <button class="dropbtn">登入</button>
+               <div class="dropdown-content">
+                   <a th:href="@{/login}">會員登入</a>
+                   <a th:href="@{/back_end/login}">後台登入</a>
+               </div>
+           </div>
+           		<div class="user-info">
+           <div class="user-profile">
+        <!-- 顯示會員頭像或預設圖片 -->
+        <img th:src="${mebImg != null ? 'data:image/png;base64,' + mebImg : '/images/defaultavatar.png'}" 
+             alt="會員頭像" 
+             class="profile-picture" />
+	    </div>
+	        <div class="user-actions">
+		    <a th:if="${isLoggedIn == null or !isLoggedIn}" th:href="@{/login}">登入</a>
+		    <a href="#" onclick="confirmLogout()">會員登出</a>
+		</div>
+       </nav>
+
+
+    <main>
+        <h2>我的寵物美容師收藏</h2>
+        <table id="order-table" class="order-table">
+            <thead>
+                <tr>
+                    <th>美容師編號</th>
+                    <th>美容師姓名</th>
+                    <th>取消收藏</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pgFavVO : ${pgFavList}">
+                    <td th:text="${pgFavVO.pgVO.pgId}"></td>
+                    <td th:text="${pgFavVO.pgVO.pgName}"></td>
+                    <td>
+					    <button type="button" 
+					            class="cancel-btn" 
+					            th:onclick="openCancelModal([[${pgFavVO.pgFavId}]])">取消收藏
+					    </button>
+					</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        <p>Copyright © 2024 ServPET 寵寵唯跡 All Rights Reserved.</p>
+    </footer>
+    
+    <!-- 取消收藏燈箱 -->
+	<div id="cancel-modal" class="modal">
+	    <div class="modal-content">
+	        <p>確定要取消此筆收藏嗎？</p>
+	        <!-- 確認按鈕會提交表單 -->
+	        <form id="confirm-cancel-form" method="post" th:action="@{/pgFav/deleteFavorite}">
+	            <input type="hidden" name="pgFavId" id="modal-pgFavId" />
+	            <button type="submit" class="cancel-btn">確認</button>
+	            <button type="button" class="cancel-btn" onclick="closeCancelModal()">取消</button>
+	        </form>
+	    </div>
+	</div>
+	
+	<script>
+    // 打開燈箱並設置 pgFavId 到隱藏欄位
+    function openCancelModal(pgFavId) {
+        // 顯示燈箱
+        const modal = document.getElementById('cancel-modal');
+        modal.style.display = 'flex';
+
+        // 設置隱藏欄位的值
+        document.getElementById('modal-pgFavId').value = pgFavId;
+    }
+
+    // 關閉燈箱
+    function closeCancelModal() {
+        const modal = document.getElementById('cancel-modal');
+        modal.style.display = 'none';
+    }
+	</script>
+    
+</body>
+</html>

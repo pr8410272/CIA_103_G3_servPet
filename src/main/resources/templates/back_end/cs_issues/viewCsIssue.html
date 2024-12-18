@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<title>問題詳情</title>
+<style>
+
+html, body {
+    margin: 0 !important;
+}
+
+	header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	#role, #name {
+             background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+        
+        nav {    
+		    margin-top: 0%;
+		}
+		
+
+  body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+           color: #333;
+		   margin: 0;
+        }
+        
+      
+
+
+
+.form-container {
+	background-color: white;
+	margin: 30px auto;
+	padding: 25px;
+	border-radius: 12px;
+	max-width: 800px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+	border-bottom: 2px solid #334252;
+}
+
+.detail-item {
+	margin-bottom: 15px;
+}
+
+.detail-item strong {
+	display: inline-block;
+	width: 180px;
+	font-weight: bold;
+	color: #555;
+}
+
+.detail-item span {
+	color: #555;
+}
+
+.back-link {
+
+	display: block;
+	width: 180px;
+	margin: 30px auto;
+	padding: 10px 20px;
+	background-color:#334252;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 8px;
+	font-size: 1em;
+	font-weight: bold;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+
+.back-link:hover {
+	background-color:#334252;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.detail-item{
+ padding-left: 100px;
+}
+    footer {
+		background-color: #334252;
+		padding:1%;
+		color: #FFE4CA;
+		text-align: center;
+		font-size: 0.9em;
+	}
+
+  /* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		    z-index: 9999;
+		}
+		
+			.contact-icon img {
+		    width: 100px;
+		    height: 100px;
+		    object-fit: cover;
+		    border-radius: 29%;
+		    margin-left: -410%;
+		    margin-top: 9%;
+		}
+		/* icon 文字樣式 */
+		.contact-icon span {
+		    font-size: 20px;
+		    color: #333;
+		    margin-top: 5px;
+		    text-align: center;
+		    white-space: nowrap;
+		    margin-left: -813%;
+		}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+
+
+</style>
+</head>
+<body>
+  <header>
+			    <div class="header-container">
+			        <div class="home-button">平台問題反應
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+
+<div th:include="@{/back_end/admin/dashboard}"></div>
+    
+<main>
+	<div class="form-container">
+		<h1>表單詳情</h1>
+
+		<!-- 客服表單編號 -->
+		<div class="detail-item">
+			<strong>客服表單編號：</strong> <span th:text="${csIssueVO.csQaId}">未提供編號</span>
+		</div>
+
+		<!-- 顧客編號 -->
+		<div class="detail-item">
+			<strong>顧客編號：</strong> <span th:text="${csIssueVO.mebId.mebId}">未提供編號</span>
+		</div>
+
+		<!-- 顧客姓名 -->
+		<div class="detail-item">
+			<strong>顧客姓名：</strong> <span th:text="${csIssueVO.mebId.mebName}">未提供姓名</span>
+		</div>
+
+		<!-- 問題內容 -->
+		<div class="detail-item">
+			<strong>內容：</strong> <span th:if="${csIssueVO.qaContent != null}"
+				th:text="${csIssueVO.qaContent}">無內容</span> <span
+				th:if="${csIssueVO.qaContent == null}">無內容</span>
+		</div>
+
+		<!-- 問題狀態 -->
+		<div class="detail-item">
+			<strong>狀態：</strong> <span th:if="${csIssueVO.qaSta == '0'}">未處理</span>
+			<span th:if="${csIssueVO.qaSta == '1'}">已回覆</span>
+		</div>
+
+		<!-- 提交日期 -->
+		<div class="detail-item">
+			<strong>提交日期：</strong> <span th:if="${csIssueVO.qaDate != null}"
+				th:text="${#temporals.format(csIssueVO.qaDate, 'yyyy-MM-dd HH:mm:ss')}">無日期</span>
+			<span th:if="${csIssueVO.qaDate == null}">無日期</span>
+		</div>
+
+		<!-- 平台管理員編號 -->
+		<div class="detail-item">
+			<strong>平台管理員編號：</strong> <span
+				th:text="${csIssueVO.adminId?.adminId ?: '尚無負責管理員'}"></span>
+		</div>
+
+		<!-- 回覆內容 -->
+		<div class="detail-item">
+			<strong>回覆內容：</strong> <span
+				th:text="${csIssueVO.reContent ?: '尚未回覆'}"></span>
+		</div>
+
+		<!-- 回覆時間 -->
+		<div class="detail-item">
+			<strong>回覆時間：</strong> <span th:if="${csIssueVO.reDate != null}"
+				th:text="${#temporals.format(csIssueVO.reDate, 'yyyy-MM-dd HH:mm:ss')}">尚未記錄</span>
+			<span th:if="${csIssueVO.reDate == null}">尚未記錄</span>
+		</div>
+		
+		<div class="contact-icon" id="icon-container">
+		    <a th:href="@{/back_end/index}">
+		        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+		    </a>
+		    <span>後台首頁</span>
+		</div>
+		
+
+		<!-- 返回按鈕 -->
+		<a class="back-link" th:href="@{/cs-issues/list}">返回問題列表</a>
+	</div>
+</main>
+		<footer>
+		       <p>© 2024 寵寵唯跡友善平台</p>
+		   </footer></body>
+</html>

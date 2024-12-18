@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵寵唯跡友善平台</title>
+    <link rel="stylesheet" href="/css/frontend_index_styles.css">
+    <link rel="stylesheet" href="/slick/slick.css"/>
+    <link rel="stylesheet" href="/slick/slick-theme.css"/>
+    <style>
+        /* 全局樣式 */
+       
+
+
+        /* 表單樣式 */
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-picture {
+		    width: 30px; /* 調整寬度，例如 50px */
+		    height: 30px; /* 調整高度，與寬度保持一致 */
+		    border-radius: 50%; /* 如果需要圓形頭像，保留此屬性 */
+		    object-fit: cover; /* 確保圖片不會被拉伸 */
+			}
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+/*             color: #555; */
+        }
+
+        input, select {
+            width: 95%;
+            padding: 10px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+
+       .submit-button {
+     		  width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+       
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+
+        img {
+            display: block;
+            margin-top: 10px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .message.success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        	.contact-icon img {
+		    width: 100PX;
+		    height: AUTO;
+		    object-fit: cover;
+		    border-radius: 100%;
+		    MARGIN-LEFT: -200%;
+		}
+		
+		.contact-icon {
+		/*     position: fixed; /* 固定在螢幕右下角 */ 
+		    bottom: 70px; /* 距離底部 */
+		     right: 80px; /* 距離右側 */ 
+		    width: 80px; /* 圓形大小 */
+		    height: 80px; /* 圓形大小 */
+		    display: flex; /* 彈性盒子 */
+		    flex-direction: column; /* 垂直排列 */
+		    align-items: center; /* 水平置中 */
+		    justify-content: center; /* 垂直置中 */
+		    cursor: pointer; /* 滑鼠指標 */
+		}
+		
+		.contact-icon img {
+			    width: 85px;
+			    height: 85px;
+			    object-fit: cover;
+			    border-radius: 71%;
+			    margin-left: 399%;
+			    margin-top: 51%;
+			}
+		.contact-icon span {
+		    margin-top: -12px;
+		    font-size: 12px;
+		    color: #2c2a2a;
+		    text-align: center;
+		    white-space: nowrap;
+		    font-size: 17px;
+		    margin-right: -790%;
+		    font-weight: bold;
+		}
+        
+    </style>
+</head>
+
+<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>寵寵唯跡友善平台</title>
+        <link rel="stylesheet" href="/css/frontend_index_styles.css">
+        <link rel="stylesheet" href="/slick/slick.css"/>
+        <link rel="stylesheet" href="/slick/slick-theme.css"/>
+    </head>
+    <body>
+      <header>
+            <h1>
+                <a th:href="@{/}">寵寵唯跡 ServPET</a>
+            </h1>
+        </header>
+        
+        <nav>
+            <div class="dropdown">
+                <button class="dropbtn">最新消息</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/event/list}">平台公告消息</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物商城</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pdDetails/allProductsHomepage}">商品列表</a>
+                    <a th:href="@{/cartDetails/shoppingCart}">購物車</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物美容</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pg/showAllPgSvcItem}">寵物美容服務</a>
+                    <a th:href="@{/pg}">預約</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物保母</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/ps/psList}">寵物保母服務</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">會員專區</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/profile}">會員個人資訊</a>
+                    <a th:href="@{/pets}">寵物資訊</a>
+                    <a th:href="@{/ntfy/member}">會員訊息匣</a>
+                    <a th:href="@{/mebPdo/mebPdo}">商城訂單</a>
+                    <a th:href="@{/booking/calendar}">我的寵物美容月曆</a>
+                    <a th:href="@{/pdFav/list}">商品收藏</a>
+                    <a th:href="@{/pgFav/list}">寵物美容師收藏</a>
+                    <a th:href="@{/favorites/psfav}">寵物保母收藏</a>
+                    <a th:href="@{/vtr/create}">我的錢包</a>
+                    <a th:href="@{/apply/create}">成為美容師/保母</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">聯絡我們</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/cs-issues/add}">問題反應</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">登入</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/login}">會員登入</a>
+                    <a th:href="@{/back_end/login}">後台登入</a>
+                </div>
+            </div>
+              <div class="user-info">
+            <div class="user-profile">
+        <!-- 顯示會員頭像或預設圖片 -->
+        <img th:src="${mebImg != null ? 'data:image/png;base64,' + mebImg : '/images/defaultavatar.png'}" 
+             alt="會員頭像" 
+             class="profile-picture" />
+     </div>
+         <div class="user-actions">
+<!--         <a th:if="${!isLoggedIn}" th:href="@{/login}">登入</a>  -->
+             <a href="#" onclick="confirmLogout()">會員登出</a> 
+         </div>
+     </div>
+        </nav>
+        
+
+    <main>
+        <div class="form-container">
+        <div class="contact-icon" id="icon-container">
+					    <a th:href="@{/apply/list}">
+					        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="50px" height="50px" alt="Pet Image">
+					    </a>
+					    <span>我的記錄</span>
+					</div>
+            
+            <h1>建立申請</h1>
+
+            <!-- 成功訊息 -->
+            <div class="message success" th:if="${message != null}">
+                <span th:text="${message}"></span>
+            </div>
+
+            <!-- 錯誤訊息 -->
+            <div class="message error" th:if="${errorMessage != null}">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <!-- 建立申請表單 -->
+            <form th:action="@{/apply/create}" th:object="${applyVO}" method="post" enctype="multipart/form-data">
+                <!-- 申請類別 -->
+                <label for="applyCate">申請類別</label>
+                <select id="applyCate" th:field="*{applyCate}">
+                    <option value="" disabled selected>選擇申請類別</option>
+                    <option value="1">保母</option>
+                    <option value="0">美容師</option>
+                </select>
+
+                <!-- 隱藏的會員 ID -->
+                <input type="hidden" id="mebId" name="mebId" th:value="${member.mebId}" />
+
+                <!-- 會員姓名 -->
+                <label for="memberName">會員姓名</label>
+                <input type="text" id="memberName" name="memberName" readonly th:value="${member.mebName}" />
+
+                <!-- 會員 Email -->
+                <label for="memberEmail">會員 Email</label>
+                <input type="email" id="memberEmail" name="memberEmail" readonly th:value="${member.mebMail}" />
+
+                <!-- 證件照 -->
+                <label for="applyPicFile">證明文件</label>
+                <input type="file" id="applyPicFile" name="applyPicFile" accept="image/jpeg, image/png" />
+                <img id="previewImage" alt="照片預覽" style="display: none;" />
+
+                  <button type="submit" class="submit-button">提交申請</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 寵寵唯跡友善平台</p>
+    </footer>
+
+    <script>
+        // 前端校驗並顯示圖片預覽
+        document.getElementById('applyPicFile').addEventListener('change', function () {
+            const file = this.files[0];
+            const preview = document.getElementById('previewImage');
+            if (file) {
+                const allowedTypes = ['image/jpeg', 'image/png'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('僅支援 JPG 或 PNG 格式的檔案！');
+                    this.value = '';
+                    preview.style.display = 'none';
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) { // 限制大小為 5MB
+                    alert('檔案大小不能超過 5MB！');
+                    this.value = '';
+                    preview.style.display = 'none';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

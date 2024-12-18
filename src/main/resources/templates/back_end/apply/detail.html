@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申請詳情</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	 <style>
+/*         html, body { */
+/*             width: 100%; */
+/*             height: 100%; */
+/*             margin: 0; */
+/*             padding: 0; */
+/*         } */
+
+	body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            
+        }
+      
+      header {
+			    background-color: #334252;
+		 	    color: #F0F8FF; 
+		 	    text-align: center; 
+		 	    padding:3%; 
+		 	    font-size: 2.5em; /* Relative font size */ 
+		 	    font-weight: bold; 
+		}
+		
+		#role, #name {
+             background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+        
+        nav {    
+		    margin-top: 0%;
+		}
+		
+		
+	****************************************************************************	
+		
+		
+		h1{
+			margin: revert-layer;
+			
+		    color: #333;
+		    margin-bottom: 20px;
+		    border-bottom: 2px solid #334252;
+	    }
+	        
+		footer {
+		background-color: #334252;
+		padding:1%;
+		color: #FFE4CA;
+		text-align: center;
+		font-size: 0.9em;
+	}
+	
+		.me-2 {
+		    margin-left: 24.5rem !important;
+		}
+		button.btn.btn-danger {
+    margin-right: 1rem;
+}
+ 		.text-center button,
+        .text-center a {
+            margin: 0 10px;
+        }
+		
+		button:hover {
+		    background-color: #445c70; /* 懸停時的顏色變化 */
+		    transform: scale(1.05); /* 懸停時稍微放大 */
+		}
+		
+		button:active {
+		    background-color: #28333f; /* 點擊時的顏色 */
+		    transform: scale(0.95); /* 點擊時稍微縮小 */
+		}
+		
+		button:focus {
+		    outline: none; /* 去除聚焦時的外框 */
+		}
+        
+		.card {
+	    max-width: 100%;
+	    margin: 0 auto; /* 將上下的 margin 設為 0，左右設為 auto 來置中 */
+	    text-align: left; /* 如果內容需要置中 */
+	   
+	    
+		}
+		.card {
+		    max-width: 100%; /* 設置為更寬的比例 */
+	    	padding: 5px !important; /* 增加內邊距 */ 
+		    background-color: #ffffff; /* 白色背景 */
+		    border-radius: 10px; /* 添加圓角 */
+		    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+		}
+		
+		
+		.container {
+	        margin: 20px auto;
+	        max-width: 700px; /* 設置容器的最大寬度 */
+	    }
+	.card h5 {
+	    font-size: 25px;
+	    margin: 2%;
+	    margin-bottom: 3%;
+	}
+	 .card p {
+	    font-size: 20px; /* 設定字體大小為 30px */
+	    line-height: 1.6; /* 增加行距，保持段落間的可讀性 */
+	    margin: 10px 0; /* 調整段落間的間距 */
+	}
+		strong {
+	    margin-left: 13%;
+	    margin-left: 13%;
+    padding: 10px;
+}
+	.img-thumbnail {
+    margin-left: 205px;
+    padding: .25rem;
+    background-color: var(--bs-body-bg);
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+  
+    height: auto;
+}
+a.btn.btn-secondary {
+    width: 95px;
+    height: auto;
+}
+
+    .img-thumbnail {
+        cursor: pointer; /* 鼠標變成手型，提示可點擊 */
+        transition: transform 0.3s ease; /* 添加過渡效果 */
+    }
+
+    .img-thumbnail:hover {
+        transform: scale(1.2); /* 放大圖片至 1.2 倍 */
+    }
+    		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		}
+		
+		.contact-icon img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 29%;
+    margin-top: 89%;
+    margin-left: -460%;
+}
+		/* icon 文字樣式 */
+		.contact-icon span {
+    font-size: 20px;
+    color: #333;
+    margin-top: 5px;
+    margin-left: -935px;
+    text-align: center;
+    white-space: nowrap;
+}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+    
+    
+</style>
+
+		
+    </style>
+
+</head>
+<body>
+
+    <header>
+			    <div class="header-container">
+			        <div class="home-button">權限審核 
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+	
+
+<div th:include="@{/back_end/admin/dashboard}"></div>
+        
+<main>
+
+    
+    <div class="container mt-5">
+        
+        <!-- 申請資訊卡片 -->
+        <div class="card shadow">
+            <div class="card-body">
+       <div class="card-context">         
+        <h1 class="text-center mb-4">申請詳情</h1>
+                <h5 class="card-title">申請項目： <span th:text="${apply.applyCate == '1' ? '保母' : '美容師'}"></span></h5>
+              	<p><strong>申請ID:</strong><span th:text="${apply.applyId}"></span></h5>
+                <p><strong>會員姓名：</strong><span th:text="${apply.mebId.mebName}"></span></p>
+                <p><strong>會員信箱：</strong><span th:text="${apply.mebId.mebMail}"></span></p>
+                
+                <!-- 證件照 -->
+                <p><strong>證明文件：</strong></p>
+                <div class="mb-3">
+                    <img th:src="@{'/apply/image/' + ${apply.applyId} + '/license'}" 
+					     alt="證件照" 
+					     class="img-thumbnail" 
+					     style="max-width: 300px;">
+
+                </div>
+                
+                <!-- 狀態與時間 -->
+                <p>
+                    <strong>申請狀態：</strong>
+                    <span th:classappend="${apply.applyStatus == '0' ? 'badge bg-secondary' :
+                                          apply.applyStatus == '1' ? 'badge bg-success' :
+                                          apply.applyStatus == '2' ? 'badge bg-danger' : 'badge bg-dark'}"
+                          th:text="${apply.applyStatus == '0' ? '未審核' :
+                                   apply.applyStatus == '1' ? '審核通過' :
+                                   apply.applyStatus == '2' ? '駁回' : '未知'}"></span>
+                </p>
+                <p><strong>申請時間：</strong><span th:text="${#temporals.format(apply.applyTime, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+                <p><strong>駁回原因：</strong><span th:text="${apply.applyRejectReason ?: '無'}"></span></p>
+                
+                <!-- 按鈕組 -->
+                <div class="d-flex justify-content-between mt-4">
+                    <div>
+	                    <!-- 返回按鈕 -->
+	                    <a href="/apply/listApply" class="btn btn-secondary">返回列表</a>
+                    <br>
+                </div>
+                        <!-- 通過按鈕 -->
+                        <form th:action="@{'/apply/approve/' + ${apply.applyId}}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-success me-2">通過</button>
+                        </form>
+                        <!-- 駁回按鈕，打開模態框 -->
+<!-- 					<button type="submit" onclick="window.location.href='/back_end/index'">回首頁</button> -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">駁回</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 駁回模態框 -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{'/apply/reject/' + ${apply.applyId}}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rejectModalLabel">駁回原因</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="rejectReason" class="form-label">請輸入駁回原因：</label>
+                            <textarea name="rejectReason" id="rejectReason" class="form-control" rows="4" required placeholder="請輸入駁回原因"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-danger">送出</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+      <div class="contact-icon" id="icon-container">
+		    <a th:href="@{/back_end/index}">
+		        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+		    </a>
+		    <span>後台首頁</span>
+		</div>
+    </main>
+    <br>
+     <footer>
+        <p>© 2024 寵寵唯跡友善平台</p>
+    </footer>
+	<!-- 引入 SweetAlert2 的 CSS 和 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- 引入 SweetAlert2 的 CSS 和 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // SweetAlert - 通過按鈕
+    document.querySelectorAll('form[action*="/apply/approve/"]').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // 防止直接提交表單
+
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true; // 禁用按鈕，防止重複提交
+            submitButton.innerText = '提交中...'; // 修改按鈕文字
+
+            Swal.fire({
+                title: '通過成功',
+                text: '新的帳號、密碼已由 Email 發送',
+                icon: 'success',
+                confirmButtonText: '確定'
+            }).then(() => {
+                form.submit(); // 彈窗確認後提交表單
+            });
+        });
+    });
+
+    // SweetAlert - 駁回按鈕
+    document.querySelector('form[action*="/apply/reject/"]').addEventListener('submit', function (event) {
+        event.preventDefault(); // 防止直接提交表單
+
+        const form = this;
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        submitButton.disabled = true; // 禁用按鈕，防止重複提交
+        submitButton.innerText = '提交中...'; // 修改按鈕文字
+
+        Swal.fire({
+            title: '確認送出駁回通知？',
+            text: '將通過 Email 發送駁回原因給申請者',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '送出',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: '已送出駁回通知',
+                    text: '原因已由 Email 發送通知',
+                    icon: 'success',
+                    confirmButtonText: '確定'
+                }).then(() => {
+                    form.submit(); // 彈窗確認後提交表單
+                });
+            } else {
+                submitButton.disabled = false; // 取消時重新啟用按鈕
+                submitButton.innerText = '送出'; // 恢復按鈕文字
+            }
+        });
+    });
+</script>
+
+</script>
+	
+    <!-- 引入 Bootstrap 的 JS 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

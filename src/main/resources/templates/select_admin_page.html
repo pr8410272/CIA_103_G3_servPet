@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>管理員檢索管理 - select_admin_page.html</title>
+<link rel="stylesheet" th:href="@{/css/admin/select_admin_page.css}"/>
+</head>
+
+<body>
+
+  <!--*************** table#header (上方深色) 區域 **************-->
+    <table id="header">
+      <tr>
+        <td>
+          <img th:src="@{/images/admin/pflogow.png}"/>
+          <font>管理員檢索管理</font>
+          <img th:src="@{/images/admin/pflogow.png}"/>
+          <h4><a th:href="@{/}">回首頁</a></h4>
+        </td>
+      </tr>
+    </table>
+    
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+	<div id="body">
+		<article>
+		<h2><span>管理員檢索</span></h2>
+		<font>單一條件檢索:</font><br>
+		<!-- 錯誤表列 -->
+		<!--<div class="errorblock" th:utext="${errorMessage}">${errorMessage}</div><br>-->
+		<table id="body">
+			<form method="post" th:action="@{getOne_For_Display}">
+				輸入管理員編號:
+				<input type="text" name="adminId" th:value="${param.adminId}" > 
+				<input type="submit" value="送出">
+			</form><br>
+			
+			<form method="post" th:action="@{getOne_For_Display}">
+				選擇管理員編號:
+				<select name="adminId">
+				     <option th:each="adminVO : ${adminListData}" th:value="${adminVO.adminId}" th:text="${adminVO.adminId}" />
+			    </select>
+				<input type="submit" value="送出">
+			</form><br>
+			
+			<form method="post" th:action="@{getOne_For_Display}">
+				選擇管理員姓名:
+				<select name="adminId">
+				     <option th:each="adminVO : ${adminListData}" th:value="${adminVO.adminId}" th:text="${adminVO.adminName}" />
+			    </select>
+				<input type="submit" value="送出">
+			</form><br>
+			
+			<!--  萬用複合查詢-以下欄位-可隨意增減 -->    
+			    <form method="post" th:action="@{listAdmins_ByCompositeQuery}"><br>
+			        <font>多條件檢索:</font><br>
+			        輸入管理員編號: 
+			        <input type="text" name="adminId" value="1001"><br>
+			           
+			        輸入管理員姓名: 
+			        <input type="text" name="adminName" value="王大偉"><br>
+			       
+			        輸入管理員狀態: 
+			        <input type="text" name="adminAccStatus" value="1"><br>
+			
+			        <input type="submit" value="送出">
+			     
+			     </form><br>
+	
+      		<h2><span>管理員管理</span></h2>
+			<button type="submit" onclick="window.location.href='addAdmin'">新增管理員</button>
+			<button type="submit" onclick="window.location.href='listAllAdmin'">管理員列表</button>
+			<br><br>
+	  	</table>
+	  </article>
+	</div>
+    
+    <!-- 旗標getOne_For_Display見AdminnoController.java的第74行 -->
+    <div class="b" th:if="${getOne_For_Display}">
+        <!--使用listOneAdmin.html網頁的listOneAdmin-div片段--> <!-- 見listOneAdmin.html的第35行的th:fragment="listOneAdmin-div" --> <!-- 使用th:replace也可 -->
+        <div th:insert="~{/back_end/admin/listOneAdmin :: listOneAdmin-div}"></div>
+
+    </div>
+    
+    	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+	  <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

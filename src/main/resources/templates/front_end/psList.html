@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<link rel="stylesheet" href="/css/psList.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>保母列表</title>
+
+</head>
+<body>
+
+<header>
+    <h1>servPet</h1>
+    <nav>
+        <ul>
+            <li><a href="#" th:href="@{/}">首頁</a></li>
+            <li><a href="#" th:href="@{/pg}">寵物美容師</a></li>
+            <li><a href="#" th:href="@{/ps/psList}">寵物保母</a></li>
+            <li><a href="#" th:href="@{/}">商城</a></li>
+            <li><a href="#" th:href="@{/}">會員專區</a></li>
+            <li><a href="#" th:href="@{/}">登出</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <div th:each="ps : ${psList}" class="img_block">
+            <a th:href="@{/ps/goodPs/{psId}(psId=${ps.psId})}" class="profileimg-button">
+                <img
+                        th:if="${ps.psPic != null}"
+                        th:src="@{/ps/profileimg(psId=${ps.psId})}"
+                        th:alt="${ps.psName}">
+            </a>
+            <h3 th:text="${ps.psName}">保母姓名</h3>
+            <p th:if="${ps.psArea == 0}" th:text="'北部'"></p>
+            <p th:if="${ps.psArea == 1}" th:text="'中部'"></p>
+            <p th:if="${ps.psArea == 2}" th:text="'南部'"></p>
+            <p th:if="${ps.psArea == 3}" th:text="'東部'"></p>
+        </div>
+    </div>
+
+</main>
+<footer>
+    <p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+</footer>
+</body>
+</html>

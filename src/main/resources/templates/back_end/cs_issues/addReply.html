@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<title>回覆問題</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f9f9f9;
+	margin: 0;
+	padding: 0;
+}
+header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	   #role, #name {
+             background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+        
+        nav {    
+		    margin-top: 0%;
+		}
+	
+	
+.container {
+	max-width: 800px;
+	margin: 50px auto;
+	background: white;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 20px;
+}
+
+p {
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+label {
+	display: block;
+	margin-top: 20px;
+	font-weight: bold;
+	color: #333;
+}
+
+textarea {
+	width: 100%;
+	height: 100px;
+	padding: 10px;
+	margin-top: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1rem;
+	color: #555;
+}
+
+textarea:focus {
+	border-color: #007bff;
+	outline: none;
+}
+
+.button-group {
+	margin-top: 20px;
+	text-align: center;
+}
+
+button {
+	background-color:#334252;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 1rem;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color:#334252;
+}
+
+.back-link {
+	display: inline-block;
+	margin-top: 20px;
+	text-decoration: none;
+	font-size: 0.9rem;
+	color: #007bff;
+}
+
+.back-link:hover {
+	text-decoration: underline;
+}
+
+/* 模態框通用樣式 */
+.modal {
+    display: none; /* 初始狀態為隱藏 */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 背景半透明黑色 */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.confirm-button {
+    background-color:#334252;
+    color: white;
+}
+
+.confirm-button:hover {
+    background-color: #0056b3;
+}
+
+.cancel-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #5a6268;
+}
+   footer {
+		background-color: #334252;
+		padding:1%;
+		color: #FFE4CA;
+		text-align: center;
+		font-size: 0.9em;
+	}
+	
+	
+	  /* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		    z-index: 9999;
+		}
+		
+			.contact-icon img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 29%;
+    margin-left: 35%;
+    margin-top: -60%;
+}
+		
+		/* icon 文字樣式 */
+		.contact-icon span {
+		    font-size: 20px; /* 小字體 */
+		    color: #333; /* 字體顏色 */
+		    margin-top: 5px; /* 與圖片的間距 */
+		    text-align: center; /* 文字水平置中 */
+		    white-space: nowrap; /* 禁止文字換行 */
+		/*     display: none; /* 預設隱藏文字 */ 
+		}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+		
+		
+		.contact-icon span {
+		    font-size: 20px;
+		    color: #333;
+		    margin-top: 5px;
+		    text-align: center;
+		    white-space: nowrap;
+		    margin-left: 40%;
+		}
+	
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+
+<body>
+    <header>
+			    <div class="header-container">
+			        <div class="home-button">平台問題反應 
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+
+
+   <div th:include="@{/back_end/admin/dashboard}"></div>
+<main>
+	<div class="container">
+		<h1>回覆問題</h1>
+		<form th:action="@{/cs-issues/reply}" method="post" id="replyForm">
+			<!-- 隱藏字段：客服表單編號 -->
+			<input type="hidden" name="csQaId" th:value="${csIssueVO.csQaId}" />
+
+			<!-- 問題內容 -->
+			<p>
+				<strong>問題內容：</strong>
+			</p>
+			<p th:text="${csIssueVO.qaContent}">無問題內容</p>
+
+			<!-- 回覆內容 -->
+			<label for="reContent">回覆內容：</label>
+			<textarea id="reContent" name="reContent" required
+				placeholder="請輸入您的回覆..."></textarea>
+
+			<!-- 提交按鈕 -->
+			<div class="button-group">
+				<button type="button" id="submitButton">提交回覆</button>
+			</div>
+		</form>
+		<!-- 返回問題列表 -->
+		<div class="button-group">
+			<a class="back-link" th:href="@{/cs-issues/list}">返回問題列表</a>
+		</div>
+	</div>
+	<div class="contact-icon" id="icon-container">
+		    <a th:href="@{/back_end/index}">
+		        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+		    </a>
+		    <span>後台首頁</span>
+		</div>
+	</main>
+	
+	<script>
+    document.getElementById('submitButton').addEventListener('click', function () {
+        // 取得回覆內容的值
+        const reContent = document.getElementById('reContent').value.trim();
+
+        // 檢查回覆內容是否為空
+        if (reContent === "") {
+            Swal.fire({
+                icon: 'error',
+                title: '回覆內容不能為空！',
+                text: '請輸入內容後再提交。',
+                confirmButtonText: '確定'
+            });
+            return;
+        }
+
+        // 顯示確認提示
+        Swal.fire({
+            title: '確認回覆內容？',
+            text: '客服表單回覆內容將以 Mail 通知顧客。',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '確認送出',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 提交表單
+                document.getElementById('replyForm').submit();
+
+                // 成功提示
+                Swal.fire({
+                    icon: 'success',
+                    title: '回覆成功！',
+                    text: 'Mail 已發送至顧客。',
+                    confirmButtonText: '確定'
+                }).then(() => {
+                    // 可選：跳轉到問題列表頁面
+                    window.location.href = "/cs-issues/list"; // 修改为实际的列表页面 URL
+                });
+            }
+        });
+    });
+</script>
+			<footer>
+		       <p>© 2024 寵寵唯跡友善平台</p>
+		   </footer>
+	
+</body>
+</html>

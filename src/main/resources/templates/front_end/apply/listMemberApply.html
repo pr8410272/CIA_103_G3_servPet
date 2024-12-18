@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵寵唯跡友善平台</title>
+    <link rel="stylesheet" href="/css/frontend_index_styles.css">
+    <link rel="stylesheet" href="/slick/slick.css"/>
+    <link rel="stylesheet" href="/slick/slick-theme.css"/>
+    <!-- 引入 Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 確保 footer 放置在最底部 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+		
+		.profile-picture {
+		    width: 30px; /* 調整寬度，例如 50px */
+		    height: 30px; /* 調整高度，與寬度保持一致 */
+		    border-radius: 50%; /* 如果需要圓形頭像，保留此屬性 */
+		    object-fit: cover; /* 確保圖片不會被拉伸 */
+			}
+		
+        body {
+        	background-color: #FFFDF9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .card-wrapper {
+            max-width: 1200px;
+            margin: 0 auto; /* 置中 */
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: auto;
+        }
+        
+        	.contact-icon img {
+		    width: 100PX;
+		    height: AUTO;
+		    object-fit: cover;
+		    border-radius: 100%;
+		    MARGIN-LEFT: -200%;
+		}
+		
+		.contact-icon {
+		/*     position: fixed; /* 固定在螢幕右下角 */ 
+		    bottom: 70px; /* 距離底部 */
+		     right: 80px; /* 距離右側 */ 
+		    width: 80px; /* 圓形大小 */
+		    height: 80px; /* 圓形大小 */
+		    display: flex; /* 彈性盒子 */
+		    flex-direction: column; /* 垂直排列 */
+		    align-items: center; /* 水平置中 */
+		    justify-content: center; /* 垂直置中 */
+		    cursor: pointer; /* 滑鼠指標 */
+		}
+		
+	.contact-icon img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 100%;
+    margin-left: 814%;
+    margin-top: 78%;
+}
+
+		.contact-icon span {
+    margin-top: -6px;
+    font-size: 13px;
+    color: #2c2a2a;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 17px;
+    margin-right: -1615px;
+    font-weight: bold;
+}
+        
+        
+    </style>
+</head>
+<body>
+    <!-- 頁面標題 -->
+       <header>
+            <h1>
+                <a th:href="@{/}">寵寵唯跡 ServPET</a>
+            </h1>
+        </header>
+        
+        <nav>
+            <div class="dropdown">
+                <button class="dropbtn">最新消息</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/event/list}">平台公告消息</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物商城</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pdDetails/allProductsHomepage}">商品列表</a>
+                    <a th:href="@{/cartDetails/shoppingCart}">購物車</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物美容</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pg/showAllPgSvcItem}">寵物美容服務</a>
+                    <a th:href="@{/pg}">預約</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物保母</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/ps/psList}">寵物保母服務</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">會員專區</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/profile}">會員個人資訊</a>
+                    <a th:href="@{/pets}">寵物資訊</a>
+                    <a th:href="@{/ntfy/member}">會員訊息匣</a>
+                    <a th:href="@{/mebPdo/mebPdo}">商城訂單</a>
+                    <a th:href="@{/booking/calendar}">我的寵物美容月曆</a>
+                    <a th:href="@{/pdFav/list}">商品收藏</a>
+                    <a th:href="@{/pgFav/list}">寵物美容師收藏</a>
+                    <a th:href="@{/favorites/psfav}">寵物保母收藏</a>
+                    <a th:href="@{/vtr/create}">我的錢包</a>
+                    <a th:href="@{/apply/create}">成為美容師/保母</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">聯絡我們</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/cs-issues/add}">問題反應</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">登入</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/login}">會員登入</a>
+                    <a th:href="@{/back_end/login}">後台登入</a>
+                </div>
+            </div>
+              <div class="user-info">
+            <div class="user-profile">
+        <!-- 顯示會員頭像或預設圖片 -->
+        <img th:src="${mebImg != null ? 'data:image/png;base64,' + mebImg : '/images/defaultavatar.png'}" 
+             alt="會員頭像" 
+             class="profile-picture" />
+     </div>
+         <div class="user-actions">
+<!--         <a th:if="${!isLoggedIn}" th:href="@{/login}">登入</a>  -->
+             <a href="#" onclick="confirmLogout()">會員登出</a> 
+         </div>
+     </div>
+        </nav>
+
+        
+      
+
+    <!-- 主要內容區 -->
+    <div class="container">
+        <div class="card-wrapper">
+
+    	 <div class="contact-icon" id="icon-container">
+					    <a th:href="@{/apply/create}">
+					        <img id="pet1" th:src="@{/images/event7.jpg}" width="50px" height="50px" alt="Pet Image">
+					    </a>
+					    <span>權限申請表</span>
+					</div>
+        
+            <h1 class="text-center mb-4">申請狀態列表</h1>
+            <!-- 會員資訊 -->
+        
+            <div class="card my-4">
+                <div class="card-body">
+                    <h5 class="card-title">會員資訊</h5>
+                    <p class="card-text"><strong>會員 ID：</strong><span th:text="${member.mebId}"></span></p>
+                    <p class="card-text"><strong>會員名稱：</strong><span th:text="${member.mebName}"></span></p>
+                </div>
+            </div>
+
+            <!-- 申請列表 -->
+            <div class="table-responsive">
+                <table class="table table-hover text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>申請 ID</th>
+                            <th>申請類型</th>
+                            <th>申請狀態</th>
+                            <th>申請時間</th>
+                            <th>駁回原因</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 若無申請數據 -->
+                        <tr th:if="${apply == null or apply.isEmpty()}">
+                            <td colspan="6" class="text-muted">目前尚無申請記錄</td>
+                        </tr>
+
+                        <!-- 有申請數據時 -->
+                        <tr th:each="item : ${apply}">
+                            <td th:text="${item.applyId}"></td>
+                            <td th:switch="${item.applyCate}">
+                                <span th:case="0">美容師</span>
+                                <span th:case="1">保母</span>
+                            </td>
+                            <td>
+                                <span th:classappend="${item.applyStatus == '0' ? 'badge bg-secondary' :
+                                                      item.applyStatus == '1' ? 'badge bg-success' :
+                                                      item.applyStatus == '2' ? 'badge bg-danger' : 'badge bg-dark'}"
+                                      th:text="${item.applyStatus == '0' ? '未審核' :
+                                               item.applyStatus == '1' ? '審核通過' :
+                                               item.applyStatus == '2' ? '駁回' : '未知'}"></span>
+                            </td>
+                            <td th:text="${#temporals.format(item.applyTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${item.applyStatus == '2' ? item.applyRejectReason : '無'}"></td>
+                            <td>
+                                <a th:href="@{'/apply/view/' + ${item.applyId}}" class="btn btn-info btn-sm">查看詳情</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer>
+        <p class="text-center py-3">© 2024 寵寵唯跡友善平台</p>
+    </footer>
+
+    <!-- 引入 Bootstrap 的 JS 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

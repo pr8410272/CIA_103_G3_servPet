@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商城訂單明細</title>
+    <link rel="stylesheet" th:href="@{css/mebpdo_style.css}">
+</head>
+<body>
+    <header>
+        <h1>
+            <a th:href="@{/}">寵寵唯跡 ServPETr</a>
+        </h1>
+    </header>
+    
+    <nav>
+            <div class="dropdown">
+                <button class="dropbtn">關於平台</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/頁面位址放這}">平台介紹</a>
+                    <a th:href="@{/member/cs-issues/add}">問題反應</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">最新消息</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/event/list}">平台公告消息</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物商城</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/頁面位址放這}">商品列表</a>
+                    <a th:href="@{/頁面位址放這}">購物車</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物美容</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pg/showAllPgSvcItem}">寵物美容服務</a>
+                    <a th:href="@{/pg}">預約</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物保母</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/ps/psList}">寵物保母服務</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">會員專區</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/profile}">會員個人資訊</a>
+                    <a th:href="@{/pets}">寵物資訊</a>
+                    <a th:href="@{/ntfy/member}">會員訊息匣</a>
+                    <a th:href="@{/mebPdo/mebId}">商城訂單</a>
+                    <a th:href="@{/頁面位址放這}">寵物服務預約排程表</a>
+                    <a th:href="@{/pdFav/list}">商品收藏</a>
+                    <a th:href="@{/pgFav/list}">寵物美容師收藏</a>
+                    <a th:href="@{/頁面位址放這}">寵物保母收藏</a>
+                    <a th:href="@{/頁面位址放這}">我的錢包</a>
+                    <a th:href="@{/apply/create}">成為美容師/保母</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">登入</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/login}">會員登入</a>
+                    <a th:href="@{/admin/login}">後台登入</a>
+                </div>
+            </div>
+        </nav>
+
+    <main>
+        <h2>商城訂單明細</h2>
+        <a th:href="@{/mebPdo/mebPdo}">返回商品訂單列表</a>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>商城訂單編號</th>
+                    <th>會員編號</th>
+                    <th>會員姓名</th>
+                    <th>訂單總金額</th>
+                    <th>訂單狀態</th>
+                    <th>付款狀態</th>
+                    <th>配送地址</th>
+                    <th>配送方式</th>
+                    <th>配送狀態</th>
+                    <th>訂單建立日期</th>
+                    <th>最後更新時間</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            	<tr th:if="${mebPdo == null}">
+        			<td colspan="13">無法取得訂單資料</td>
+    			</tr>
+                <tr th:each="mebPdo : ${mebPdo}">
+                    <td>
+					    <a th:href="@{'/mebPdo/' + ${mebPdo.pdoId}}" th:text="${mebPdo.pdoId}"></a>
+					</td>
+                    <td th:text="${mebPdo.mebVO.mebId}"></td>
+                    <td th:text="${mebPdo.mebVO.mebName}"></td>
+                    <td th:text="'NT$ ' + ${mebPdo.pdTotalPrice}"></td>
+                    <td th:text="${mebPdo.pdoStatus == '0' ? '進行中' :
+                    			  (mebPdo.pdoStatus == '1' ? '已完成' :
+                    			  (mebPdo.pdoStatus == '2' ? '已取消' : ' '))}">
+                    </td>
+                    <td th:text="${mebPdo.paymentStatus == '0' ? '未付款' :
+                    			  (mebPdo.paymentStatus == '1' ? '已付款' :
+                    			  (mebPdo.paymentStatus == '2' ? '已退款' : ' '))}"></td>
+                    <td th:text="${mebPdo.shippingAddr}"></td>
+                    <td th:text="${mebPdo.shippingMethod == '0' ? '宅配' :
+                    			  (mebPdo.shippingMethod == '1' ? '超商取貨' : ' ')}"></td>
+                    <td th:text="${mebPdo.shippingStatus == '0' ? '配送中' :
+                    			  (mebPdo.shippingStatus == '1' ? '已配送至指定地址' : ' ')}"></td>
+                    <td th:text="${#dates.format(mebPdo.pdoDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${#dates.format(mebPdo.pdoUpdateTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+<!--                     <td> -->
+<!-- 					    <button class="edit-address-btn" -->
+<!-- 					            th:onclick="'openEditAddressModal(' + ${mebPdo.pdoId} + ', \'' + ${mebPdo.shippingAddr} + '\')'" -->
+<!-- 					            th:if="${mebPdo.pdoStatus == '0'  -->
+<!-- 					                   and mebPdo.paymentStatus == '1'  -->
+<!-- 					                   and mebPdo.shippingMethod == '0'  -->
+<!-- 					                   and mebPdo.shippingStatus == '0'}">修改地址</button> -->
+<!-- 					</td> -->
+<!--                     <td> -->
+<!--     					<button class="cancel-btn"  -->
+<!-- 							            th:onclick="'openCancelModal(' + ${mebPdo.pdoId} + ')'" -->
+<!-- 							            th:disabled="${mebPdo.pdoStatus == '2'}" -->
+<!-- 							            th:classappend="${mebPdo.pdoStatus == '2'} ? 'disabled-btn'">取消訂單</button> -->
+<!-- 					</td> -->
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2>商品訂單明細</h2>
+	    <table class="order-table">
+	        <thead>
+	            <tr>
+	                <th>商品編號</th>
+	                <th>商品數量</th>
+	                <th>商品單價</th>
+	                <th>訂單金額</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="item : ${pdoItems}">
+	                <td th:text="${item.pdDetailsVO.pdId}"></td>
+	                <td th:text="${item.pdQty}"></td>
+	                <td th:text="'NT$ ' + ${item.pdPrice}"></td>
+	                <td th:text="'NT$ ' + ${item.pdTotalPrice}"></td>
+	            </tr>
+	        </tbody>
+	    </table>
+        
+    </main>
+
+    <footer>
+            <p>Copyright © 2024 ServPET 寵寵唯跡 All Rights Reserved.</p>
+    </footer>
+
+    <!-- 燈箱 -->
+    
+<!--     修改地址 -->
+<!-- 	<div id="edit-address-modal" class="modal"> -->
+<!-- 	    <div class="modal-content"> -->
+<!-- 	        <p>請輸入新的配送地址：</p> -->
+<!-- 	        <input type="text" id="new-address" placeholder="請輸入新地址"> -->
+<!-- 	        <button onclick="confirmUpdateAddress()">確認</button> -->
+<!-- 	        <button onclick="closeEditAddressModal()">取消</button> -->
+<!-- 	    </div> -->
+<!-- 	</div> -->
+	
+	<!-- 取消訂單 -->
+<!--     <div id="cancel-modal" class="modal"> -->
+<!--         <div class="modal-content"> -->
+<!--             <p>確定要取消此筆訂單嗎？</p> -->
+<!--             <button onclick="confirmCancel()">確認</button> -->
+<!--             <button onclick="closeCancelModal()">取消</button> -->
+<!--         </div> -->
+<!--     </div> -->
+
+    <script th:src="@{/static/javascript/mebpdo_script.js}"></script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link
+	href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.css'
+	rel='stylesheet'>
+<script
+	src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js'></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/zh-tw.js"></script>
+<link rel="stylesheet" href="/css/pg/listOnePg.css">
+
+
+</head>
+<body>
+	<header>
+		<h1>servPet</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/}">首頁</a></li>
+				<li><a href="#" th:href="@{/pg}">寵物美容師</a></li>
+				<li><a href="#" th:href="@{/ps/psList}">寵物保母</a></li>
+				<li><a href="#" th:if="${pgVO == null}" th:href="@{/back_end/topgLogin}" class="btn btn-danger">登入</a></li>
+				<li><a href="#" th:if="${pgVO != null}" th:href="@{/back_end/logout}" class="btn btn-danger">登出</a></li>
+				
+			</ul>
+		</nav>
+	</header>
+	
+
+	
+
+	<main>
+		<div class="view">
+			<!-- 圓形生活照 -->
+			<div class="profile-pic">
+				<img th:src="@{/pg/profileimg(pgId=${pgVO.pgId})}"
+					th:alt="${pgVO.pgName + ' 的生活照'}">
+			</div>
+<!-- 			<!-- 預約按鈕 (籠子圖案) -->
+<!-- 			<div class="booking-button"> -->
+<!-- 				<a th:href="@{/pg/pgOrder(pgId=${pgVO.pgId})}">  -->
+<!-- 				<img th:src="@{/images/kennel.png}"> -->
+<!-- 				</a> -->
+<!-- 			</div> -->
+			<!-- 收藏按鈕 (籠子圖案) -->
+			<div class="booking-button">
+			    <button id="booking-button" data-pg-id="${pgVO.pgId}">
+			        <img th:src="@{/images/kennel.png}" alt="收藏">
+			    </button>
+			</div>
+			
+
+			<!-- 美容師詳細資料 -->
+			<table class="profile">
+				<tr>
+					<th>美容師姓名</th>
+					<td th:text="${pgVO.pgName}"></td>
+				</tr>
+				<tr>
+					<th>服務ID</th>
+					<td th:text="${pgVO.pgId}"></td>
+				</tr>
+				<tr>
+					<th>服務地區</th>
+					<td th:switch="${pgVO.pgArea}">
+						<div th:case="0">北部</div>
+						<div th:case="1">中部</div>
+						<div th:case="2">南部</div>
+						<div th:case="3">東部</div>
+					</td>
+				</tr>
+		
+				<tr>
+					<th>星等</th>
+					<td>
+				        <div>
+				            <p th:if="${averageStars > 0}">
+				                <span th:utext="${'⭐'.repeat(averageStars)}"></span>
+				            </p>
+				            <p th:if="${averageStars == 0}">
+				                <span>尚無評價</span>
+				            </p>
+				        </div>
+			    	</td>
+				</tr>
+				<tr>
+					<th>違規記點</th>
+					<td th:text="${pgVO.reportTimes}"></td>
+				</tr>
+				<tr>
+					<th>簡介</th>
+					<td th:text="${pgVO.pgBio}"></td>
+				</tr>
+			</table>
+			
+						
+			<div id="calendar">
+		
+			<!-- 當無可預約時段時，顯示訊息 -->
+			<div th:if="${#strings.isEmpty(availableSlotsJson)}">
+				<p style="text-align: center; color: #f00;">暫無可預約時段。</p>
+			</div>
+			</div>
+			
+			<!-- 服務清單 -->
+			<div class="service-list">
+			    <div th:each="entry : ${groupedServices}" class="service-item">
+			        <h3 th:text="${entry.key}"></h3>
+			        <p th:text="${entry.value[0].svcDescr}"></p>
+			        <table>
+			            <thead>
+			                <tr>
+			                    <th>適用寵物體型</th>
+			                    <th></th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <tr th:each="detail : ${entry.value}">
+			                    <td th:text="${detail.svcType == '0' ? '迷你（3kg以下）' :
+			                                   detail.svcType == '1' ? '小型（3-5kg）' :
+			                                   detail.svcType == '2' ? '中小型（5-10kg）' :
+			                                   detail.svcType == '3' ? '中型（10-16kg）' :
+			                                   detail.svcType == '4' ? '中大型（16-22kg）' :
+			                                   detail.svcType == '5' ? '大型（22-27kg）' :
+			                                   detail.svcType == '6' ? '特大型（27kg以上）' : '未知體型'}"></td>
+			                    <td th:text="'NT$ ' + ${detail.svcPrice}"></td>
+			                </tr>
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+			
+						<!-- 照片跑馬燈 -->
+				    <div class="carousel-container">
+				        <button class="carousel-btn prev-btn">&#9664;</button>
+				        <div class="carousel-wrapper">
+				            <div class="carousel">
+				                <div th:each="picId : ${picId}" class="carousel-item">
+				                    <img th:src="@{'/pg/picture/' + ${picId}}" alt="作品照片">
+				                </div>
+				            </div>
+				        </div>
+				        <button class="carousel-btn next-btn">&#9654;</button>
+				    </div>
+			
+			
+<!-- 			<div class="gallery"> -->
+<!-- 			<div th:if="${picId != null and !picId.isEmpty()}"> -->
+<!-- 				<div th:each="picId : ${picId}" class="gallery-item"> -->
+<!-- 				<img th:src="@{'/pg/picture/' + ${picId}}" alt="作品圖片"></div> -->
+<!-- 			</div> -->
+			
+<!-- 			<div th:if="${picId == null || picId.isEmpty()}"> -->
+<!-- 				<p class="no-images">無圖片可顯示。</p> -->
+<!-- 			</div> -->
+<!-- 			</div> -->
+			
+
+			</div>
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	
+	<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        // 從後端獲取 JSON 數據和 mebId
+        const events = /*[[${availableSlotsJson}]]*/ '[]';
+        const mebId = /*[[${mebId}]]*/ 0; // 從後端傳遞的 mebId
+
+        const parsedEvents = JSON.parse(events);
+        const pgId = /*[[${pgVO.pgId}]]*/ 0;
+
+        // 格式化事件數據
+        const formattedEvents = parsedEvents.map(slot => ({
+            title: slot.timeSlot === 0 ? '早上可預約' : slot.timeSlot === 1 ? '中午可預約' : '晚上可預約',
+            start: slot.date,
+            extendedProps: {
+                timeSlot: slot.timeSlot
+            }
+        }));
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'zh-tw',
+            headerToolbar: {
+                left: 'next today',
+                center: 'title',
+                right: ''
+            },
+            dayHeaderFormat: { weekday: 'narrow' },
+            events: formattedEvents,
+            eventClick: function (info) {
+                const bookingDate = info.event.start.toLocaleDateString('zh-TW', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                }).replace(/\//g, '-');
+
+                // 在 URL 中加入 mebId 參數
+                const url = `/pg/pgOrderForm?pgId=${pgId}&bookingDate=${bookingDate}&bookingTime=${info.event.extendedProps.timeSlot}`;
+                window.location.href = url;
+            }
+        });
+
+        calendar.render();
+    });
+</script>
+	
+
+
+<!-- <!-- <script th:inline="javascript"> -->
+<!-- //     document.addEventListener('DOMContentLoaded', function () { -->
+<!-- //         const calendarEl = document.getElementById('calendar'); -->
+
+<!-- //         // 獲取從後端傳遞的 JSON 數據 -->
+<!-- //         const events = /*[[${availableSlotsJson}]]*/ '[]'; -->
+
+<!-- //         // 將 JSON 數據解析為 JavaScript 對象 -->
+<!-- //         const parsedEvents = JSON.parse(events); -->
+
+<!-- //         // 獲取當前美容師 ID（來自後端傳遞的 pgId） -->
+<!-- //         const pgId = /*[[${pgVO.pgId}]]*/ 0; -->
+
+<!-- //         // 轉換數據為 FullCalendar 可用的格式 -->
+<!-- //         const formattedEvents = parsedEvents.map(slot => ({ -->
+<!-- //             title: slot.timeSlot === 0 ? '早上可預約' : slot.timeSlot === 1 ? '中午可預約' : '晚上可預約', -->
+<!-- //             start: slot.date, -->
+<!-- //             extendedProps: { -->
+<!-- //                 timeSlot: slot.timeSlot // 將時段資訊添加到事件屬性 -->
+<!-- //             } -->
+<!-- //         })); -->
+
+<!-- //         const calendar = new FullCalendar.Calendar(calendarEl, { -->
+<!-- //             initialView: 'dayGridMonth', -->
+<!-- //             locale: 'zh-tw', // 設置為繁體中文 -->
+<!-- //             headerToolbar: { -->
+<!-- //                 left: 'next today', -->
+<!-- //                 center: 'title', -->
+<!-- //                 right: '' -->
+<!-- //             }, -->
+<!-- //             dayHeaderFormat: { weekday: 'narrow' }, // 設定只顯示短格式「一二三四五六日」 -->
+<!-- //             events: formattedEvents, -->
+<!-- //             eventClick: function (info) { -->
+<!-- //                 const bookingDate = info.event.start.toLocaleDateString('zh-TW', { -->
+<!-- //                     year: 'numeric', -->
+<!-- //                     month: '2-digit', -->
+<!-- //                     day: '2-digit' -->
+<!-- //                 }).replace(/\//g, '-'); // 格式轉換，例如 2024/12/10 -> 2024-12-10 -->
+
+<!-- //                 const url = `/pg/pgOrderForm?pgId=${pgId}&bookingDate=${bookingDate}&bookingTime=${info.event.extendedProps.timeSlot}`; -->
+<!-- //                 window.location.href = url;}}); -->
+
+
+<!-- //         calendar.render(); -->
+<!-- //     }); -->
+<!-- <!-- </script> -->
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const carousel = document.querySelector(".carousel");
+            const prevBtn = document.querySelector(".prev-btn");
+            const nextBtn = document.querySelector(".next-btn");
+            const items = document.querySelectorAll(".carousel-item");
+
+            const visibleItems = 5; // 一次顯示五張圖片
+            const itemWidth = items[0].offsetWidth + 10; // 每個項目寬度（包含間距）
+            let currentIndex = visibleItems; // 初始化到第一個真實項目
+            let autoPlay;
+
+            // 克隆首尾項目來實現無縫循環
+            const cloneItems = () => {
+                const firstItems = Array.from(items).slice(0, visibleItems);
+                const lastItems = Array.from(items).slice(-visibleItems);
+
+                firstItems.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    carousel.appendChild(clone);
+                });
+
+                lastItems.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    carousel.insertBefore(clone, carousel.firstChild);
+                });
+            };
+
+            // 初始化克隆和偏移
+            const initCarousel = () => {
+                cloneItems();
+                const offset = -(currentIndex * itemWidth);
+                carousel.style.transform = `translateX(${offset}px)`;
+            };
+
+            // 更新跑馬燈的偏移
+            const updateCarousel = () => {
+                const offset = -(currentIndex * itemWidth);
+                carousel.style.transition = "transform 0.8s ease-in-out";
+                carousel.style.transform = `translateX(${offset}px)`;
+
+                // 無縫切換處理
+                carousel.addEventListener("transitionend", () => {
+                    if (currentIndex === 0) {
+                        currentIndex = items.length; // 跳到真實的最後一張
+                        carousel.style.transition = "none"; // 瞬間重置
+                        carousel.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+                    } else if (currentIndex === items.length + visibleItems) {
+                        currentIndex = visibleItems; // 跳到真實的第一張
+                        carousel.style.transition = "none"; // 瞬間重置
+                        carousel.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+                    }
+                });
+            };
+
+            // 自動播放
+            const startAutoPlay = () => {
+                stopAutoPlay(); // 確保不會有重複的定時器
+                autoPlay = setInterval(() => {
+                    currentIndex++;
+                    updateCarousel();
+                }, 3000); // 每 3 秒切換一張
+            };
+
+            const stopAutoPlay = () => {
+                clearInterval(autoPlay);
+            };
+
+            // 左右按鈕
+            prevBtn.addEventListener("click", () => {
+                stopAutoPlay();
+                currentIndex--;
+                updateCarousel();
+                startAutoPlay();
+            });
+
+            nextBtn.addEventListener("click", () => {
+                stopAutoPlay();
+                currentIndex++;
+                updateCarousel();
+                startAutoPlay();
+            });
+
+            // 初始化
+            initCarousel();
+            startAutoPlay();
+        });
+    </script>
+
+	<!-- 收藏美容師功能 -->
+	<script>
+	document.addEventListener("DOMContentLoaded", function() {
+	    // 收藏按鈕點擊事件
+	    document.getElementById("booking-button").addEventListener("click", function() {
+	        const pgId = this.getAttribute("data-pg-id"); // 從按鈕中取得 pgId
+	
+	        fetch("/pgFav/add", {
+	            method: "POST",
+	            headers: {
+	                "Content-Type": "application/x-www-form-urlencoded"
+	            },
+	            body: `pgId=${pgId}` // 傳送 pgId 給後端
+	        })
+	        .then(response => response.text())
+	        .then(data => {
+	            // 顯示成功或失敗的訊息
+	            alert(data); // 例如: "收藏已成功加入！"
+	        })
+	        .catch(error => {
+	            console.error("Error:", error);
+	            alert("收藏失敗，請稍後再試！");
+	        });
+	    });
+	});
+	</script>
+	
+
+
+	
+	
+	
+	
+</body>
+</html>
+
+
+			<!-- 新增作品集按鈕 移到美容師個人管理頁面-->
+<!-- 			<form id="uploadForm" -->
+<!-- 				th:action="@{/pg/uploadpicture/{pgId}(pgId=${pgVO.pgId})}" -->
+<!-- 				method="post" enctype="multipart/form-data"> -->
+<!-- 				<input type="file" name="pictures" multiple accept="image/*"> -->
+<!-- 				<button type="submit">新增照片</button> -->
+<!-- 			</form> -->

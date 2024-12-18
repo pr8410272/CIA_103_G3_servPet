@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>功能新增 - addFnc.html</title>
+<link rel="stylesheet" th:href="@{/css/addFnc.css}" />
+<link rel="stylesheet" th:href="@{/css/adminData.css}" />
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+</head>
+<body>
+
+	<!--*************** table#header (上方深色) 區域 **************-->
+	<table id="header">
+		<tr>
+			<td><img th:src="@{/images/admin/pflogow.png}"> 
+			<font>功能新增</font>
+				<img th:src="@{/images/admin/pflogow.png}"></td>
+		</tr>
+	</table>
+
+	<div th:include="@{back_end/admin/adminData}"></div>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+	<div th:include="@{back_end/admin/dashboard}"></div>
+	<div id="body">
+
+		<article id="BGcat">
+			<img id="BGcat" th:src="@{/images/admin/BGcat.png}" />
+		</article>
+
+		<article id="body">
+			<h2>
+				<span>填寫資料</span>
+			</h2>
+			<hr>
+			<h4>
+				<b>所有欄位皆為必填欄位</b>
+			</h4>
+			<form th:action="@{/fnc/insert}" method="post" th:object="${fncVO}"
+				enctype="multipart/form-data">
+
+				<div>
+					<label>功能名稱:</label> <input type="text" th:field="*{fncName}"
+						placeholder="請輸入2~20字的功能名稱"
+						onclick="hideContent('fncName.errors');" /><br /> <span
+						th:if="${#fields.hasErrors('fncName')}" th:errors="*{fncName}"
+						class="error" id="fncName.errors"></span>
+				</div>
+
+				<div>
+					<label id="des">功能描述:</label>
+					<textarea th:field="*{fncDes}" placeholder="請輸入2~255字的功能描述"
+						onclick="hideContent('fncDes.errors');"></textarea>
+					<br /> <span th:if="${#fields.hasErrors('fncDes')}"
+						th:errors="*{fncDes}" class="error" id="fncDes.errors"></span>
+				</div>
+				<div>
+					<button type="submit" id="submit">送出新增</button>
+				</div>
+			</form>
+			<button type="submit"
+				onclick="window.location.href='/fnc/select_fnc_page'">回管理頁</button>
+		</article>
+
+		<article id="BGdog">
+			<img id="BGdog" th:src="@{/images/admin/BGdog.png}" />
+		</article>
+
+	</div>
+
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<!--***************** JS程式碼區段 *****************-->
+	<script type="text/javascript">
+        // 清除提示信息
+        function hideContent(d) {
+            document.getElementById(d).style.display = "none";
+        }
+
+        // 照片上傳-預覽用
+        var filereader_support = typeof FileReader != 'undefined';
+        if (!filereader_support) {
+            alert("No FileReader support");
+        }
+        acceptedTypes = {
+            'image/png': true,
+            'image/jpeg': true,
+            'image/gif': true
+        };
+        
+        function previewImage() {
+            var upfile1 = document.getElementById("upFiles");
+            upfile1.addEventListener("change", function(event) {
+                var files = event.target.files || event.dataTransfer.files;
+                for (var i = 0; i < files.length; i++) {
+                    previewfile(files[i]);
+                }
+            }, false);
+        }
+
+        function previewfile(file) {
+            if (filereader_support === true && acceptedTypes[file.type] === true) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var image = new Image();
+                    image.src = event.target.result;
+                    image.width = 100;
+                    image.height = 75;
+                    image.border = 2;
+                    if (blob_holder.hasChildNodes()) {
+                        blob_holder.removeChild(blob_holder.childNodes[0]);
+                    }
+                    blob_holder.appendChild(image);
+                };
+                reader.readAsDataURL(file);
+                document.getElementById('submit').disabled = false;
+            } else {
+                blob_holder.innerHTML = "<div style='text-align: left;'>" + 
+                                         "● filename: " + file.name +
+                                         "<br>" + "● ContentTyp: " + file.type +
+                                         "<br>" + "● size: " + file.size + "bytes" +
+                                         "<br>" + "● 上傳ContentType限制: <b> <font color=red>image/png、image/jpeg、image/gif </font></b></div>";
+                document.getElementById('submit').disabled = true;
+            }
+        }
+    </script>
+
+</body>
+</html>

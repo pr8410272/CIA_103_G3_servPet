@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>管理員權限新增 - addAdminPer.html</title>
+<link rel="stylesheet" th:href="@{/css/adminPer/addAdminPer.css}"/>
+
+<body>
+
+<!--*************** table#header (上方深色) 區域 **************-->
+<table id="header">
+  <tr>
+   <td>
+    <img th:src="@{/images/adminPer/pflogow.png}">
+      <font>管理員權限新增</font>
+    <img th:src="@{/images/adminPer/pflogow.png}">
+    <h4><a th:href="@{/adminPer/select_adminPer_page}">回檢索管理頁</a></h4>
+   </td>
+  </tr>
+</table>
+
+<!--**************** div#body (中間淺色) 區域 *****************-->
+<div id="body">
+<article>
+    <h4><b>所有欄位皆為必填欄位</b></h4>
+    <form th:action="@{insert}" method="post" th:object="${adminPerVO}">
+      
+    <div>
+      <label>請選擇管理員:</label>
+      <select th:field="*{adminVO.adminId}" id="adminId">
+        <option th:each="admin : ${adminListData}" th:value="${admin.adminId}" th:text="${admin.adminName}"></option>
+      </select>
+      <br/>
+      <span th:if="${#fields.hasErrors('adminVO.adminId')}" th:errors="*{adminVO.adminId}" class="error"></span>
+    </div>
+
+    <div>
+      <label>選擇功能權限:</label>
+      <select th:field="*{fncVO.fncId}" id="fncId">
+        <option th:each="fnc : ${fncList}" th:value="${fnc.fncId}" th:text="${fnc.fncName}"></option>
+      </select>
+      <br/>
+      <span th:if="${#fields.hasErrors('fncVO.fncId')}" th:errors="*{fncVO.fncId}" class="error"></span>
+    </div>
+
+    <div>
+      <button type="submit" id="submit">送出新增</button>
+    </div>
+
+    </form>
+</article>
+</div>
+
+<!--***************** footer (下方深色) 區域 *****************-->
+<footer>
+  <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link rel="stylesheet" href="/css/pg/editPgSvcList.css">
+
+</head>
+<body>
+	<header>
+				
+				
+					<!-- ================================ -->
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+			<li>
+				<li><a href="#" th:if="${pgVO == null}" th:href="@{/back_end/topgLogin}">登入</a></li>
+				<li><a href="#" th:if="${pgVO != null}" th:href="@{/back_end/logout}">登出</a></li>  
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+
+	<div class="view">
+		<!-- 返回按鈕 -->
+		<div class="return-button">
+			<a href="javascript:history.back()"> 
+			<img th:src="@{/images/heart.png}">
+			</a>
+
+	</div>
+
+
+	<div>
+		<!-- 修改服務項目價格 -->
+		<form th:action="@{/pg/updatePgSvc}" method="post"  class="form-container">
+		 <input type="hidden" name="pgSvcId" th:value="${content.pgSvcId}"/>
+
+    <div>
+        <label for="svcName">項目名稱:</label>
+        <input type="text" id="svcName" name="svcName" th:value="${content.svcName}" readonly/>
+    </div>
+
+    <div>
+        <label for="svcType">適用體型:</label>
+        <select id="svcType" name="svcType" th:value="${content.svcType}">
+            <option value="0" th:selected="${content.svcType == '0'}">迷你（3kg以下）</option>
+            <option value="1" th:selected="${content.svcType == '1'}">小型（3-5kg）</option>
+            <option value="2" th:selected="${content.svcType == '2'}">中小型（5-10kg）</option>
+            <option value="3" th:selected="${content.svcType == '3'}">中型（10-16kg）</option>
+            <option value="4" th:selected="${content.svcType == '4'}">中大型（16-22kg）</option>
+            <option value="5" th:selected="${content.svcType == '5'}">大型（22-27kg）</option>
+            <option value="6" th:selected="${content.svcType == '6'}">特大型（27kg以上）</option>
+        </select>
+<!--         隱藏輸入框來確保選單值被提交 -->
+<!--         <input type="hidden" name="svcType" th:value="${detail.svcType}" /> -->
+    </div>
+
+    <div>
+        <label for="svcDescr">項目描述:</label>
+        <textarea id="svcDescr" name="svcDescr"  th:text="${content.svcDescr}" readonly></textarea>
+    </div>
+    <div>
+        <label for="svcPrice">項目價格:</label>
+        <input id="svcPrice" type="number" name="svcPrice" th:value="${content.svcPrice}" required/>
+    </div>
+    <div>
+        <button type="submit">更新</button>
+    </div>
+</form>
+				
+
+			</div>
+
+	
+
+		</div>
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

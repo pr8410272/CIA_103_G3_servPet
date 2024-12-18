@@ -1,0 +1,184 @@
+@charset "UTF-8";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Quicksand",sans-serif;
+}
+
+header {
+    background-color: #F8EAD3;
+    height: 80px;
+    width: 100%;
+}
+
+h1 {
+    color: black;
+    position: absolute;
+    left: 25px;
+    top: 0;
+    line-height: 80px;
+}
+
+header ul {
+    position: absolute;
+    right: 5vw;
+    top: 0;
+    line-height: 80px;
+}
+
+header li {
+    display: inline;
+    margin-right: 4vw;
+    /* 視窗寬度4% */
+}
+
+header a {
+    color: black;
+    text-decoration: none;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+footer{
+    background-color:#F8EAD3;
+    color: 3f3f3f;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+
+.search {
+    height: 60px;
+    background-color:#F8EAD3;
+    padding: 15px;
+    display: flex; 
+    justify-content: flex-end; /* 搜尋框靠右 */
+    align-items: center; /* 垂直居中 */
+    gap: 10px; /* 元素間的水平間距 */
+    flex-wrap: nowrap; /* 防止內容換行 */
+}
+
+.search form {
+    display: flex; /* 讓表單內元素水平排列 */
+    align-items: center; /* 垂直居中 */
+    gap: 10px; /* 表單內元素間距 */
+    width: auto; /* 防止表單撐滿 */
+}
+
+.search select,
+.search input,
+.search button {
+    background-color: white; 
+    color: darkolivegreen;
+    padding: 6px 10px;
+    border: 1px solid #949d9a;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; 
+    margin: 0; /* 清除可能的垂直間距 */
+}
+
+.search input {
+    width: 200px; /* 設置輸入框寬度 */
+}
+
+.search select:hover,
+.search input:hover,
+.search button:hover {
+    background-color: #f0f8ff; /* 滑鼠懸停時的背景顏色 */
+    box-shadow: 2px 2px 5px lightblue;
+}
+
+
+.view{
+    background-color: #FFFDF9;
+    width: 100%; /* 父容器滿版 */
+    padding: 15px;
+    display: flex; 
+/*     justify-content: flex-end; */
+    align-items:center;
+    min-height: 100vh; /* 設置最小高度為 100vh，讓背景色自動填滿螢幕 */
+	justify-content: space-between; /* 讓子元素均勻分佈，確保 footer 在底部 */
+}
+
+.table_container {
+    background-color: #FFFDF9;
+    padding: 15px;
+    /* display: flex; 
+    justify-content: flex-end;
+    align-items:center; */
+    color: 3f3f3f;
+    table-layout: fixed;
+    width: 100%; /* 確保整個表格寬度滿版 */
+    margin: 20px;;
+    border-collapse: collapse;
+}
+
+
+
+ ul.item_list {
+	
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+ul.item_list>li {
+	border: 4px solid #334252;
+	width: calc(( 100% - 60px)/4);
+	border-radius:10px;
+}
+
+
+
+ul.item_list>li a {
+	display: block;
+/* 	border: 2px solid yellow; */
+	text-decoration: none;
+}
+
+ ul.item_list>li a div.img_block {
+/* 	border: 2px solid red; */
+	font-size: 0;
+	
+	
+	
+}
+
+
+
+
+ ul.item_list>li a span.item_text {
+	display: block;
+/* 	border: 2px solid green; */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+
+
+
+
+div.img_block img{
+	width: 100%;
+	height:300px;
+	border-radius:10px;
+	transition:transform 0.3s ease;	
+}
+
+div.img_block img:hover{
+	transform: scale(1.07);
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+

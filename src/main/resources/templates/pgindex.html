@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link rel="stylesheet" href="/css/index.css">
+
+</head>
+<body>
+	<header>
+		<h1>servPet</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/}">首頁</a></li>
+				<li><a href="#" th:href="@{/pg}">寵物美容師</a></li>
+				<li><a href="#" th:href="@{/pg/showAllPgSvcItem}">寵物美容介紹</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<section class="search">
+
+		</section>
+
+	
+		<section class="content-section">
+		    <!-- 左半部分 - 圖片 -->
+		    <div class="image-section">
+		        <img th:src="@{/images/huipretty.jpg}" alt="服務圖片">
+		    </div>
+		
+		    <!-- 右半部分 - 描述與按鈕 -->
+		    <div class="text-section">
+		        <h2 ></h2>
+		        <p >〝 寵物陪伴您走過每段人生足跡，給予寵物最值得的關愛 〞</p>
+		        <button class="action-btn" th:onclick="'window.location.href=\'http://localhost:8080/pg/\''">
+		        馬上預約
+		        </button>
+
+		    </div>
+		</section>
+		
+		
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	
+
+</body>
+</html>
+<!-- 		<section class="view"> -->
+<!--     <div class="select-section"> -->
+<!--         <label for="svcName"></label> -->
+<!--         <select id="svcName" name="svcName" onchange="updateDescription()" > -->
+<!--             加入 "請選擇服務項目" 選項 -->
+<!--             <option value="" th:if="${selectedService == null}" selected>請選擇想查看的服務介紹▽</option> -->
+            
+<!--             從服務列表中生成其他選項 -->
+<!--             <option th:each="service : ${list}"  -->
+<!--                     th:value="${service.svcName}"  -->
+<!--                     th:text="${service.svcName + ' ▽'}" -->
+<!--                     th:selected="${selectedService?.svcName == service.svcName}"> -->
+<!--             </option> -->
+<!--         </select> -->
+<!--     </div> -->
+<!-- 		</section> -->

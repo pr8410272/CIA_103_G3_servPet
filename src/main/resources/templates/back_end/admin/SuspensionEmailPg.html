@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>問題回覆通知</title>
+<link
+	href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap"
+	rel="stylesheet">
+<style>
+@charset "UTF-8";
+
+/************************<< 全域設定  >>**********************/
+html, body {
+	font-weight: bold;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0; /* 將網頁padding歸0，以免留下邊框 */
+}
+
+body {
+	background-color: #334252; /*設置整個頁面的背景色*/
+}
+
+/**************<< table#header (上方深色) 區域 >>****************/
+.header {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	color: #FFFAF4;
+	background-color: #334252;
+	text-align: center;
+	width: 100%; /* 根據圖片和標題的寬度進行調整 */
+	min-width: 500px; /* 最小寬度 */
+	height: 100px;
+	margin: 0;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin: 0;
+}
+
+/*header文字字體 */
+.header font {
+	font-size: 50px;
+	color: #FFFAF4;
+	border: 0;
+	width: 60px;
+	height: 60px;
+	margin: 0;
+	vertical-align: bottom;
+}
+
+.header h1 {
+	color: #FFFAF4;
+	display: block;
+	margin: 10px;
+}
+
+.header h2 {
+	color: #FFFAF4;
+	display: block;
+}
+
+/*****************<< div#body (中間淺色) 區域 >>*****************/
+.body {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	color: #334252; /* 設置文字顏色為藍 */
+	text-align: center; /* 文字左右置中 */
+	background-color: #FFE4CA;
+	height: auto;
+	padding: 40px 0 40px 0;
+	width: 100%;
+	min-width: 300px; /* 固定寬度 */
+	/* 使用 Flexbox 讓內容垂直與水平置中 */
+}
+
+.body2 {
+	width: 300px;
+	min-width: 300px;
+	height: auto;
+	background-color: #FFFAF4;
+	border: 2px solid #334252;
+	border-top: 4px solid #334252;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.4);
+	border-radius: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+}
+/*****************<< footer (下方深色) 區域 >>*****************/
+.footer {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	background-color: #334252;
+	text-align: center;
+	width: 100%; /* 根據圖片和標題的寬度進行調整 */
+	min-width: 500px; /* 最小寬度 */
+	height: 80px;
+	padding-top: 20px;
+}
+
+.footer p {
+	font-size: 16px; /* 字體大小 */
+	font-weight: normal;
+	color: #FFE4CA; /* 字體顏色 */
+	border: 0;
+	vertical-align: middle; /* 將圖片垂直置中 */
+}
+</style>
+</head>
+
+<body>
+	<!-- =============== HEATER ============== -->
+	<div class="header">
+		<h2>
+			<font>美容師停權通知</font>
+		</h2>
+	</div>
+	<!-- =============== CONTENT ============== -->
+	<div class="body">
+		<div class="body2">
+			<h2>鄭重告知</h2>
+			<hr>
+			<h3>
+				親愛的 <span th:text="${pgName}">美容師名稱</span>您好，
+			</h3>
+			<h3>很抱歉通知您，</h3>
+			<h3 style="color: red;">由於違反了平台的相關規範，</h3>
+			<h3 style="color: red;">我們已經禁用了您的美容師帳號。</h3>
+			<h3>若您對此有疑問，</h3>
+			<h3>請與我們的客服團隊聯繫。</h3>
+			<h3>此致，</h3>
+			<h3>平台管理團隊</h3>
+		</div>
+	</div>
+
+	<!-- ===============Footer ============== -->
+
+	<div class="footer">
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</div>
+</body>
+</html>

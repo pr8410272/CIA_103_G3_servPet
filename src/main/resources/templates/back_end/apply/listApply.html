@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申請列表 - 管理後台</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+	header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	#role, #name {
+             background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+        
+        nav {    
+		    margin-top: 0%;
+		}
+	
+		
+		
+		  .button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+    
+    
+		  /* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		}
+		
+		.contact-icon img {
+		    width: 100px;
+		    height: 100px;
+		    object-fit: cover;
+		    border-radius: 29%;
+		    margin-left: 15%;
+		}
+		
+		/* icon 文字樣式 */
+		.contact-icon span {
+		    font-size: 20px; /* 小字體 */
+		    color: #333; /* 字體顏色 */
+		    margin-top: 5px; /* 與圖片的間距 */
+		    text-align: center; /* 文字水平置中 */
+		    white-space: nowrap; /* 禁止文字換行 */
+		/*     display: none; /* 預設隱藏文字 */ 
+		}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+
+
+	
+	     html, body {
+	        height: 100%;
+	        margin: 0;
+	        display: flex;
+	        flex-direction: column;
+	        font-size: calc(10px + 0.5vw); /* 基於視口寬度的字體縮放 */
+	    }     
+	    
+	    
+		h1 {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+		main {
+		    flex: 1; /* 將主要內容區塊擴展，推動 footer 到底部 */
+		    display: flex;
+		    flex-direction: column;
+		    align-items: center;
+		    background-color: #f4f4f4; /* 背景色 */
+		}
+		
+  		table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        
+		.table td {
+		    text-align: center;
+		}
+
+        .btn {
+             padding: 4px 6px;
+	        border: none;
+	        border-radius: 8px;
+	        font-size: 1rem;
+	        font-weight: bold;
+	        color: white;
+	        cursor: pointer;
+	        transition: all 0.3s ease;
+	        text-transform: uppercase;
+        }
+	 
+	 .button:hover {
+        transform: scale(1.05); /* 鼠標懸停放大效果 */
+        opacity: 0.9;
+    }
+
+     .bg-success {
+	    --bs-bg-opacity: 1; 
+	     background-color: rgba(25,135,84, var(--bs-bg-opacity)) !important; 
+	}
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            gap: 15px; /* 按鈕間距 */
+            margin: 20px 0; /* 與上下內容的距離 */
+        }
+             .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #e9ecef;
+            border: 1px solid #007bff;
+            color: #0056b3;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #0056b3;
+            color: white;
+            border: 1px solid #003865;
+        }
+        
+
+/*      
+footer {
+    background-color: #334252;
+    color: #FFE4CA;
+    text-align: center;
+    font-size: 16px;
+    padding: 10px 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+	
+
+    /* 主內容區域的高度自動擴展 */
+    .main-content {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2%; /* 相對於視口大小的間距 */
+    }
+
+     body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            
+        }
+		  .button {
+            background-color: #6c757d;
+        }
+        .button-view {
+            background-color: rgb(25 135 84);
+        }
+
+        .button-reply {
+            background-color: #6c757d;
+        }
+        
+        .button-rejected{
+        	background-color: #dc3545;
+        }
+
+        .button:hover {
+	        transform: scale(1.05); /* 鼠標懸停放大效果 */
+	        opacity: 0.9;
+	    }
+
+	    .thead.table-dark{
+	    	background-color: #334252;
+	    }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            gap: 15px; /* 按鈕間距 */
+            margin: 20px 0; /* 與上下內容的距離 */
+        }
+	
+		.btn btn-info btn-sm{
+		 background-color: #17a2b8;
+		}
+
+	  footer {
+			background-color: #334252;
+			padding:1%;
+			color: #FFE4CA;
+			text-align: center;
+			font-size: 0.9em;
+		}
+		label {
+		    display: inline-block;
+		    font-size: 1rem;
+		    color: #333; /* 字體顏色 */
+		
+		}
+	
+		.dataTables_wrapper .dataTables_length {
+		    float: left; /* 左對齊 */
+		}
+
+		.dataTables_wrapper .dataTables_filter {
+		    float: right; /* 右對齊 */
+		    text-align: right;
+		}
+
+	.dataTables_wrapper .dataTables_filter label {
+	    white-space: nowrap; /* 防止文字換行 */
+	}
+		
+		.dataTables_wrapper .dataTables_info {
+	    float: left; /* 靠左對齊 */
+	    text-align: left; /* 保證文字從左到右排列 */
+	    padding-top: 10px; /* 垂直間距調整 */
+	}
+	
+	.dataTables_wrapper .dataTables_paginate {
+	    float: right; /* 靠右對齊 */
+	    text-align: right;
+	    margin-top: 0; /* 與分頁對齊 */
+	}
+	/* 移除表頭欄位邊線 */
+	.table thead th {
+	  
+	    background-color: #334252; /* 設置表頭背景色（可選） */
+	    color: #ffffff; /* 設置表頭文字顏色（可選） */
+	    font-weight: bold; /* 表頭文字加粗（可選） */
+	    text-align: center; /* 表頭文字居中對齊 */
+	}
+	
+	/* 針對表格內容移除邊框（可選，與表頭保持一致） */
+	.table td {
+	/*     border: none; /* 移除單元格邊框 */ 
+	}
+	
+	
+	/* 調整表格行的背景色（可選） */
+	.table tbody tr {
+	    background-color: transparent; /* 無背景色 */
+	}
+	
+	/* 懸停時行的背景色效果 */
+	.table tbody tr:hover {
+	    background-color: #f8f9fa; /* 可選懸停背景色 */
+	}
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 2%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 80%; /* 控制最大寬度 */
+    }
+
+    .badge {
+        font-size: 0.8em; /* 相對於基準字體 */
+    }
+    
+    .btn {
+    background-color:#2d5077 !important; /* 固定背景顏色 */
+    color: white !important; /* 字體顏色 */
+    border: none; /* 移除邊框 */
+    cursor: pointer; /* 鼠標指針變為手型 */
+    transition: opacity 0.2s ease-in-out; /* 添加過渡效果 */
+}
+
+.btn:hover, 
+.btn:focus, 
+.btn:active {
+    background-color: #6c757d !important; /* 懸浮、點擊、聚焦保持同樣顏色 */
+    color: white !important; /* 字體顏色保持不變 */
+    opacity: 0.9; /* 添加輕微透明效果 */
+    box-shadow: none; /* 移除點擊時的陰影 */
+    outline: none; /* 移除聚焦時的外框 */
+}
+
+.btn:disabled {
+    background-color: #6c757d !important; /* 禁用按鈕的背景色 */
+    color: #ddd !important; /* 禁用時的字體顏色 */
+    cursor: not-allowed; /* 禁用時鼠標變為不可用狀態 */
+}
+    
+  
+/* 優化表格區域的樣式 */
+.table {
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+    overflow: hidden; /* 防止邊框溢出 */
+}
+
+
+/* 狀態標籤樣式 */
+.badge {
+    padding: 5px 8px;
+    font-size: 0.85rem;
+    border-radius: 5px; /* 圓角 */
+    font-weight: bold;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* 小螢幕自動換行 */
+    gap: 10px; /* 按鈕間距 */
+}
+
+button#filterRejected,
+button#filterProcessed,
+button#filterUnprocessed,
+button#filterAll {
+    padding: 10px 20px !important; /* 內邊距 */
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    border: none !important;
+    cursor: pointer !important;
+    color: white !important; /* 文字顏色統一為白色 */
+    transition: all 0.2s ease-in-out !important; /* 平滑過渡效果 */
+}
+
+button#filterUnprocessed {
+    background-color: #6c757d !important; /* 灰色 */
+}
+
+button#filterProcessed {
+    background-color: #198754 !important; /* 綠色 */
+}
+
+button#filterRejected {
+    background-color: #dc3545 !important; /* 紅色 */
+}
+
+button#filterAll {
+    background-color: #2d5077 !important; /* 藍灰色 */
+}
+
+button#filterRejected:hover,
+button#filterProcessed:hover,
+button#filterUnprocessed:hover,
+button#filterAll:hover {
+    opacity: 0.8 !important; /* 懸停時透明度調整 */
+}
+
+
+/* 搜索框樣式 */
+.dataTables_filter input[type="search"] {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px; /* 圓角 */
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+
+
+/* 分頁按鈕樣式 */
+.dataTables_paginate .paginate_button {
+    padding: 8px 12px;
+    margin: 2px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+/* 顯示筆數和搜尋框區域 */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+/* 移動端響應式處理 */
+@media (max-width: 768px) {
+    .table tbody td {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+
+    .table thead th {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .button-container .btn {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+}
+
+
+
+/* 表格表頭的顏色（如果需要改變表頭） */
+.table thead th {
+    color: #333; /* 設置表頭文字顏色為白色 */
+    background-color: #f2f2f2;; /* 設置表頭背景顏色 */
+}
+
+
+.btn-info {
+            background-color:#2d5077 !important;
+            border: none;
+        }
+
+        .btn-success {
+            background-color: #2d5077!important;
+            border: none;
+        }
+
+        .btn-warning {
+            background-color: #dc3545 !important;
+            border: none;
+        }
+    
+/*     .button-container .btn { */
+/*     background-color: #6c757d; /* 統一按鈕顏色 */ */
+/*     color: white; */
+/*     border: none; */
+/*     padding: 10px 20px; */
+/*     border-radius: 4px; */
+/*     font-size: 0.9rem; */
+/*     cursor: pointer; */
+/*     margin-right: 10px; */
+/*     transition: all 0.3s ease; */
+/* } */
+
+.button-container .btn:hover {
+    opacity: 0.8; /* 懸停效果 */
+}
+    
+    th,td{    border: 1px solid #ddd;}
+	
+	
+</style>
+
+  <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    // 初始化 DataTable
+    const table = $('.table').DataTable({
+        "lengthMenu": [15, 10, 5],
+        "searching": true,
+        "paging": true,
+        "ordering": true,
+        "language": {
+            "processing": "處理中...",
+            "lengthMenu": "顯示 _MENU_ 筆結果",
+            "zeroRecords": "沒有符合的結果",
+            "info": "顯示第 _START_ 至 _END_ 筆結果，共 _TOTAL_ 筆",
+            "infoEmpty": "顯示第 0 至 0 筆結果，共 0 筆",
+            "search": "搜尋:",
+            "paginate": {
+                "first": "第一頁",
+                "previous": "上一頁",
+                "next": "下一頁",
+                "last": "最後一頁"
+            }
+        }
+    });
+
+    // 篩選按鈕邏輯
+    // 全部按鈕 - 清除篩選條件
+    $('#filterAll').on('click', function () {
+        table.search('').columns().search('').draw(); // 清空全表的篩選條件
+    });
+
+    // 未審核
+    $('#filterUnprocessed').on('click', function () {
+        table.column(3).search('未審核').draw(); // 只搜尋第4欄 (index 3) 未審核
+    });
+
+    // 審核通過
+    $('#filterProcessed').on('click', function () {
+        table.column(3).search('審核通過').draw(); // 搜尋審核通過
+    });
+
+    // 駁回
+    $('#filterRejected').on('click', function () {
+        table.column(3).search('駁回').draw(); // 搜尋駁回
+    });
+});
+
+
+    </script>
+    
+
+</head>
+<body>
+
+    <header>
+			    <div class="header-container">
+			        <div class="home-button">權限審核 
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+    
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+	
+
+<div th:include="@{/back_end/admin/dashboard}"></div>
+        
+        <div class="contact-icon" id="icon-container">
+		    <a th:href="@{/back_end/index}">
+		        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+		    </a>
+		    <span>後台首頁</span>
+		</div>
+<main>
+
+    <div class="container mt-5">
+    	<div class="button-container">
+		    <button id="filterAll" class="btn btn-secondary">全部</button>
+		    <button id="filterUnprocessed" class="btn btn-warning">未審核</button>
+		    <button id="filterProcessed" class="btn btn-success">審核通過</button>
+		    <button id="filterRejected" class="btn btn-danger">駁回</button>
+		</div>
+		    	
+	
+   
+  			<br>
+
+        <!-- 表格 -->
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>申請ID</th>
+                    <th>會員名稱</th>
+                    <th>申請項目</th>
+                    <th>申請狀態</th>
+                    <th>申請時間</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 檢查數據是否為空 -->
+                <tr th:if="${applications == null or applications.isEmpty()}">
+                    <td colspan="6" class="text-center">未找到任何申請</td>
+                </tr>
+
+                <!-- 遍歷數據並渲染表格 -->
+                <tr th:each="apply : ${applications}">
+                    <td th:text="${apply.applyId}"></td>
+                    <td th:text="${apply.mebId.mebName}"></td>
+                    <td th:switch="${apply.applyCate}">
+                        <span th:case="0">美容師</span>
+                        <span th:case="1">保母</span>
+                    </td>
+                    <td>
+                        <span th:classappend="${apply.applyStatus == '0' ? 'badge bg-secondary' :
+                                              apply.applyStatus == '1' ? 'badge bg-success' :
+                                              apply.applyStatus == '2' ? 'badge bg-danger' : 'badge bg-dark'}"
+                              th:text="${apply.applyStatus == '0' ? '未審核' :
+                                       apply.applyStatus == '1' ? '審核通過' :
+                                       apply.applyStatus == '2' ? '駁回' : '下架'}"></span>
+                    </td>
+                    <td th:text="${#temporals.format(apply.applyTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td>
+                        <!-- 查看操作 -->
+                        <a th:href="@{'/apply/' + ${apply.applyId}}" class="btn btn-info btn-sm">查看</a>
+
+                        <!-- 通過操作 -->
+                        <form id="approveForm" th:action="@{'/apply/approve/' + ${apply.applyId}}" method="post" style="display: inline;">
+						    <button 
+						        type="button" 
+						        class="btn btn-success btn-sm"
+						        th:attr="data-apply-id=${apply.applyId}"
+						        onclick="confirmApprove(this)">
+						        通過
+						    </button>
+						</form>
+
+
+                        <!-- 駁回操作 -->
+                        <button 
+                            type="button" 
+                            class="btn btn-warning btn-sm" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#rejectModal" 
+                            th:attr="onclick='setRejectId(' + ${apply.applyId} + ')'">
+                            駁回
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 驳回模态框 -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">駁回原因</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="rejectForm" method="post">
+                    <div class="modal-body">
+                        <!-- 駁回ID -->
+                        <input type="hidden" id="rejectApplyId" name="applyId">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                       
+                        <!-- 驳回原因 -->
+                        <div class="mb-3">
+                            <label for="rejectReason" class="form-label">請輸入駁回原因：</label>
+                            <textarea 
+                                class="form-control" 
+                                id="rejectReason" 
+                                name="rejectReason" 
+                                rows="3" 
+                                required 
+                                placeholder="必須填寫駁回原因"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-danger">送出</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<br>
+    <footer>
+        <p>© 2024 寵寵唯跡友善平台</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function setRejectId(applyId) {
+            document.getElementById('rejectApplyId').value = applyId;
+            document.getElementById('rejectForm').action = `/apply/reject/${applyId}`;
+            console.log("駁回ID: " + applyId);
+            console.log("表單action: " + document.getElementById('rejectForm').action);
+        }
+
+        document.getElementById('rejectModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('rejectApplyId').value = '';
+            document.getElementById('rejectReason').value = '';
+        });
+
+        document.getElementById('rejectForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // 阻止表單預設提交
+
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true; // 禁用按鈕，防止重複提交
+            submitButton.innerText = '提交中...';
+
+            Swal.fire({
+                title: '已送出駁回通知',
+                text: '原因將由 Email 發送',
+                icon: 'success',
+                confirmButtonText: '確定'
+            }).then(() => {
+                // 彈窗關閉後，提交表單
+                event.target.submit();
+            });
+        });
+
+        
+        function confirmApprove(button) {
+            const applyId = button.getAttribute('data-apply-id');
+            Swal.fire({
+                title: '已通過申請',
+                text: '新的帳號、密碼將由 Email 發送',
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '確定',
+                cancelButtonText: '取消'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // 獲取當前按鈕所在表單，並提交
+                    const form = button.closest('form');
+                    form.submit();
+                }
+            });
+        }
+
+        
+    </script>
+</body>
+</html>

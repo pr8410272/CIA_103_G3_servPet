@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+
+<link rel="stylesheet" href="/css/pg/pgSvcListManagement.css">
+
+<!-- ●● jquery datatables 設定 -->
+<script>
+	$(document)
+			.ready(
+					function() {
+						$('#example')
+								.DataTable(
+										{
+											"lengthMenu" : [  10, 15, 20,25,30
+													 ],
+											"searching" : true, //搜尋功能, 預設是開啟
+											"paging" : true, //分頁功能, 預設是開啟
+											"ordering" : true, //排序功能, 預設是開啟
+											"language" : {
+												"processing" : "處理中...",
+												"loadingRecords" : "載入中...",
+												"lengthMenu" : "顯示 _MENU_ 筆結果",
+												"zeroRecords" : "沒有符合的結果",
+												"info" : "顯示第 _START_ 至 _END_ 筆結果，共<font color=red> _TOTAL_ </font>筆",
+												"infoEmpty" : "顯示第 0 至 0 筆結果，共 0 筆",
+												"infoFiltered" : "(從 _MAX_ 筆結果中過濾)",
+												"infoPostFix" : "",
+												"search" : "搜尋:",
+												"paginate" : {
+													"first" : "第一頁",
+													"previous" : "上一頁",
+													"next" : "下一頁",
+													"last" : "最後一頁"
+												},
+												"aria" : {
+													"sortAscending" : ": 升冪排列",
+													"sortDescending" : ": 降冪排列"
+												}
+											}
+										});
+					});
+</script>
+
+</head>
+<body>
+	<header>
+	<!-- ============登入檢查部分 ============ -->
+<!-- 	 				<div id="role"> -->
+<!-- 					    <span th:if="${pgVO == null}" th:text="未知身分"></span> -->
+<!-- 					</div> -->
+<!-- 					<div id="role"> -->
+<!-- 					    <span th:if="${pgVO != null}" th:text="美容師"></span> -->
+<!-- 					</div> -->
+			    	
+<!-- 				<div id="name"> -->
+<!-- 				<span th:if="${pgVO != null}" th:text="${pgVO.pgName}"></span>    -->
+<!-- 				<span th:if="${pgVO == null}" th:text="造訪者"></span>    -->
+<!-- 				</div> -->
+				
+					<!-- ================================ -->
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/pg/listOnePg_back(pgId=${pgVO.pgId})}">美容師資料管理</a></li>
+				<li><a href="#" th:href="@{/pg/pgSvcListManagement(pgId=${pgVO.pgId})}">美容師服務項目管理</a></li>
+				<li><a href="#" th:href="@{/pg/pgOrderManagement(pgId=${pgVO.pgId})}">美容師訂單管理</a></li>
+				<li><a href="#" th:if="${pgVO == null}" th:href="@{/back_end/topgLogin}" >登入</a></li>
+				<li><a href="#" th:if="${pgVO != null}" th:href="@{/back_end/logout}" >登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<div class="view">
+			
+			<table id="example">
+				<thead>
+					<tr>
+<!-- 						<th>清單編號</th> -->
+						<th>項目編號</th>
+						<th>名稱</th>
+						<th>適用體型</th>
+						<th>簡述</th>
+						<th>價格</th>
+						<th>編輯</th>
+						<th>操作</th>
+	
+					</tr>
+				</thead>
+				<tbody>
+					<!-- 使用Thymeleaf來循環顯示數據 -->
+					<th:block th:each=" item : ${services}">
+						<tr>
+<!-- 							<td th:text="${item.pgSvcId}"></td> -->
+							<td th:text="${item.svcId}"></td>
+							<td th:text="${item.svcName}"></td>
+							<td th:switch="${item.svcType}">
+							<span th:case="0">迷你（3kg以下</span>
+							<span th:case="1">小型（3-5kg）</span>
+							<span th:case="2">中小型（5-10kg）</span> 
+							<span th:case="3">中型（10-16kg）</span>
+							<span th:case="4">中大型（16-22kg）</span>
+							<span th:case="5">大型（22-27kg）</span> 
+							<span th:case="6">特大型（27kg以上）</span></td>
+							<td th:text="${item.svcDescr}"></td>
+							<td th:text="${item.svcPrice}"></td>
+		                	
+		                	
+									
+
+					    <!-- 編輯按鈕，跳轉到編輯頁面 -->
+		    <td>
+		     <a th:href="@{/pg/editPgSvcList(pgSvcId=${item.pgSvcId})}" class="btn btn-edit">編輯</a>
+			</td>
+			<td>
+		     <a th:href="@{/pg/deletePgSvc(pgSvcId=${item.pgSvcId})}" class="btn btn-delete">刪除</a>
+			</td>
+		    
+					  
+						
+
+
+					
+						</tr>
+				</tbody>
+			</table>
+			
+			
+			<!-- 新增按鈕 (愛心圖案) -->
+					<div class="add-button">
+<!-- 			<a> -->
+				<a th:href="@{/pg/addService}"> 
+				<img th:src="@{/images/heart.png}">
+				</a>
+			</div>
+
+		</div>
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	<script>
+//監聽所有刪除按鈕的點擊事件
+document.addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('btn-delete')) {
+        event.preventDefault(); // 阻止默認的跳轉行為
+
+        const deleteUrl = event.target.getAttribute('href'); // 取得刪除的 URL
+        Swal.fire({
+            title: '確認刪除？',
+            text: '刪除後無法復原，您確定要刪除嗎？',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '確定',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl; // 如果用戶確認，跳轉到刪除的 URL
+            }
+        });
+    }
+});
+</script>
+
+	
+	
+</body>
+</html>

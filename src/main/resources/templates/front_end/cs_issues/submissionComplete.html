@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title>寵寵唯跡友善平台</title>
+    <link rel="stylesheet" href="/css/frontend_index_styles.css">
+    <link rel="stylesheet" href="/slick/slick.css"/>
+    <link rel="stylesheet" href="/slick/slick-theme.css"/>
+    <style>
+    
+    .profile-picture {
+		    width: 30px; /* 調整寬度，例如 50px */
+		    height: 30px; /* 調整高度，與寬度保持一致 */
+		    border-radius: 50%; /* 如果需要圓形頭像，保留此屬性 */
+		    object-fit: cover; /* 確保圖片不會被拉伸 */
+			}
+    
+    body {
+        font-family: Arial, sans-serif;
+              margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
+    }
+
+   
+
+    .container {
+        max-width: 1000px;
+        height:200px;
+      	background: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin: 50px auto;
+
+    }
+     /* Full-width nav */
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #FFF8EE;
+            padding: 10px;
+            width: 100%;  /* Full width */
+            box-sizing: border-box; /* Include padding in the width calculation */
+        }
+
+        nav a {
+            color: #3f3f3f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+    h1 {
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .button-group {
+        text-align: center;
+    }
+
+    button {
+        background-color:#45a049;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+   
+</style>
+</head>
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>寵寵唯跡友善平台</title>
+        <link rel="stylesheet" href="/css/frontend_index_styles.css">
+        <link rel="stylesheet" href="/slick/slick.css"/>
+        <link rel="stylesheet" href="/slick/slick-theme.css"/>
+    </head>
+    <body>
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>寵寵唯跡友善平台</title>
+        <link rel="stylesheet" href="/css/frontend_index_styles.css">
+        <link rel="stylesheet" href="/slick/slick.css"/>
+        <link rel="stylesheet" href="/slick/slick-theme.css"/>
+    </head>
+    <body>
+       <header>
+            <h1>
+                <a th:href="@{/}">寵寵唯跡 ServPET</a>
+            </h1>
+        </header>
+        
+        <nav>
+            <div class="dropdown">
+                <button class="dropbtn">最新消息</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/event/list}">平台公告消息</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物商城</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pdDetails/allProductsHomepage}">商品列表</a>
+                    <a th:href="@{/cartDetails/shoppingCart}">購物車</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物美容</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/pg/showAllPgSvcItem}">寵物美容服務</a>
+                    <a th:href="@{/pg}">預約</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">寵物保母</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/ps/psList}">寵物保母服務</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">會員專區</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/profile}">會員個人資訊</a>
+                    <a th:href="@{/pets}">寵物資訊</a>
+                    <a th:href="@{/ntfy/member}">會員訊息匣</a>
+                    <a th:href="@{/mebPdo/mebPdo}">商城訂單</a>
+                    <a th:href="@{/booking/calendar}">我的寵物美容月曆</a>
+                    <a th:href="@{/pdFav/list}">商品收藏</a>
+                    <a th:href="@{/pgFav/list}">寵物美容師收藏</a>
+                    <a th:href="@{/favorites/psfav}">寵物保母收藏</a>
+                    <a th:href="@{/vtr/create}">我的錢包</a>
+                    <a th:href="@{/apply/create}">成為美容師/保母</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">聯絡我們</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/member/cs-issues/add}">問題反應</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">登入</button>
+                <div class="dropdown-content">
+                    <a th:href="@{/login}">會員登入</a>
+                    <a th:href="@{/back_end/login}">後台登入</a>
+                </div>
+            </div>
+              <div class="user-info">
+            <div class="user-profile">
+        <!-- 顯示會員頭像或預設圖片 -->
+        <img th:src="${mebImg != null ? 'data:image/png;base64,' + mebImg : '/images/defaultavatar.png'}" 
+             alt="會員頭像" 
+             class="profile-picture" />
+     </div>
+         <div class="user-actions">
+<!--         <a th:if="${!isLoggedIn}" th:href="@{/login}">登入</a>  -->
+             <a href="#" onclick="confirmLogout()">會員登出</a> 
+         </div>
+     </div>
+        </nav>
+        
+        <main>
+<body>
+    
+    <div class="container">
+        <h1>提交成功！</h1>
+        <p>您的問題已提交完成，平台回覆會以 Email 通知您，請留意您的信箱。</p>
+        <div class="button-group">
+            <button onclick="redirectToList()">查看我的問題</button>
+        </div>
+    </div>
+     </main>
+
+    <footer>
+        <p>© 2024 寵寵唯跡友善平台</p>
+    </footer>
+    <script>
+        function redirectToList() {
+            window.location.href = '/member/cs-issues/list'; // 修改为列表页面路径
+        }
+    </script>
+</body>
+</html>

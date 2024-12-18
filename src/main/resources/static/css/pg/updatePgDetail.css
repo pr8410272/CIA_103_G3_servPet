@@ -1,0 +1,440 @@
+@charset "UTF-8";
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+header {
+    background-color:#334252;
+    height: 80px;
+    width: 100%;
+    position: sticky;
+}
+
+h1{
+    color: antiquewhite;
+    position: absolute;
+    left: 25px;
+    top: 0;
+    line-height: 80px;
+
+}
+header ul{
+    position: absolute;
+    right: 5vw;
+    top: 0;
+    line-height: 80px;
+}
+header li{
+    display: inline;
+    margin-right: 4vw; 
+    /* 視窗寬度4% */
+
+}
+
+header a{
+    color:antiquewhite;
+    text-decoration: none;
+}
+
+header a:hover{
+    text-decoration: underline;
+}
+
+footer{
+    background-color:#334252;
+    color: antiquewhite;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+
+
+
+.view{
+    background-color: #ffeedd;
+    width: 100%; /* 父容器滿版 */
+    padding: 15px;
+    /* display: flex;  */
+/*     justify-content: flex-end; */
+    align-items:center;
+	min-height: 100vh; /* 設置最小高度為 100vh，讓背景色自動填滿螢幕 */
+	justify-content: space-between; /* 讓子元素均勻分佈，確保 footer 在底部 */
+
+} 
+
+.return-button img {
+    top: 170x;
+    left: 80px;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    cursor: pointer;
+    position: sticky;
+}
+
+.return-button img:hover {
+    transform: scale(1.1);
+}
+/* 美容師生活照圓形框樣式 */
+.profile-pic {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	overflow: hidden;
+	margin: 0 auto;
+	display: block;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	margin-left: 150px;
+	text-align: left;
+}
+
+.profile-pic img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.profile-pic-button img {
+	top: 195px;
+	left: 175px;
+	width: 40px;
+	height: 40px;
+	margin: 5px;
+	border-radius: 50%;
+	transition: transform 0.3s;
+	cursor: pointer;
+	position:absolute;
+}
+
+.profile-pic-button img:hover {
+	transform: scale(1.1);
+	
+}
+/* 表單外框樣式 */
+.form-container {
+    width: 80%;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    background-color: #D9CBCB; /* 表單背景顏色 */
+    overflow: hidden;
+}
+
+/* 移除選取框的樣式 */
+.form-container :focus {
+    outline: none; /* 移除焦點框 */
+    border: 1px solid #ddd; /* 保持原來的邊框顏色 */
+    box-shadow: none; /* 移除陰影 */
+    transform: none; /* 移除上移效果 */
+}
+
+/* 表單標題樣式 */
+.form-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 表單欄位的標籤樣式 */
+.form-container label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* 表單欄位樣式 */
+.form-container input,
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #f9f9f9; /* 欄位背景顏色 */
+}
+
+
+
+
+/* 勾選框容器樣式 */
+#schDate, #schTime {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: #f9f9f9; /* 底色與其他表單欄位一致 */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd; /* 圓角邊框 */
+}
+
+/* 勾選框標籤 */
+#schDate label, #schTime label {
+    font-size: 16px;
+    color: #333;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+/* 調整勾選框大小 */
+#schDate input[type="checkbox"], #schTime input[type="checkbox"] {
+    width: 20px; /* 增大勾選框的大小 */
+    height: 20px; /* 增大勾選框的大小 */
+    margin-right: 5px;
+}
+
+/* 勾選框懸停效果 */
+#schDate input[type="checkbox"]:hover, #schTime input[type="checkbox"]:hover {
+    transform: scale(1.2); /* 懸停時放大 */
+}
+
+/* 當勾選框被選中時，增加一些效果 */
+#schDate input[type="checkbox"]:checked, #schTime input[type="checkbox"]:checked {
+    background-color: #334252; /* 改變選中時的顏色 */
+    border-color: #334252;
+}
+
+
+
+input:focus {
+    outline: none; /* 移除外框 */
+    border: 1px solid transparent; /* 可設定透明邊框來避免其他樣式干擾 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 增加陰影效果 */
+    transform: translateY(-2px); /* 輕微上移以呈現浮起感 */
+    transition: box-shadow 0.2s ease, transform 0.2s ease; /* 平滑過渡效果 */
+}
+
+select:focus{
+    outline: none; /* 移除外框 */
+    border: 1px solid transparent; /* 可設定透明邊框來避免其他樣式干擾 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 增加陰影效果 */
+    transform: translateY(-2px); /* 輕微上移以呈現浮起感 */
+    transition: box-shadow 0.2s ease, transform 0.2s ease; /* 平滑過渡效果 */
+
+}
+/* 按鈕樣式 */
+.form-container button{
+    width: 25%; /* 設定按鈕寬度為表單寬度的 1/4 */
+    padding: 10px;
+    background-color: #334252;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    display: block; /* 確保按鈕是塊級元素 */
+    margin: 0 auto; /* 居中對齊 */
+}
+#uploadPgPic button {
+    width: 19%; 
+    padding: 10px;
+    background-color: #334252;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+    display: block; /* 確保按鈕是塊級元素 */
+    margin: 0 auto; /* 居中對齊 */
+}
+
+/* 按鈕懸停樣式 */
+.form-container button:hover,
+#uploadPgPic button:hover {
+    background-color: #DDD1D1;
+}
+
+/* 錯誤訊息樣式 */
+.form-container .error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* 美化檔案選擇框 */
+#uploadPgPic input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* 欄位背景顏色 */
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+/* 檔案選擇框聚焦時的效果 */
+#uploadPgPic input[type="file"]:focus {
+    outline: none;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 增加陰影效果 */
+    transform: translateY(-2px); /* 輕微上移以呈現浮起感 */
+    transition: box-shadow 0.2s ease, transform 0.2s ease; /* 平滑過渡效果 */
+}
+
+/* 使檔案選擇按鈕的樣式和其他欄位一致 */
+/* 檔案選擇按鈕懸停效果 */
+#uploadPgPic input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #DDD1D1;
+}
+/* 密碼欄位的容器 */
+.password-field {
+    margin-bottom: 20px; /* 讓各欄位之間有空隙 */
+}
+
+/* 密碼欄位標籤獨立一行 */
+.password-field label {
+    display: block; /* 讓 label 單獨占一行 */
+    margin-bottom: 8px; /* 增加 label 和輸入欄位的間距 */
+    font-weight: bold;
+}
+
+/* 欄位和按鈕的容器 */
+.input-container {
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    gap: 10px; /* 調整欄位和按鈕之間的間距 */
+}
+
+/* 密碼輸入框 */
+.input-container input {
+    width: 100%;
+}
+
+/* 顯示/隱藏密碼按鈕 */
+#togglePassword {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    padding: 0;
+    box-shadow: none; /* 去掉陰影 */
+}
+
+#togglePassword:hover {
+    color: #555;
+}
+ /* 容器樣式：保持背景色、內邊距以及其他樣式 */ 
+/* .table_container { */
+/*     padding: 15px; */
+/*     color: cornsilk; */
+/*     margin: 20px; */
+/*     display: flex; */
+/*     justify-content: center; */
+/*     align-items: center; */
+/*     flex-direction: column; */
+/* } */
+
+ /* 讓圖片列表使用 Flexbox 排列，並保持間距 */ 
+/* ul.item_list { */
+/*     list-style: none; */
+/*     margin: 0; */
+/*     padding: 0; */
+/*     display: flex; */
+/*     flex-wrap: wrap; */
+/*     gap: 20px; */
+/*     justify-content: center; 水平居中對齊 */
+/* } */
+
+ /* 每個圖片項目的容器，控制圖片大小和間距 */ 
+/* ul.item_list > .gallery-item { */
+/*     border: 2px solid antiquewhite; */
+/*     width: calc(( 100% - 60px) / 4); 設置每列的寬度，四列 */
+/*     border-radius: 10px; */
+/*     overflow: hidden; */
+/*     text-align: center; */
+/* } */
+
+ /* 圖片容器 */ 
+/* ul.item_list > .gallery-item a { */
+/*     display: block; */
+/*     text-decoration: none; */
+/* } */
+
+/* /* 圖片樣式：保證圖片大小一致，並設置圓角 */ */
+/* ul.item_list > .gallery-item img { */
+/*     width: 100%; 填滿容器 */
+/*     height: 300px; 固定高度 */
+/*     object-fit: cover; 確保圖片不會變形 */
+/*     border-radius: 10px; */
+/*     transition: transform 0.3s ease, box-shadow 0.3s ease; */
+/* } */
+
+ /* 圖片懸停效果：放大並加陰影 */ 
+/* ul.item_list > .gallery-item img:hover { */
+/*     transform: scale(1.07); 放大圖片 */
+/*     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 添加陰影 */
+/* } */
+
+ /* 如果沒有圖片，顯示提示訊息 */ 
+/* .no-images { */
+/*     color: cornsilk; */
+/*     font-size: 18px; */
+/*     text-align: center; */
+/* } */
+
+ /* 項目名稱顯示 */ 
+/* ul.item_list > .gallery-item .item_text { */
+/*     display: block; */
+/*     margin-top: 10px; */
+/*     white-space: nowrap; */
+/*     overflow: hidden; */
+/*     text-overflow: ellipsis; */
+/* } */
+
+
+ /* 美化圖片排列的容器 */ 
+.gallery {
+	width: 100%;
+	max-width: 1200px; /*可以設置最大寬度來限制圖片排列的寬度*/ 
+	display: flex; /*使用 Flexbox 排列圖片*/ 
+	flex-wrap: wrap; /*允許多行排列*/ 
+	gap: 12px; /*圖片間距*/ 
+	justify-content: center; /*水平方向靠左*/ 
+	padding: 10px; /*整體容器內部留白*/ 
+	margin: 0 auto; /*垂直居中容器*/ 
+
+}
+
+/* 單個圖片項目  */
+.gallery-item {
+	text-align: center;
+	flex: 1 0 200px; /*自動調整項目寬度，最小200px，並且能自動拉伸*/ 
+    max-width: 300px; /*控制圖片項目的最大寬度*/ 
+ 	display: inline-block
+}
+
+/*  圖片樣式  */
+.gallery img {
+	width: 200px; /*圖片寬度填滿容器*/ 
+	height: auto; /*保持比例*/ 
+	border-radius: 8px; /*圖片圓角*/ 
+	transition: transform 0.3s, box-shadow 0.3s; /*添加動畫過渡*/ 
+}
+
+/*  圖片懸停效果  */
+.gallery img:hover {
+	transform: scale(1.3); /*懸停放大效果*/ 
+	z-index: 10;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /*懸停陰影加強*/ 
+}
+

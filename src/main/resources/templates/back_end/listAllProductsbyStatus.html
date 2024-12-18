@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>所有商品資料</title>
+<!-- <head th:insert="~{/back_end/pdDetails/included-fragment}"></head> -->
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+<!-- <link rel="stylesheet" th:href="@{/css/listAllProducts.css}" /> -->
+<style>
+@charset "UTF-8";
+
+/* 引入 Google Fonts 字型 */
+@import
+	url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap')
+	;
+
+html, body {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	background-color: #F8F9FA;
+	color: #334252;
+	height: 100%; /* 確保整個頁面佔滿窗口高度 */
+	display: flex;
+	flex-direction: column; /* 讓內容區和 footer 垂直排列 */
+}
+
+main {
+	flex-grow: 1; /* 主內容區域自動填充剩餘空間 */
+	padding-bottom: 20px; /* 與 footer 保持間距 */
+}
+
+/********************** Header 區域 **********************/
+nav.navbar {
+	background-color: #334252;
+	color: white;
+	padding: 15px 0;
+	text-align: center;
+}
+
+nav.navbar h2 {
+	margin: 0;
+	font-size: 24px;
+}
+
+nav.navbar h3 a {
+	color: #FFD700;
+	text-decoration: none;
+}
+
+/* nav.navbar h3 a img { */
+/* 	vertical-align: middle; */
+/* 	width: 24px; */
+/* 	height: 24px; */
+/* } */
+
+/********************** 內容區域 **********************/
+table {
+	width: 100%;
+	margin: 20px auto;
+	border-collapse: collapse;
+	font-size: 14px;
+	background: #ffffff;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+thead {
+	background-color: #CCCCFF;
+	color: #334252;
+	font-weight: bold;
+}
+
+th, td {
+	padding: 10px;
+	text-align: center;
+	border: 1px solid #f0f8ff;
+}
+
+tbody tr:hover {
+	background-color: #f0f8ff;
+}
+
+/* 按鈕樣式 */
+.view-images-btn, input[type="submit"] {
+	padding: 8px 15px;
+	font-size: 14px;
+	color: #ffffff;
+	background-color: #334252;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.view-images-btn:hover, input[type="submit"]:hover {
+	background-color: #556B8D;
+	transform: scale(1.05);
+}
+
+.view-images-btn:active, input[type="submit"]:active {
+	background-color: #2C3A48;
+	transform: scale(0.95);
+}
+
+/* 燈箱 */
+.lightbox {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+.lightbox.hidden {
+	display: none;
+}
+
+.lightbox-content {
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	max-width: 800px;
+	width: 90%;
+	text-align: center;
+}
+
+.lightbox-thumbnails {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.lightbox-thumbnails img {
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
+	border: 2px solid transparent;
+	transition: border-color 0.3s ease;
+}
+
+.lightbox-thumbnails img:hover {
+	border-color: #007bff;
+}
+
+.lightbox-main-image img {
+	width: 300px; /* 設定圖片寬度 */
+	height: 300px; /* 設定圖片高度，保持圖片為正方形 */
+	object-fit: contain; /* 確保圖片在容器內適應且保持比例 */
+	margin: auto;
+	display: block;
+}
+
+.close-btn {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background: #333;
+	color: #fff;
+	border: none;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+}
+
+footer {
+	background-color: #334252;
+	color: white;
+	text-align: center;
+	padding: 10px 0;
+	position: relative;
+	bottom: 0;
+	width: 100%;
+	margin-top: 20px; /* 與內容留白 */
+}
+
+.category-row {
+	cursor: pointer;
+	font-weight: bold;
+	background-color: #CCCCFF;
+}
+
+.category-row:hover {
+	background-color: #AAB5FF;
+}
+
+.product-row {
+	background-color: #FFFFFF;
+}
+
+.product-row:hover {
+	background-color: #F0F8FF;
+}
+
+.product-details {
+	display: flex;
+	justify-content: center; /* 讓三個元素靠近中間排列 */
+	align-items: center;
+	text-align: center;
+	margin-bottom: 10px; /* 減少整體的上下距離 */
+	gap: 20px; /* 控制每個元素之間的距離 */
+}
+
+.product-details p {
+	margin: 0; /* 移除段落預設的外邊距 */
+	padding: 0;
+	font-size: 14px; /* 控制字型大小 */
+	color: #334252;
+	font-weight: bold; /* 讓文字更清晰 */
+}
+
+.product-details div {
+	/* 讓標籤與內容水平排列 */
+	align-items: center; /* 垂直居中 */
+	gap: 5px; /* 標籤與內容之間的間距 */
+}
+/* 浮動文字的初始樣式，默認隱藏 */
+.tooltip {
+	position: absolute;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	padding: 8px 12px; /* 減少內邊距 */
+	border-radius: 4px; /* 圓角化 */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* 更加柔和的陰影 */
+	font-size: 12px;
+	color: #334252;
+	z-index: 1000;
+	display: none;
+	pointer-events: none; /* 確保不會干擾滑鼠操作 */
+	white-space: nowrap; /* 防止文字換行 */
+}
+
+.fnc_button {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #334252;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.fnc_button:hover {
+	background-color: #556B8D;
+	transform: scale(1.05);
+}
+
+.fnc_button:active {
+	background-color: #2C3A48;
+	transform: scale(0.95);
+}
+
+.navbar-btn {
+    margin-left: auto; /* 將按鈕推到最右邊 */
+    margin-right: 20px; /* 右邊間距 */
+    background-color: #55687d; /* 按鈕背景顏色 */
+    color: #FFFFFF; /* 文字顏色 */
+    border: 1px solid #334252; /* 邊框顏色 */
+    padding: 8px 16px; /* 內邊距 */
+    font-size: 14px; /* 字體大小 */
+    font-weight: bold; /* 字體加粗 */
+    border-radius: 5px; /* 圓角邊框 */
+    cursor: pointer; /* 鼠標指針 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 過渡效果 */
+}
+
+.navbar-btn:hover {
+    background-color: #556B8D; /* 滑鼠懸停時的背景顏色 */
+    color: #FFFFFF; /* 滑鼠懸停時的文字顏色 */
+    border-color: #556B8D; /* 邊框顏色 */
+}
+</style>
+</head>
+<body>
+
+	<nav
+		class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		<div align="center">
+			<h2>所有商品資料（按上架狀態分組）</h2>
+			<h3>
+				<a class="navbar-btn" th:href="@{/back_end/index}" style="margin-right: 15px;">管理員後台首頁</a> 
+				<a class="logout-btn navbar-btn" onclick="window.location.href='/back_end/logout'">登出</a>
+			</h3>
+		</div>
+	</nav>
+		<div style="text-align: center; margin: 20px 0;">
+			<button id="toggle-all-btn" class="fnc_button">一鍵展開</button>
+			<a th:href="@{/pdDetails/listAllProducts}" class="fnc_button">按商品類別分組</a>
+			<a href='addProducts' class="fnc_button">新增商品</a>
+		</div>
+
+
+	<main>
+		<!-- 按狀態分組顯示 -->
+		<table id="productTable" class="display" style="width: 80%">
+			<tbody>
+				<!-- 遍歷商品狀態分組 -->
+				<th:block th:each="entry : ${groupedByStatus}">
+					<!-- 狀態標題行 -->
+					<tr class="category-row" th:data-category-id="${entry.key}">
+						<td colspan="12"
+							style="cursor: pointer; font-weight: bold; background-color: #CCCCFF;">-
+							商品狀態：<span th:text="${entry.key}"></span>
+						</td>
+					</tr>
+
+					<!-- 表頭 -->
+					<tr class="product-header" th:data-category-id="${entry.key}"
+						style="display: none; background-color: #EFEFEF;">
+						<th>商品編號</th>
+						<th>商品類別</th>
+						<th>商品名稱</th>
+						<th>商品描述</th>
+						<th>商品價格</th>
+						<th>商品數量</th>
+						<th>修改</th>
+						<th>圖片</th>
+					</tr>
+
+					<!-- 遍歷該狀態下的商品 -->
+					<th:block th:each="product : ${entry.value}">
+						<tr class="product-row" th:data-category-id="${entry.key}"
+							th:data-pd-weight="${product.pdWeight}"
+							th:data-pd-size="${product.pdSize}"
+							th:data-pd-color="${product.pdColor}" style="display: none;">
+							<td th:text="${product.pdId}"></td>
+							<td th:text="${product.pdCategVO.categoryName}"></td>
+							<td th:text="${product.pdName}"></td>
+							<td th:text="${product.pdDescr}"></td>
+							<td th:text="${product.pdPrice}"></td>
+							<td th:text="${product.pdQty}"></td>
+							<td>
+								<form method="post" th:action="@{/pdDetails/getOne_For_Update}"
+									style="margin: 0;">
+									<input type="hidden" name="pdId" th:value="${product.pdId}" />
+									<input type="submit" value="修改" />
+								</form>
+							</td>
+							<td><input type="button" class="view-images-btn"
+								th:data-pd-id="${product.pdId}"
+								th:data-pd-weight="${product.pdWeight}"
+								th:data-pd-size="${product.pdSize}"
+								th:data-pd-color="${product.pdColor}" value="查看圖片"></td>
+						</tr>
+					</th:block>
+				</th:block>
+			</tbody>
+		</table>
+	</main>
+
+	<div id="tooltip" class="tooltip hidden">
+		<p>
+			<span id="tooltip-weight"></span>
+		</p>
+		<p>
+			<span id="tooltip-size"></span>
+		</p>
+		<p>
+			<span id="tooltip-color"></span>
+		</p>
+	</div>
+	<!-- 	新增燈箱 -->
+	<div id="lightbox" class="lightbox hidden">
+		<div class="lightbox-content">
+			<span class="close-btn">&times;</span>
+			<!-- 大圖顯示區	-->
+			<div id="lightbox-main-image" class="lightbox-main-image">
+				<!-- 					動態插入主圖片 -->
+			</div>
+			<!-- 小圖瀏覽區-->
+			<div id="lightbox-thumbnails" class="lightbox-thumbnails">
+				<!-- 					動態插入小圖 -->
+			</div>
+		</div>
+	</div>
+
+
+
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<!-- 	<script type="text/javascript" th:src="@{/js/listAllProducts.js}" /> -->
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function () {
+	    const lightbox = document.getElementById("lightbox");
+	    const lightboxMainImage = document.getElementById("lightbox-main-image");
+	    const lightboxThumbnails = document.getElementById("lightbox-thumbnails");
+	    const closeBtn = document.querySelector(".close-btn");
+	    const tooltip = document.getElementById("tooltip");
+	    const toggleAllBtn = document.getElementById("toggle-all-btn"); // 一鍵展開/收合按鈕
+	    let allExpanded = false; // 狀態標記，判斷是否所有分類已展開
+
+	    // 1. 初始化燈箱功能
+	    if (!lightbox || !lightboxMainImage || !lightboxThumbnails || !closeBtn) {
+	        console.error("燈箱相關元素未找到，請檢查 HTML 結構");
+	        return;
+	    }
+
+	    document.querySelectorAll(".view-images-btn").forEach(function (button) {
+	        button.addEventListener("click", function () {
+	            const pdId = this.getAttribute("data-pd-id");
+
+	            // 清空並載入圖片數據
+	            lightboxMainImage.innerHTML = "";
+	            lightboxThumbnails.innerHTML = "";
+	            fetch(`/pdDetails/getProductImages?pdId=${pdId}`)
+	                .then((response) => response.json())
+	                .then((data) => {
+	                    if (data && data.length > 0) {
+	                        // 主圖
+	                        const mainImg = document.createElement("img");
+	                        mainImg.src = `/pdImg/DBGifReader?pdImgId=${data[0]}`;
+	                        lightboxMainImage.appendChild(mainImg);
+
+	                        // 小縮略圖
+	                        data.forEach((imgId) => {
+	                            const thumbImg = document.createElement("img");
+	                            thumbImg.src = `/pdImg/DBGifReader?pdImgId=${imgId}`;
+	                            thumbImg.addEventListener("click", () => {
+	                                mainImg.src = `/pdImg/DBGifReader?pdImgId=${imgId}`;
+	                            });
+	                            lightboxThumbnails.appendChild(thumbImg);
+	                        });
+
+	                        lightbox.classList.remove("hidden"); // 顯示燈箱
+	                    } else {
+	                        alert("此商品無圖片。");
+	                    }
+	                })
+	                .catch((error) => console.error("圖片請求錯誤:", error));
+	        });
+	    });
+
+	    closeBtn.addEventListener("click", function () {
+	        lightbox.classList.add("hidden"); // 關閉燈箱
+	    });
+
+	    lightbox.addEventListener("click", function (event) {
+	        if (event.target === lightbox) {
+	            lightbox.classList.add("hidden");
+	        }
+	    });
+
+	    // 2. 工具提示 - 增加類別顯示
+	    document.querySelectorAll(".product-row").forEach(row => {
+	        row.addEventListener("mousemove", function (e) {
+	            const weight = this.getAttribute("data-pd-weight") || "未提供";
+	            const size = this.getAttribute("data-pd-size") || "未提供";
+	            const color = this.getAttribute("data-pd-color") || "未提供";
+
+	            document.getElementById("tooltip-weight").textContent = `重量：${weight}`;
+	            document.getElementById("tooltip-size").textContent = `尺寸：${size}`;
+	            document.getElementById("tooltip-color").textContent = `顏色：${color}`;
+
+	            tooltip.style.display = "block";
+	            tooltip.style.top = e.pageY + 10 + "px";
+	            tooltip.style.left = e.pageX + 10 + "px";
+	        });
+
+	        row.addEventListener("mouseleave", function () {
+	            tooltip.style.display = "none"; // 隱藏提示
+	        });
+	    });
+
+	    // 按狀態顯示/隱藏
+document.querySelectorAll(".category-row").forEach(row => {
+    row.addEventListener("click", function () {
+        // 獲取當前狀態 ID
+        const categoryId = this.getAttribute("data-category-id");
+
+        // 查找對應的商品表頭和商品行
+        const relatedRows = document.querySelectorAll(`.product-header[data-category-id='${categoryId}'], .product-row[data-category-id='${categoryId}']`);
+
+        // 切換顯示/隱藏
+        relatedRows.forEach(row => {
+            row.style.display = row.style.display === "none" ? "table-row" : "none";
+        });
+    });
+});
+
+
+	    // 一鍵展開/收合
+	    toggleAllBtn.addEventListener("click", function () {
+	        const allHeaders = document.querySelectorAll(".product-header");
+	        const allRows = document.querySelectorAll(".product-row");
+
+	        if (allExpanded) {
+	            allHeaders.forEach(header => (header.style.display = "none"));
+	            allRows.forEach(row => (row.style.display = "none"));
+	            toggleAllBtn.textContent = "一鍵展開";
+	        } else {
+	            allHeaders.forEach(header => (header.style.display = "table-row"));
+	            allRows.forEach(row => (row.style.display = "table-row"));
+	            toggleAllBtn.textContent = "一鍵收合";
+	        }
+	        allExpanded = !allExpanded;
+	    });
+	});
+
+	</script>
+
+</body>
+</html>

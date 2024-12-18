@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+
+<link rel="stylesheet" href="/css/pg/pgProfile.css">
+
+</head>
+<body>
+	<header>
+
+				
+					<!-- ================================ -->
+		<h1>servPet管理後台</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/pg/listOnePg_back(pgId=${pgVO.pgId})}">美容師資料管理</a></li>
+				<li><a href="#" th:href="@{/pg/pgSvcListManagement(pgId=${pgVO.pgId})}">美容師服務項目管理</a></li>
+				<li><a href="#" th:href="@{/pg/pgOrderManagement(pgId=${pgVO.pgId})}">美容師訂單管理</a></li>
+				<li><a th:if="${pgVO == null}" th:href="@{/back_end/toAdminLogin}">登入</a></li>
+				<li><a th:if="${pgVO != null}" th:href="@{/back_end/logout}">登出</a></li>
+				
+
+				
+			</ul>
+		</nav>
+	</header>
+
+	
+
+	
+
+
+	<main>
+		<div class="view">
+			<!-- 圓形生活照 -->
+			<div class="profile-pic">
+				<img th:src="@{/pg/profileimg(pgId=${pgVO.pgId})}"
+					th:alt="${pgVO.pgName + ' 的生活照'}">
+			</div>
+			<!-- 美容師詳細資料 -->
+			<table class="profile">
+			<form method="get" th:action="@{/pg/getOne_For_Update(pgId=${pgVO.pgId})}" style="margin-bottom: 0px;">
+			    <input type="hidden" name="pgId" th:value="${pgVO.pgId}">
+			    <button type="submit" class="btn btn-edit">編輯</button>	   
+			</form>
+				<tr>
+					<th>美容師姓名</th>
+					<td th:text="${pgVO.pgName}"></td>
+				</tr>
+				<tr>
+					<th>服務ID</th>
+					<td th:text="${pgVO.pgId}"></td>
+				</tr>
+				<tr>
+					<th>營業狀態</th>
+					<td th:switch="${pgVO.pgStatus}">
+						<div th:case="0">暫休</div>
+						<div th:case="1">在職</div>
+					</td>
+				</tr>
+				<tr>
+					<th>服務地區</th>
+					<td th:switch="${pgVO.pgArea}">
+						<div th:case="0">北部</div>
+						<div th:case="1">中部</div>
+						<div th:case="2">南部</div>
+						<div th:case="3">東部</div>
+					</td>
+				</tr>
+		
+				<tr>
+					<th>每週服務日</th>
+					<td><span th:if="${pgVO.schDate[0] == '1'}">(一) </span> <span
+						th:if="${pgVO.schDate[1] == '1'}">(二) </span> <span
+						th:if="${pgVO.schDate[2] == '1'}">(三) </span> <span
+						th:if="${pgVO.schDate[3] == '1'}">(四) </span> <span
+						th:if="${pgVO.schDate[4] == '1'}">(五) </span> <span
+						th:if="${pgVO.schDate[5] == '1'}">(六) </span> <span
+						th:if="${pgVO.schDate[6] == '1'}">(日) </span> <span
+						th:if="${pgVO.schDate == '0000000'}">目前無提供服務</span></td>
+				</tr>
+
+
+
+				<tr>
+					<th>可預約時段</th>
+					<td><span th:if="${pgVO.schTime == '000'}">目前無法預約</span> <span
+						th:if="${pgVO.schTime != '000'}"> <span
+							th:if="${pgVO.schTime[0] == '1'}">早 </span> <span
+							th:if="${pgVO.schTime[1] == '1'}">中 </span> <span
+							th:if="${pgVO.schTime[2] == '1'}">晚 </span>
+					</span></td>
+				</tr>
+				<tr>
+					<th>星等</th>
+					<td>
+				        <div>
+				            <p th:if="${averageStars > 0}">
+				                <span th:utext="${'⭐'.repeat(averageStars)}"></span>
+				            </p>
+				            <p th:if="${averageStars == 0}">
+				                <span>尚無評價</span>
+				            </p>
+				        </div>
+			    	</td>
+				</tr>
+				<tr>
+					<th>違規記點</th>
+					<td th:text="${pgVO.reportTimes}"></td>
+				</tr>
+				<tr>
+					<th>簡介</th>
+					<td th:text="${pgVO.pgBio}"></td>
+				</tr>
+			</table>
+			
+			<!-- 服務清單 -->
+			<div class="service-list">
+			    <div th:each="entry : ${groupedServices}" class="service-item">
+			        <h3 th:text="${entry.key}"></h3>
+			        <p th:text="${entry.value[0].svcDescr}"></p>
+			        <table>
+			            <thead>
+			                <tr>
+			                    <th>適用寵物體型</th>
+			                    <th></th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <tr th:each="detail : ${entry.value}">
+			                    <td th:text="${detail.svcType == '0' ? '迷你（3kg以下）' :
+			                                   detail.svcType == '1' ? '小型（3-5kg）' :
+			                                   detail.svcType == '2' ? '中小型（5-10kg）' :
+			                                   detail.svcType == '3' ? '中型（10-16kg）' :
+			                                   detail.svcType == '4' ? '中大型（16-22kg）' :
+			                                   detail.svcType == '5' ? '大型（22-27kg）' :
+			                                   detail.svcType == '6' ? '特大型（27kg以上）' : '未知體型'}"></td>
+			                    <td th:text="'NT$ ' + ${detail.svcPrice}"></td>
+			                </tr>
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+
+
+
+
+					<!-- 照片跑馬燈 -->
+				    <div class="carousel-container">
+				        <button class="carousel-btn prev-btn">&#9664;</button>
+				        <div class="carousel-wrapper">
+				            <div class="carousel">
+				                <div th:each="picId : ${picId}" class="carousel-item">
+				                    <img th:src="@{'/pg/picture/' + ${picId}}" alt="作品照片">
+				                </div>
+				            </div>
+				        </div>
+				        <button class="carousel-btn next-btn">&#9654;</button>
+				    </div>
+			
+<!-- 			<div class="gallery"> -->
+<!-- 			<div th:if="${picId != null and !picId.isEmpty()}"> -->
+<!-- 				<div th:each="picId : ${picId}" class="gallery-item"> -->
+<!-- 				<img th:src="@{'/pg/picture/' + ${picId}}" alt="作品圖片"></div> -->
+<!-- 			</div> -->
+			
+<!-- 			<div th:if="${picId == null || picId.isEmpty()}"> -->
+<!-- 				<p class="no-images">無圖片可顯示。</p> -->
+<!-- 			</div> -->
+<!-- 			</div> -->
+			
+
+			</div>
+
+
+
+		<!-- 新增作品集按鈕(大吳版) -->
+		<!-- 			<form id="uploadForm" th:action="@{/pg/upload}" method="post" enctype="multipart/form-data"> -->
+		<!-- 				<input type="file" name="pictures" multiple accept="image/*"> -->
+		<!-- 				<input type="hidden" name="pgId" th:value="${pgVO.pgId}"> -->
+		<!-- 				<button type="submit">新增照片</button> -->
+		<!-- 			</form> -->
+
+		<!-- 作品集區域 -->
+
+
+
+
+
+
+
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const carousel = document.querySelector(".carousel");
+            const prevBtn = document.querySelector(".prev-btn");
+            const nextBtn = document.querySelector(".next-btn");
+            const items = document.querySelectorAll(".carousel-item");
+
+            const visibleItems = 5; // 一次顯示五張圖片
+            const itemWidth = items[0].offsetWidth + 10; // 每個項目寬度（包含間距）
+            let currentIndex = visibleItems; // 初始化到第一個真實項目
+            let autoPlay;
+
+            // 克隆首尾項目來實現無縫循環
+            const cloneItems = () => {
+                const firstItems = Array.from(items).slice(0, visibleItems);
+                const lastItems = Array.from(items).slice(-visibleItems);
+
+                firstItems.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    carousel.appendChild(clone);
+                });
+
+                lastItems.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    carousel.insertBefore(clone, carousel.firstChild);
+                });
+            };
+
+            // 初始化克隆和偏移
+            const initCarousel = () => {
+                cloneItems();
+                const offset = -(currentIndex * itemWidth);
+                carousel.style.transform = `translateX(${offset}px)`;
+            };
+
+            // 更新跑馬燈的偏移
+            const updateCarousel = () => {
+                const offset = -(currentIndex * itemWidth);
+                carousel.style.transition = "transform 0.8s ease-in-out";
+                carousel.style.transform = `translateX(${offset}px)`;
+
+                // 無縫切換處理
+                carousel.addEventListener("transitionend", () => {
+                    if (currentIndex === 0) {
+                        currentIndex = items.length; // 跳到真實的最後一張
+                        carousel.style.transition = "none"; // 瞬間重置
+                        carousel.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+                    } else if (currentIndex === items.length + visibleItems) {
+                        currentIndex = visibleItems; // 跳到真實的第一張
+                        carousel.style.transition = "none"; // 瞬間重置
+                        carousel.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+                    }
+                });
+            };
+
+            // 自動播放
+            const startAutoPlay = () => {
+                stopAutoPlay(); // 確保不會有重複的定時器
+                autoPlay = setInterval(() => {
+                    currentIndex++;
+                    updateCarousel();
+                }, 3000); // 每 3 秒切換一張
+            };
+
+            const stopAutoPlay = () => {
+                clearInterval(autoPlay);
+            };
+
+            // 左右按鈕
+            prevBtn.addEventListener("click", () => {
+                stopAutoPlay();
+                currentIndex--;
+                updateCarousel();
+                startAutoPlay();
+            });
+
+            nextBtn.addEventListener("click", () => {
+                stopAutoPlay();
+                currentIndex++;
+                updateCarousel();
+                startAutoPlay();
+            });
+
+            // 初始化
+            initCarousel();
+            startAutoPlay();
+        });
+    </script>
+</body>
+</html>
+

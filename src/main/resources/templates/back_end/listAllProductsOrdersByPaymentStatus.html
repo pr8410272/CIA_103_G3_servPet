@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>所有訂單資料</title>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.5/css/dataTables.jqueryui.min.css" />
+<style>
+@charset "UTF-8";
+
+/* 引入 Google Fonts 字型 */
+@import
+	url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap')
+	;
+
+html, body {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	background-color: #F8F9FA;
+	color: #334252;
+	height: 100%; /* 確保整個頁面佔滿窗口高度 */
+	display: flex;
+	flex-direction: column; /* 讓內容區和 footer 垂直排列 */
+}
+
+main {
+	flex-grow: 1; /* 主內容區域自動填充剩餘空間 */
+	padding-bottom: 20px; /* 與 footer 保持間距 */
+}
+
+/********************** Header 區域 **********************/
+nav.navbar {
+	background-color: #334252;
+	color: white;
+	padding: 15px 0;
+	text-align: center;
+}
+
+nav.navbar h2 {
+	margin: 0;
+	font-size: 24px;
+}
+
+nav.navbar h3 a {
+	color: #FFD700;
+	text-decoration: none;
+}
+
+/* 標頭樣式 */
+.order-status-header {
+	background-color: #CCCCFF;
+	cursor: pointer;
+	font-weight: bold;
+	padding: 10px; /* 內部留白 */
+	text-align: center;
+	width: 80%; /* 寬度設為 80% */
+	margin: 0 auto; /* 左右置中 */
+	box-sizing: border-box; /* 確保 padding 不影響寬度 */
+	border: 0.5px solid #f0f8ff; /* 白色框線 */
+}
+
+.order-status-header:first-child {
+	border-top-left-radius: 10px; /* 左上角圓角 */
+	border-top-right-radius: 10px; /* 右上角圓角 */
+}
+
+.order-status-header:nth-of-type(3) {
+	border-bottom-left-radius: 10px; /* 左下角無圓角 */
+	border-bottom-right-radius: 10px; /* 右下角無圓角 */
+}
+
+.order-status-header:hover {
+	background-color: #AAB5FF;
+}
+
+table.order-table {
+	margin: 0 auto; /* 左右置中 */
+	border-collapse: collapse; /* 確保邊框連接 */
+}
+
+table {
+	width: 100%;
+	margin: 20px auto;
+	border-collapse: collapse;
+	font-size: 14px;
+	background: #ffffff;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+thead {
+	background-color: #CCCCFF;
+	color: #334252;
+	font-weight: bold;
+}
+
+th, td {
+	padding: 10px;
+	text-align: center;
+	border: 1px solid #f0f8ff;
+}
+
+tbody tr:hover {
+	background-color: #f0f8ff;
+}
+
+footer {
+	background-color: #334252;
+	color: white;
+	text-align: center;
+	padding: 10px 0;
+	position: relative;
+	bottom: 0;
+	width: 100%;
+	margin-top: 20px; /* 與內容留白 */
+}
+
+/* .order-status-header { */
+/* 	cursor: pointer; */
+/* 	font-weight: bold; */
+/* 	background-color: #CCCCFF; */
+/* } */
+
+/* .order-status-header:hover { */
+/* 	background-color: #AAB5FF; */
+/* } */
+.product-row {
+	background-color: #FFFFFF;
+}
+
+.product-row:hover {
+	background-color: #F0F8FF;
+}
+
+.product-details {
+	display: flex;
+	justify-content: center; /* 讓三個元素靠近中間排列 */
+	align-items: center;
+	text-align: center;
+	margin-bottom: 10px; /* 減少整體的上下距離 */
+	gap: 20px; /* 控制每個元素之間的距離 */
+}
+
+.product-details p {
+	margin: 0; /* 移除段落預設的外邊距 */
+	padding: 0;
+	font-size: 14px; /* 控制字型大小 */
+	color: #334252;
+	font-weight: bold; /* 讓文字更清晰 */
+}
+
+.product-details div {
+	/* 讓標籤與內容水平排列 */
+	align-items: center; /* 垂直居中 */
+	gap: 5px; /* 標籤與內容之間的間距 */
+}
+
+.fnc_button {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #334252;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.fnc_button:hover {
+	background-color: #556B8D;
+	transform: scale(1.05);
+}
+
+.fnc_button:active {
+	background-color: #2C3A48;
+	transform: scale(0.95);
+}
+
+/* 按鈕樣式 */
+.view-images-btn, input[type="submit"] {
+	padding: 8px 15px;
+	font-size: 14px;
+	color: #ffffff;
+	background-color: #334252;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.view-images-btn:hover, input[type="submit"]:hover {
+	background-color: #556B8D;
+	transform: scale(1.05);
+}
+
+.view-images-btn:active, input[type="submit"]:active {
+	background-color: #2C3A48;
+	transform: scale(0.95);
+}
+
+.btn-action {
+	padding: 8px 15px;
+	font-size: 14px;
+	color: #ffffff;
+	background-color: #334252;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-action:hover {
+	background-color: #556B8D;
+	transform: scale(1.05);
+}
+
+.navbar-btn {
+    margin-left: auto; /* 將按鈕推到最右邊 */
+    margin-right: 20px; /* 右邊間距 */
+    background-color: #55687d; /* 按鈕背景顏色 */
+    color: #FFFFFF; /* 文字顏色 */
+    border: 1px solid #334252; /* 邊框顏色 */
+    padding: 8px 16px; /* 內邊距 */
+    font-size: 14px; /* 字體大小 */
+    font-weight: bold; /* 字體加粗 */
+    border-radius: 5px; /* 圓角邊框 */
+    cursor: pointer; /* 鼠標指針 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 過渡效果 */
+}
+
+.navbar-btn:hover {
+    background-color: #556B8D; /* 滑鼠懸停時的背景顏色 */
+    color: #FFFFFF; /* 滑鼠懸停時的文字顏色 */
+    border-color: #556B8D; /* 邊框顏色 */
+}
+</style>
+</head>
+<body>
+	<!-- Header -->
+	<nav
+		class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		<div align="center">
+			<h2>所有訂單資料（按付款狀態分組）</h2>
+			<h3>
+				<a class="navbar-btn" th:href="@{/back_end/index}" style="margin-right: 15px;">管理員後台首頁</a> 
+				<a class="logout-btn navbar-btn" onclick="window.location.href='/back_end/logout'">登出</a>
+			</h3>
+		</div>
+	</nav>
+
+	<!-- 一鍵展開/收合按鈕 -->
+	<div style="text-align: center; margin: 20px 0 40px 0;">
+		<a id="toggle-all-btn" class="btn btn-primary fnc_button">一鍵展開</a> <a
+			th:href="@{/pdo/listAllProductsOrders}" class="fnc_button">按訂單狀態分組</a>
+	</div>
+
+	<main class="container">
+		<!-- 訂單狀態: 進行中 -->
+		<div class="order-status-header" data-target="#status-0"
+			style="cursor: pointer; font-weight: bold; background-color: #CCCCFF;">📦
+			付款狀態：未付款</div>
+		<table id="status-0" class="order-table table table-bordered"
+			style="display: none; width: 80%">
+			<thead>
+				<tr style="background-color: #EFEFEF;">
+					<th>檢視商品細項</th>
+					<th>訂單編號</th>
+					<th>會員編號</th>
+					<th>訂單建立日期</th>
+					<th>訂單總金額</th>
+					<th>訂單狀態</th>
+					<th>配送地址</th>
+					<th>配送方式</th>
+					<th>配送狀態</th>
+					<th>訂單評分</th>
+					<th>評論</th>
+					<th>訂單修改</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pdo : ${pdoList}" th:if=" ${pdo.paymentStatus == '0'}">
+					<td><a th:href="@{/pdoItem/listPdoItems(pdoId=${pdo.pdoId})}"
+						class="btn btn-info btn-action">檢視</a></td>
+					<td th:text="${pdo.pdoId}"></td>
+					<td th:text="${pdo.mebVO.mebId}"></td>
+					<td th:text="${#dates.format(pdo.pdoDate, 'yyyy-MM-dd HH:mm')}"></td>
+					<td th:text="${pdo.pdTotalPrice}"></td>
+					<td	th:text="${pdo.pdoStatus == '0' ? '進行中' : (pdo.pdoStatus == '1' ? '已完成' : '已取消')}"></td>
+					<td th:text="${pdo.shippingAddr}"></td>
+					<td th:text="${pdo.shippingMethod == '0' ? '宅配' : '超商取貨'}"></td>
+					<td th:text="${pdo.shippingStatus == '0' ? '理貨中' : pdo.shippingStatus == '1' ? '配送中' : '已配達'}"></td>
+					<td
+						th:text="${pdo.pdoReviewRate != null ? pdo.pdoReviewRate : '未評分'}"></td>
+					<td
+						th:text="${pdo.pdoReviewComm != null ? pdo.pdoReviewComm : '未評論'}"></td>
+					<td>
+						<form method="post" th:action="@{/pdo/getOnePdo_For_Update}">
+							<input type="hidden" name="pdoId" th:value="${pdo.pdoId}">
+							<button type="submit" class="btn-action">修改</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<!-- 訂單狀態: 已完成 -->
+		<div class="order-status-header" data-target="#status-1"
+			style="cursor: pointer; font-weight: bold; background-color: #CCCCFF;">✅
+			付款狀態：已付款</div>
+		<table id="status-1" class="order-table table table-bordered"
+			style="display: none; width: 80%">
+			<thead>
+				<tr style="background-color: #EFEFEF;">
+					<th>檢視商品細項</th>
+					<th>訂單編號</th>
+					<th>會員編號</th>
+					<th>訂單建立日期</th>
+					<th>訂單總金額</th>
+					<th>付款狀態</th>
+					<th>配送地址</th>
+					<th>配送方式</th>
+					<th>配送狀態</th>
+					<th>訂單評分</th>
+					<th>評論</th>
+					<th>訂單修改</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pdo : ${pdoList}" th:if="${pdo.paymentStatus == '1'}">
+					<td><a th:href="@{/pdoItem/listPdoItems(pdoId=${pdo.pdoId})}"
+						class="btn btn-info btn-action">檢視</a></td>
+					<td th:text="${pdo.pdoId}"></td>
+					<td th:text="${pdo.mebVO.mebId}"></td>
+					<td th:text="${#dates.format(pdo.pdoDate, 'yyyy-MM-dd HH:mm')}"></td>
+					<td th:text="${pdo.pdTotalPrice}"></td>
+					<td	th:text="${pdo.pdoStatus == '0' ? '進行中' : (pdo.pdoStatus == '1' ? '已完成' : '已取消')}"></td>
+					<td th:text="${pdo.shippingAddr}"></td>
+					<td th:text="${pdo.shippingMethod == '0' ? '宅配' : '超商取貨'}"></td>
+					<td th:text="${pdo.shippingStatus == '0' ? '理貨中' : pdo.shippingStatus == '1' ? '配送中' : '已配達'}"></td>
+					<td
+						th:text="${pdo.pdoReviewRate != null ? pdo.pdoReviewRate : '未評分'}"></td>
+					<td
+						th:text="${pdo.pdoReviewComm != null ? pdo.pdoReviewComm : '未評論'}"></td>
+					<td>
+						<form method="post" th:action="@{/pdo/getOnePdo_For_Update}">
+							<input type="hidden" name="pdoId" th:value="${pdo.pdoId}">
+							<button type="submit" class="btn-action">修改</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<!-- 訂單狀態: 已取消 -->
+		<div class="order-status-header" data-target="#status-2"
+			style="cursor: pointer; font-weight: bold; background-color: #CCCCFF;">⛔
+			付款狀態：已退款</div>
+		<table id="status-2" class="order-table table table-bordered"
+			style="display: none; width: 80%">
+			<thead>
+				<tr style="background-color: #EFEFEF;">
+					<th>檢視商品細項</th>
+					<th>訂單編號</th>
+					<th>會員編號</th>
+					<th>訂單建立日期</th>
+					<th>訂單總金額</th>
+					<th>付款狀態</th>
+					<th>配送地址</th>
+					<th>配送方式</th>
+					<th>配送狀態</th>
+					<th>訂單評分</th>
+					<th>評論</th>
+					<th>訂單修改</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pdo : ${pdoList}" th:if="${pdo.paymentStatus == '2'}">
+					<td><a th:href="@{/pdoItem/listPdoItems(pdoId=${pdo.pdoId})}"
+						class="btn btn-info btn-action">檢視</a></td>
+					<td th:text="${pdo.pdoId}"></td>
+					<td th:text="${pdo.mebVO.mebId}"></td>
+					<td th:text="${#dates.format(pdo.pdoDate, 'yyyy-MM-dd HH:mm')}"></td>
+					<td th:text="${pdo.pdTotalPrice}"></td>
+					<td	th:text="${pdo.pdoStatus == '0' ? '進行中' : (pdo.pdoStatus == '1' ? '已完成' : '已取消')}"></td>
+					<td th:text="${pdo.shippingAddr}"></td>
+					<td th:text="${pdo.shippingMethod == '0' ? '宅配' : '超商取貨'}"></td>
+					<td th:text="${pdo.shippingStatus == '0' ? '理貨中' : pdo.shippingStatus == '1' ? '配送中' : '已配達'}"></td>
+					<td
+						th:text="${pdo.pdoReviewRate != null ? pdo.pdoReviewRate : '未評分'}"></td>
+					<td
+						th:text="${pdo.pdoReviewComm != null ? pdo.pdoReviewComm : '未評論'}"></td>
+					<td>
+						<form method="post" th:action="@{/pdo/getOnePdo_For_Update}">
+							<input type="hidden" name="pdoId" th:value="${pdo.pdoId}">
+							<button type="submit" class="btn-action">修改</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</main>
+
+	<!-- Footer -->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<!-- JavaScript: 滑動效果 -->
+	<script>
+		$(document).ready(function() {
+			// 監聽分類行的點擊事件
+			$(".order-status-header").on("click", function() {
+				const targetId = $(this).data("target"); // 取得目標表格的 ID
+				const relatedRows = $(targetId); // 選中目標表格
+
+				// 切換顯示/隱藏
+				if (relatedRows.is(":visible")) {
+					relatedRows.hide(); // 隱藏
+				} else {
+					relatedRows.show(); // 顯示
+				}
+			});
+
+			// 一鍵展開/收合按鈕
+			let allExpanded = false; // 全部展開/收合的狀態
+			$("#toggle-all-btn").on("click", function() {
+				const allTables = $("table.order-table"); // 選中所有表格
+
+				if (allExpanded) {
+					allTables.hide(); // 全部收合
+					$(this).text("一鍵展開"); // 更新按鈕文字
+				} else {
+					allTables.show(); // 全部展開
+					$(this).text("一鍵收合"); // 更新按鈕文字
+				}
+
+				allExpanded = !allExpanded; // 切換狀態
+			});
+		});
+	</script>
+</body>
+</html>

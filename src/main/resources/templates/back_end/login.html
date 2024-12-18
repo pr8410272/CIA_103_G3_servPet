@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登入</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+</head>
+<body>
+
+<!--*************** table#header (上方深色) 區域 **************-->
+<table id="header">
+    <tr>
+        <td>
+            <img th:src="@{/images/admin/pflogow.png}">
+            <font>後台登入</font>
+            <img th:src="@{/images/admin/pflogow.png}">
+        </td>
+    </tr>
+</table>
+
+<!--**************** div#body (中間淺色) 區域 *****************-->                
+<div id="body">
+
+	<article id="BGcat">
+	  	<img id="BGcat" th:src="@{/images/admin/BGcat.png}"/>
+	  </article>
+	  
+    <article id="body">
+    	<h2>切換登入身分</h2>
+			  <hr>
+        <div class="role">
+            <!-- 按鈕切換登入表單 -->
+            <button id="switch" onclick="showLoginForm('admin')">管理員登入</button>
+            <button id="switch" onclick="showLoginForm('pg')">美容師登入</button>
+            <button id="switch" onclick="showLoginForm('ps')"> 保母登入 </button>
+        </div>
+        
+                <!--====== 錯誤訊息區域 ========-->    
+        	<div th:if="${errorMessage}">
+            	<p style="color: red;" th:text="${errorMessage}"></p>
+        	</div>
+        
+        <!-- 登入表單區域 -->
+        <div class="container login-form" style=" margin-top:10px; "  id="admin-login">
+            <h2>管理員登入</h2>	
+            <form action="#" th:action="@{/back_end/adminLogin}" th:object="${adminVO}" method="post">
+                <div class="form-group">
+                    <label for="adminAcc">帳號</label>
+                    <input type="text" class="form-control" id="adminAcc" name="adminAcc" placeholder="請輸入您的帳號" required />
+                </div>
+                <div class="form-group">
+                    <label for="adminPwd">密碼</label>
+                    <input type="password" class="form-control" id="adminPwd" name="adminPwd" placeholder="請輸入您的密碼" required />
+                </div>
+                <br><br>
+                <button type="submit" class="btn btn-primary">登入</button>
+            </form>
+        </div>
+
+        <div class="container login-form" id="pg-login">
+            <h2>美容師登入</h2>
+            <form action="#" th:action="@{/back_end/pgLogin}" th:object="${pgVO}" method="post">
+                <div class="form-group">
+                    <label for="pgId">帳號</label>
+                    <input type="text" class="form-control" id="pgId" name="pgId" placeholder="請輸入您的帳號" required />
+                </div>
+                <div class="form-group">
+                    <label for="pgPw">密碼</label>
+                    <input type="password" class="form-control" id="pgPw" name="pgPw" placeholder="請輸入您的密碼" required />
+                </div>
+                <br><br>
+                <button type="submit" class="btn btn-primary">登入</button>
+            </form>
+        </div>
+
+        <div class="container login-form" id="ps-login">
+            <h2> 保母登入 </h2>
+            <form action="#" th:action="@{/back_end/psLogin}" th:object="${psVO}" method="post">
+                <div class="form-group">
+                    <label for="psId">帳號</label>
+                    <input type="text" class="form-control" id="psId" name="psId" placeholder="請輸入您的帳號" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="psPw">密碼</label>
+                    <input type="password" class="form-control" id="psPw" name="psPw" placeholder="請輸入您的密碼" required />
+                </div>
+                <br><br>
+                <button type="submit" class="btn btn-primary">登入</button>
+            </form>
+        </div>
+
+    </article>
+    
+     <article id="BGdog">
+		  	<img id="BGdog" th:src="@{/images/admin/BGdog.png}"/>
+	</article>
+		  
+</div>
+
+<!--***************** footer (下方深色) 區域 *****************-->
+<footer>
+    <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+</footer>
+
+<script>
+    // 預設顯示後台登入
+    function showLoginForm(formType) {
+        // 隱藏所有登入表單
+        document.getElementById("admin-login").style.display = 'none';
+        document.getElementById("pg-login").style.display = 'none';
+        document.getElementById("ps-login").style.display = 'none';
+
+        // 顯示對應的登入表單
+        if (formType === 'admin') {
+            document.getElementById("admin-login").style.display = 'block';
+        } else if (formType === 'pg') {
+            document.getElementById("pg-login").style.display = 'block';
+        } else if (formType === 'ps') {
+            document.getElementById("ps-login").style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>

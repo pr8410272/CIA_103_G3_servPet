@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問題回覆通知</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 700px;
+            margin: 20px auto;
+            background-color: #FFF8EE;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #F8EAD3; /* 背景顏色延伸整條 */
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* 調整文字與圖片之間的距離 */
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+        }
+        .header img {
+            width: 35px; /* 調整腳印圖案大小 */
+            height: auto;
+        }
+        .content {
+            padding: 20px 30px;
+            text-align: center;
+            color: #333333;
+        }
+        .content h2 {
+            font-size: 22px;
+            color: #E74C3C;
+            margin-bottom: 10px;
+        }
+        .content p {
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .email-body p {
+            font-size: 16px;
+        }
+        .email-body strong {
+            color: #333333;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+        .footer {
+            background-color: #F8EAD3;
+            padding: 15px;
+            font-size: 14px;
+            color: #666666;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <span>寵寵唯跡 ServPet Forever</span>
+            <img src="https://drive.google.com/uc?export=view&id=1JXqYg1NMsB6gqTcEiHbyK70ZVNsnOY_0" alt="Google 雲端硬碟圖片" />
+		</div>
+        <!-- Content -->
+        <div class="content">
+            <h2>客服表單回覆通知</h2>
+            <div class="email-body">
+                <p>親愛的用戶您好，</p>
+                <p>您的客服問題已回覆，以下為詳細信息：</p>
+                <p><strong>問題內容：</strong> <span th:text="${questionContent}"></span></p>
+                <p><strong>回覆內容：</strong> <span th:text="${replyContent}"></span></p>
+                <p><strong>回覆時間：</strong> <span th:text="${replyDate}"></span></p>
+            </div>
+			<p>感謝您使用我們的服務！</p>
+            <img src="https://drive.google.com/uc?export=view&id=1Lb3pV_0TaIrMHqlGI1MmZjPPXQDAbU2R" alt="Google 雲端硬碟圖片1" />
+        </div>
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 龍寵唯跡 ServPet Forever 2024</p>
+        </div>
+    </div>
+</body>
+</html>

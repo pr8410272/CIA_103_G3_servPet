@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServPET</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/pg/pgOrder.css">
+
+</head>
+<body>
+	<header>
+		<h1>servPet</h1>
+		<nav>
+			<ul>
+				<li><a href="#" th:href="@{/}">首頁</a></li>
+				<li><a href="#" th:href="@{/pg}">寵物美容師</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+
+		<div class="view">
+
+			<!-- 返回按鈕 -->
+			<div class="return-button">
+				<a href="javascript:history.back()"> 
+				<img th:src="@{/images/girlpet.png}">
+				</a>
+
+			</div>
+
+
+			<div class="form-container">
+
+				<form  id="bookingForm" th:action="@{/pg/createOrder}" th:method="post">
+					<!-- 				<input type="hidden" name="pgId" th:value="${pg.pgId}" />  -->
+
+					<!-- 美容師編號 -->
+					<label for="pgId">美容師編號:</label> 
+					<input type="text" id="pgId" name="pgId" th:value="${pg.pgId}" readonly>
+					
+					<!-- 美容師姓名 -->
+					<label for="pgId">美容師姓名:</label> 
+					<input type="text" id="pgName" name="pgName" th:value="${pg.pgName}" readonly>
+
+					<!-- 會員編號 -->
+					<label for="mebId">會員編號:</label> 
+					<input type="text" id="mebId" name="mebId" th:value="${member.mebId}" readonly>
+					
+					<!-- 會員姓名 -->
+					<label for="mebName">會員姓名:</label> 
+					<input type="text" id="mebName" name="mebName" th:value="${member.mebName}" readonly>
+					
+					
+<!-- 					<input type="text" id="mebId" -->
+<!-- 						name="mebId" th:value="${mebVO.mebId}" readonly> -->
+
+
+					<!-- 寵物編號 -->
+					<label for="petId">寵物:</label> 
+					<select id="pet" name="petId">
+			        <option th:each="pets : ${pets}" th:value="${pets.petId}" th:text="${pets.petName}"></option>
+			    	</select>
+
+					<!-- 預約日期 -->
+					<label for="bookingDate">預約日期:</label> <input type="date"
+						id="bookingDate" name="bookingDate" th:value="${bookingDate}"
+						readonly>
+
+					<!-- 預約時段 -->
+					<label for="bookingTime">預約時段:</label>
+					<select id="bookingTime" name="bookingTime" disabled>
+					    <option value="0" th:selected="${bookingTime == '0'}">早上</option>
+					    <option value="1" th:selected="${bookingTime == '1'}">中午</option>
+					    <option value="2" th:selected="${bookingTime == '2'}">晚上</option>
+					</select>
+					
+					<!-- 隱藏的 input 保留選擇的值 -->
+					<input type="hidden" id="hiddenBookingTime" name="bookingTime" th:value="${bookingTime}" />
+							
+						
+					<label for="service">選擇服務</label> 
+					<select id="service" name="pgSvcId" onchange="updatePrice()" >
+					<option th:each="service : ${services}" th:value="${service.pgSvcId}" 
+					th:data-price="${service.svcPrice}"
+					th:text="${service.svcName + ' - ' + service.svcType + ' - NT$ ' + service.svcPrice}"></option>
+					</select>
+
+					<!-- 顯示總金額和儲值金餘額 -->
+					<label for="svcPrice">服務項目金額:</label> 
+					<input type="text" id="svcPrice" name="svcPrice" readonly placeholder="金額會自動顯示">
+<!-- 					<input type="text" id="svcPrice" name="svcPrice" th:value="${service.svcPrice}" readonly> -->
+
+					
+					<label for="balance">儲值金餘額</label>
+    				<input type="text" id="balance" th:value="${member.bal}" readonly />
+	
+
+					<!-- 送出訂單按鈕 -->
+					<button type="submit">送出訂單</button>
+				</form>
+			</div>
+		</div>
+
+
+	</main>
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+	
+	 <!-- SweetAlert 顯示成功或錯誤消息 -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bookingForm = document.getElementById('bookingForm');
+        const svcPriceInput = document.getElementById('svcPrice');
+        const balanceInput = document.getElementById('balance');
+
+        bookingForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // 阻止默認提交行為
+
+            // 獲取服務價格和用戶餘額
+            const svcPrice = parseFloat(svcPriceInput.value.replace('NT$', '').trim()); // 去除 "NT$"
+            const balance = parseFloat(balanceInput.value);
+
+            if (isNaN(svcPrice) || isNaN(balance)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '無法計算金額',
+                    text: '服務價格或儲值金餘額無效。',
+                    confirmButtonText: '確定'
+                });
+                return;
+            }
+
+            if (svcPrice > balance) {
+                // 餘額不足情況
+                Swal.fire({
+                    icon: 'error',
+                    title: '餘額不足',
+                    text: '您的儲值金餘額不足，請先儲值。',
+                    showCancelButton: true,
+                    confirmButtonText: '去儲值',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/vtr/create"; // 替換為儲值頁面的 URL
+                    }
+                });
+            } else {
+                // 餘額足夠，確認提交
+                Swal.fire({
+                    icon: 'info',
+                    title: '確認預約',
+                    text: '您的餘額足夠，是否確認提交？',
+                    showCancelButton: true,
+                    confirmButtonText: '確認',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        bookingForm.submit(); // 提交表單
+                    }
+                });
+            }
+        });
+    });
+
+        
+
+    	function updatePrice() {
+    	    // 獲取選定的選項
+    	    const serviceSelect = document.getElementById("service");
+    	    const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+    	    
+    	    // 獲取選項中的價格
+    	    const price = selectedOption.getAttribute("data-price");
+    	    
+    	    // 更新價格欄位
+    	    document.getElementById("svcPrice").value = `NT$ ${price}`;
+    	}
+    </script>
+
+	
+	
+	<script type="text/javascript">
+		const select = document.querySelector("#svcName");
+		select.addEventListener("change",async function(){
+			console.log(select.value);
+			const res = await fetch("",)
+		})
+	</script>
+
+	
+
+
+</body>
+</html>
+
+

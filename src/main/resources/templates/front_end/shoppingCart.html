@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>購物車</title>
+<!-- <link rel="stylesheet" th:href="@{/css/shoppingCart.css}"> -->
+
+<style>
+/* 全域樣式 */
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: "Quicksand", sans-serif;
+}
+
+html, body {
+	background-color: #FFFDF9;
+	color: #333;
+	min-height: 100vh; /* 讓頁面至少填滿整個視窗 */
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+}
+
+/* Header 樣式 */
+header {
+	background-color: #F8EAD3;
+	padding: 10px 0;
+	text-align: center;
+	position: relative;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+header h1 {
+	color: #333;
+	font-size: 2rem;
+	margin-left: 25px;
+}
+
+header nav ul {
+	display: flex;
+	list-style: none;
+	margin-right: 25px;
+}
+
+header nav li {
+	margin-left: 20px;
+}
+
+header nav a {
+	background-color: #F8EAD3;
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+	padding: 10px 15px;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+header nav a:hover {
+	background-color: #e5d0b5;
+	text-decoration: underline;
+}
+
+/* Main 區域 */
+main {
+	flex: 1;
+	padding: 2rem 5%;
+}
+
+.cart-container {
+	max-width: 900px;
+	margin: 0 auto;
+	background-color: #fff;
+	padding: 1.5rem;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cart-container h1 {
+	font-size: 2rem;
+	text-align: center;
+	margin-bottom: 1rem;
+	color: #333;
+}
+
+/* 商品項目排列與間隔 */
+.cart-item {
+	display: flex;
+	align-items: center; /* 垂直居中 */
+	justify-content: flex-start; /* 水平從左到右排列 */
+	padding: 1rem;
+	border-bottom: 1px solid #ddd;
+}
+
+.cart-item img {
+	width: 100px;
+	height: auto;
+	border-radius: 5px;
+	margin-right: 1.5rem; /* 與文字區域的間隔 */
+}
+
+.cart-item-details {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center; /* 垂直居中 */
+	justify-content: space-between;
+	flex: 1; /* 填滿剩餘空間 */
+}
+
+.cart-item-details>div {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem; /* 各項目之間的水平間隔 */
+}
+
+/* 商品名稱與單價 */
+.product-name {
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #333;
+	margin-right: 1rem; /* 與單價的間隔 */
+}
+
+.unit-price {
+	color: #d9534f;
+	font-weight: bold;
+	font-size: 1rem;
+	margin-right: 1rem; /* 與數量輸入框的間隔 */
+}
+
+/* 數量調整按鈕 */
+.quantity-control {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem; /* 減號、數量輸入框、加號之間的間隔 */
+}
+
+.quantity-input {
+	width: 50px;
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.decrease-btn, .increase-btn {
+	background-color: #f8f9fa;
+	border: 1px solid #ccc;
+	color: #333;
+	border-radius: 5px;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.decrease-btn:hover, .increase-btn:hover {
+	background-color: #e5d0b5;
+}
+
+/* 小計金額 */
+.cart-item-price {
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #007bff;
+	margin-right: 1rem; /* 與移除按鈕的間隔 */
+}
+
+/* 移除按鈕 */
+.remove-btn {
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+	background-color: #c82333;
+}
+
+/* 總金額與按鈕區域 */
+.total-price {
+	text-align: right;
+	margin: 1rem 0;
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+
+.button-container {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 1rem;
+}
+
+.button-container .btn {
+	padding: 10px 15px;
+	font-size: 1rem;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+.continue-shopping {
+	background-color: #007bff;
+	color: white;
+}
+
+.continue-shopping:hover {
+	background-color: #0056b3;
+}
+
+.checkout {
+	background-color: #28a745;
+	color: white;
+}
+
+.checkout:hover {
+	background-color: #218838;
+}
+
+/* Footer 移到底部 */
+footer {
+	background-color: #F8EAD3;
+	color: #333;
+	text-align: center;
+	padding: 1rem 0;
+	margin-top: auto; /* 推動 Footer 到底部 */
+	font-size: 0.9rem;
+}
+
+/* Modal 樣式 */
+.modal-overlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1000;
+}
+
+.buyer-info-modal {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	padding: 2rem;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	z-index: 1001;
+	width: 100%;
+	max-width: 500px;
+}
+
+.buyer-info-modal h3 {
+	margin-bottom: 1rem;
+	color: #333;
+	font-size: 1.5rem;
+	text-align: center;
+}
+
+.buyer-info-modal input, .buyer-info-modal select {
+	width: 100%;
+	margin-bottom: 1rem;
+	padding: 0.5rem;
+	font-size: 1rem;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.checkout-btn {
+	background-color: #28a745;
+	color: white;
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	width: 100%;
+	font-size: 1rem;
+	transition: background-color 0.3s ease;
+}
+
+.checkout-btn:hover {
+	background-color: #218838;
+}
+
+.text-right {
+	text-align: right;
+	font-size: 16px;
+	margin-top: 5px; /* 讓文字與總金額之間有適當間距 */
+	margin-bottom: 15px;
+	color: #6c757d; /* 可選配合提示的灰色 */
+}
+</style>
+
+
+</head>
+<body>
+
+	<header>
+		<h1>servPet：購物車</h1>
+		<nav>
+			<ul style="margin-bottom: 0px;">
+				<li><a th:href="@{/}">寵寵唯跡 ServPET首頁</a></li>
+				<li><a th:href="@{/pdDetails/allProductsHomepage}">回購物商城</a></li>
+				<li><a href="#" th:href="@{/}">登出</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<main>
+		<div class="cart-container">
+			<!-- 空購物車提示 -->
+			<div id="emptyCartMessage" th:if="${cartDetailsList.isEmpty()}"
+				style="display: none;">
+				<p>購物車是空的！</p>
+			</div>
+
+			<div id="cartItemsContainer">
+				<div th:each="cartItem : ${cartDetailsList}" class="cart-item">
+					<!-- 商品圖片 -->
+					<img
+						th:src="@{/pdImg/DBGifReader(pdImgId=${defaultImages[cartItem.pdDetailsVO.pdId]})}"
+						alt="商品圖片"
+						onerror="this.onerror=null;this.src='/images/no-image-available.png';" />
+
+					<!-- 商品細節 -->
+					<div class="cart-item-details">
+						<div>
+							<!-- 商品名稱 -->
+							<span th:text="${cartItem.pdDetailsVO.pdName}">商品名稱</span>
+							<!-- 單價 -->
+							<span class="unit-price"
+								th:data-price="${cartItem.pdDetailsVO.pdPrice}"
+								th:text="'單價: $' + ${cartItem.pdDetailsVO.pdPrice}"></span>
+							<!-- 數量 -->
+							<div>
+								<button class="decrease-btn">-</button>
+								<input class="quantity-input" type="number" min="1" max="99"
+									th:value="${cartItem.quantity}">
+								<button class="increase-btn">+</button>
+							</div>
+						</div>
+
+						<!-- 小計 -->
+						<div>
+							<span class="cart-item-price"
+								th:data-price="${cartItem.pdDetailsVO.pdPrice}"
+								th:text="'小計: $' + ${cartItem.pdDetailsVO.pdPrice * cartItem.quantity}"></span>
+						</div>
+						<!-- 移除按鈕 -->
+						<button class="remove-btn"
+							th:data-pd-id="${cartItem.pdDetailsVO.pdId}">移除</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- 總金額 -->
+			<div class="total-price">
+				<span id="totalAmount"
+					th:text="'總金額: $' + ${cartDetailsList != null ? cartDetailsList.size() > 0 ? cartDetailsList.get(0).quantity : 0 : 0}"></span>
+			</div>
+
+			<div class="button-container">
+				<a th:href="@{/pdDetails/allProductsHomepage}"
+					class="btn continue-shopping">繼續購物</a>
+				<button id="checkoutBtn" class="btn checkout">填寫配送資料</button>
+			</div>
+		</div>
+
+		<div class="modal-overlay"></div>
+		<div class="buyer-info-modal">
+			<h3>配送資料</h3>
+			<!-- 表單提交到後端 -->
+			<form th:action="@{/pdo/pdOrderSubmitted}" method="post">
+				<input type="hidden" name="totalAmount" id="hidden-total-amount">
+				<!-- 			其他表單欄位 -->
+				<!-- 				<input type="text" name="buyerName" id="buyer-name" -->
+				<!-- 					placeholder="收件人姓名" required>  -->
+				<p style="font-size: 20px;">收件人地址：</p>
+				<input type="text" name="buyerAddress" id="buyer-address"
+					placeholder="若為超商取貨，請填寫超商門市">
+				<!-- 		    <input type="tel" name="buyerPhone" id="buyer-phone" placeholder="收件人聯絡電話" required> -->
+				<!-- 				<input type="tel" name="buyerPhone" id="buyer-phone" -->
+				<!-- 					placeholder="收件人聯絡電話" required pattern="\d{1,10}" maxlength="10" -->
+				<!-- 					title="電話號碼只能包含最多 10 位數字">  -->
+				<p style="font-size: 20px;">請選擇運輸方式：</p>
+				<select name="shippingMethod" id="shipping-method">
+					<option value=""></option>
+					<option value="0">宅配</option>
+					<option value="1">超商取貨</option>
+				</select>
+				<div class="total-price">
+					總金額: <span id="modal-total-price"></span>
+				</div>
+				<p class="text-right">
+					按下確認後將建立未付款訂單<br>並跳轉至儲值金扣款頁面
+				</p>
+				<button type="submit" id="submit-buyer-info" class="checkout-btn">進入結帳頁面</button>
+			</form>
+		</div>
+	</main>
+
+
+	<footer>
+		<p>Copyright &copy; 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+	<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const totalPriceEl = document.getElementById('totalAmount');
+        const modalTotalPriceEl = document.getElementById('modal-total-price');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const modalOverlay = document.querySelector('.modal-overlay'); // 修正這裡
+        const buyerInfoModal = document.querySelector('.buyer-info-modal'); // 修正這裡
+        const buyerInfoSubmit = document.getElementById('submit-buyer-info');
+        const hiddenTotalAmountInput = document.getElementById('hidden-total-amount');
+        if (!hiddenTotalAmountInput) {
+            console.error('Hidden input "hidden-total-amount" not found!');
+        }
+        
+        buyerInfoSubmit.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // 獲取總金額
+            const totalAmountText = totalPriceEl.textContent.replace('總金額: $', '').replace(/,/g, '');
+            hiddenTotalAmountInput.value = totalAmountText;
+
+            // 提交表單
+            buyerInfoSubmit.closest('form').submit();
+        });
+        
+        
+
+        // 格式化數字，每三位數添加逗號
+        const formatNumberWithCommas = (number) => {
+            return number.toLocaleString('en-US');
+        };
+
+        // 更新單項商品小計
+        const updateItemSubtotal = (item) => {
+            const quantity = parseInt(item.querySelector('.quantity-input').value) || 0;
+            const price = parseFloat(item.querySelector('.unit-price').dataset.price || 0);
+            const subtotalEl = item.querySelector('.cart-item-price');
+            subtotalEl.textContent = `小計: $${formatNumberWithCommas(quantity * price)}`;
+        };
+
+        // 更新總金額
+        const updateTotalPrice = () => {
+            const cartItems = document.querySelectorAll('.cart-item');
+            let total = 0;
+            cartItems.forEach(item => {
+                const quantity = parseInt(item.querySelector('.quantity-input').value) || 0;
+                const price = parseFloat(item.querySelector('.unit-price').dataset.price || 0);
+                total += quantity * price;
+
+                // 更新每個商品的小計
+                updateItemSubtotal(item);
+            });
+
+            if (totalPriceEl) {
+                totalPriceEl.textContent = `總金額: $${formatNumberWithCommas(total)}`;
+            }
+
+            if (modalTotalPriceEl) {
+                modalTotalPriceEl.textContent = `$${formatNumberWithCommas(total)}`;
+            }
+
+            if (cartItems.length === 0) {
+                if (cartItemsContainer) cartItemsContainer.style.display = 'none';
+                if (emptyCartMessage) emptyCartMessage.style.display = 'block';
+                if (totalPriceEl) totalPriceEl.textContent = '總金額: $0';
+            } else {
+                if (cartItemsContainer) cartItemsContainer.style.display = 'block';
+                if (emptyCartMessage) emptyCartMessage.style.display = 'none';
+            }
+        };
+
+     // 設置數量輸入框邏輯
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('input', () => {
+                const item = input.closest('.cart-item');
+                const productId = item.querySelector('.remove-btn').dataset.pdId;
+                let quantity = parseInt(input.value) || 1;
+
+                if (quantity < 1) {
+                    quantity = 1; // 防止輸入小於 1
+                    input.value = quantity;
+                } else if (quantity > 99) {
+                    quantity = 99; // 防止輸入超過 99
+                    input.value = quantity;
+                }
+
+                // 更新後端數量
+                fetch(`/cartDetails/updateQuantity?productId=${productId}&quantity=${quantity}`, {
+                    method: 'POST',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        updateTotalPrice(); // 更新前端金額
+                    } else {
+                        alert('數量更新失敗，請稍後再試！');
+                    }
+                })
+                .catch(error => {
+                    console.error('更新數量時發生錯誤:', error);
+                });
+            });
+        });
+        
+     // 設置數量增減邏輯
+        document.querySelectorAll('.decrease-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = btn.nextElementSibling;
+                const item = btn.closest('.cart-item');
+                const productId = item.querySelector('.remove-btn').dataset.pdId;
+                let quantity = parseInt(input.value) || 1;
+                if (quantity > 1) {
+                    quantity -= 1;
+                    input.value = quantity;
+
+                    // 更新後端數量
+                    fetch(`/cartDetails/updateQuantity?productId=${productId}&quantity=${quantity}`, {
+                        method: 'POST',
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            updateTotalPrice(); // 更新前端金額
+                        } else {
+                            alert('數量更新失敗，請稍後再試！');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('更新數量時發生錯誤:', error);
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.increase-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = btn.previousElementSibling;
+                const item = btn.closest('.cart-item');
+                const productId = item.querySelector('.remove-btn').dataset.pdId;
+                let quantity = parseInt(input.value) || 1;
+                if (quantity < 99) {
+                    quantity += 1;
+                    input.value = quantity;
+
+                    // 更新後端數量
+                    fetch(`/cartDetails/updateQuantity?productId=${productId}&quantity=${quantity}`, {
+                        method: 'POST',
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            updateTotalPrice(); // 更新前端金額
+                        } else {
+                            alert('數量更新失敗，請稍後再試！');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('更新數量時發生錯誤:', error);
+                    });
+                }
+            });
+        });
+
+
+        // 設置移除商品邏輯
+        document.querySelectorAll('.remove-btn').forEach(removeBtn => {
+            removeBtn.addEventListener('click', () => {
+                const productId = removeBtn.dataset.pdId;
+                const cartItem = removeBtn.closest('.cart-item');
+                fetch(`/cartDetails/removeFromCart?productId=${productId}`, {
+                    method: 'POST',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('商品已成功移除！');
+                        if (cartItem) cartItem.remove();
+                        updateTotalPrice();
+                    } else {
+                        alert('移除失敗，請稍後再試！');
+                    }
+                })
+                .catch(error => {
+                    console.error('移除商品時發生錯誤:', error);
+                    alert('移除失敗，請稍後再試！');
+                });
+            });
+        });
+        
+        // 點擊【結帳】按鈕，顯示燈箱
+        checkoutBtn.addEventListener('click', () => {
+            const cartItems = document.querySelectorAll('.cart-item');
+            if (cartItems.length === 0) {
+                alert('購物車是空的，無法結帳！');
+                return; // 停止執行後續操作
+            }
+
+            // 更新燈箱中的總金額（確保打開燈箱時數值是最新的）
+            if (modalTotalPriceEl) {
+                modalTotalPriceEl.textContent = totalPriceEl.textContent.replace('總金額: ', '');
+            }
+            modalOverlay.style.display = 'block';
+            buyerInfoModal.style.display = 'block';
+        });
+
+
+//         // 點擊遮罩，關閉燈箱
+        modalOverlay.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+            buyerInfoModal.style.display = 'none';
+        });
+
+     // 點擊【確認結帳】按鈕
+		buyerInfoSubmit.addEventListener('click', (e) => {
+		    e.preventDefault(); // 阻止預設提交行為
+		
+		    // 獲取輸入值
+		    const address = document.querySelector('#buyer-address').value.trim();
+		    const shipping = document.querySelector('#shipping-method').value;
+		
+		    // 驗證收件人地址是否填寫
+		    if (!address) {
+		        alert('請輸入收件人地址！');
+		        document.querySelector('#buyer-address').focus();
+		        return; // 強制終止函式，防止提交
+		    }
+		
+		    // 驗證運輸方式是否選擇
+		    if (!shipping) {
+		        alert('請選擇運輸方式！');
+		        document.querySelector('#shipping-method').focus();
+		        return; // 強制終止函式，防止提交
+		    }
+		
+		    // 確認提交
+		    if (confirm('確認資料無誤，是否繼續提交？')) {
+		        console.log('提交表單中...');
+		        buyerInfoSubmit.closest('form').submit(); // 只執行提交邏輯
+		    } else {
+		        e.stopImmediatePropagation(); // 明確阻止任何其他事件觸發
+		        return; // 強制退出，確保不提交表單
+		    }
+		});
+
+        // 初始化金額
+        updateTotalPrice();
+        
+    });
+</script>
+
+</body>
+</html>

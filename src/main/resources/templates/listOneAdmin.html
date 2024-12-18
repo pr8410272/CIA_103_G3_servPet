@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>管理員資料 - listOneAdmin.html</title>
+<link rel="stylesheet" th:href="@{/css/admin/listOneAdmin.css}"/>
+</head>
+<body>
+
+	<!--*************** table#header (上方深色) 區域 **************-->
+	<table id="header">
+	  <tr>
+	    <td>
+	      <img th:src="@{/images/admin/pflogow.png}">
+	      <font>管理員資料</font>
+	      <img th:src="@{/images/admin/pflogow.png}">
+	      <h4><a th:href="@{/admin/select_admin_page}">回檢索管理頁</a></h4>
+	    </td>
+	  </tr>
+	</table>
+
+	<!--**************** div#body (中間淺色) 區域 *****************-->
+			<div id="body" th:fragment="listOneAdmin-div"> <!-- 此div被select_page.html第158行insert用 -->
+			  <article>
+			  	<h3><span>查詢結果 :</span></h3>
+	    		 <table id="body">
+				     <!-- 表格表頭 -->
+				     <thead>
+				     <tr>
+				        <th>編號</th>
+				        <th>姓名</th>
+				        <th>照片</th>
+				        <th>身分</th>
+				        <th>狀態</th>
+				        <th>帳號</th>
+				        <th>密碼</th>
+				     </tr>
+				     </thead>
+				     <!-- 表格資料 -->
+				     <tbody>
+				     <tr>
+				        <td th:text="${adminVO.adminId}"></td>
+				        <td th:text="${adminVO.adminName}"></td>
+				        <td><img th:src="@{/admin/DBGifReader} + '?adminId=' + ${adminVO.adminId}" width="150px" alt="管理員照片"></td>
+				        <td>
+						    <span th:switch="${adminVO.adminRole}">
+						        <span th:case="1">超級管理</span>
+						        <span th:case="2">後台管理</span>
+						        <span th:case="3">商城管理</span>
+						        <span th:case="4">美容師</span>
+						        <span th:case="5">保母</span>
+						        <span th:case="*">未知角色</span> <!-- Fallback if the role is not recognized -->
+						    </span>
+						</td>
+				        <td th:text="${adminVO.adminAccStatus == '1' ? '啟用' : '停用'}"></td>
+				        <td th:text="${adminVO.adminAcc}"></td>
+				        <td th:text="${adminVO.adminPwd}"></td>
+				     </tr>
+				     </tbody>
+			    </table>
+			</article>
+		  </div>
+	  
+	<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+	  <p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+/* 表格陰影設計 */
+.table {
+    table-layout: fixed; /* 固定表格布局 */
+    width: 100%; /* 表格佔滿父容器 */
+}
+
+/* 表格標題置中與加深顏色 */
+.table th {
+    background-color: #0056b3; /* 深藍色背景 */
+    color: #333333; /* 深灰色字體，增加對比度 */
+    text-align: left; /* 文字置左 */
+    font-weight: bold; /* 加粗 */
+    font-size: 1.2rem; /* 字體大小稍大 */
+    padding: 15px; /* 增加內邊距 */
+}
+
+/* 表格偶數行和奇數行的對比背景色 */
+.table tr:nth-child(odd) {
+    background-color: #f2f6fc; /* 輕淺藍 */
+}
+
+.table tr:nth-child(even) {
+    background-color: #e6f0ff; /* 稍微飽和的藍色 */
+}
+
+/* 滑鼠懸停行效果 */
+.table tr:hover {
+    background-color: #c2e0ff; /* 較深的藍色 */
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* 狀態徽章顏色調整 */
+.bg-warning {
+    background-color: #ff9800 !important; /* 明亮橘色 */
+    color: #fff !important; /* 白色字體 */
+}
+
+.bg-success {
+    background-color: #28a745 !important; /* 綠色，飽和度提升 */
+    color: white !important;
+}
+
+/* 一鍵讀取按鈕強化 */
+.btn-warning {
+    background: linear-gradient(to right, #ff6600, #ff9900); /* 明顯橘色漸層 */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(to right, #ff9900, #ffcc00);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.table th:nth-child(2), .table td:nth-child(2) {
+    width: 20%;
+    text-align: center;
+}
+
+.table th:nth-child(3), .table td:nth-child(3) {
+    width: 15%;
+    text-align: center;
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寵寵唯跡 會員訊息通知</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="d-flex justify-content-between align-items-center">
+			<h1 class="mb-4">會員訊息通知</h1>
+			<!-- 一鍵已讀按鈕 -->
+			<form
+				th:action="@{/ntfy/member/markAllAsRead}"
+				method="post" style="display: inline;">
+				<button type="submit" class="btn btn-warning">一鍵讀取</button>
+			</form>
+		</div>
+
+		<!-- 所有通知與未讀通知的切換按鈕 -->
+		<div class="mb-3">
+			<a th:href="@{/ntfy/member}"
+				class="btn btn-primary">所有通知</a> <a
+				th:href="@{/ntfy/member/unread}"
+				class="btn btn-secondary">未讀通知</a>
+		</div>
+
+		<!-- 通知列表 -->
+		<div class="card">
+			<div class="card-body">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>標題</th>
+							<th>日期</th>
+							<th>狀態</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="notification : ${notifications}"
+							id="notification-${notification.ntfyMgmtId}">
+							<td>
+								<!-- 點擊標題時觸發顯示或隱藏內容 --> <a href="javascript:void(0)"
+								th:onclick="'toggleContent(' + ${notification.ntfyMgmtId} + ');'"
+								th:text="${notification.title}"></a> <!-- 隱藏的通知內容區塊 -->
+								<div th:id="'content-' + ${notification.ntfyMgmtId}"
+									style="display: none;">
+									<p th:text="${notification.content}"></p>
+								</div>
+							</td>
+							<td
+								th:text="${#dates.format(notification.date, 'yyyy-MM-dd HH:mm')}"></td>
+							<td><span th:if="${notification.status == 0}"
+								class="badge bg-warning">未讀取</span> <span
+								th:if="${notification.status == 1}" class="badge bg-success">已讀取</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<script>
+	function toggleContent(ntfyMgmtId) {
+	    const contentElement = document.getElementById(`content-${ntfyMgmtId}`);
+	    const badgeElement = document.querySelector(`#notification-${ntfyMgmtId} .badge`);
+	    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+	    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+	    // 顯示或隱藏通知內容
+	    contentElement.style.display = contentElement.style.display === 'none' ? 'block' : 'none';
+
+	    // 發送 AJAX 請求來標記為已讀
+	    axios.post(`/ntfy/member/read/${ntfyMgmtId}`, {}, {
+	        headers: {
+	            [csrfHeader]: csrfToken // 添加 CSRF Token 至標頭
+	        }
+	    })
+	    .then(() => {
+	        // 更新當前通知狀態為已讀
+	        if (badgeElement) {
+	            badgeElement.classList.remove('bg-warning');
+	            badgeElement.classList.add('bg-success');
+	            badgeElement.textContent = '已讀';
+	        }
+	    })
+	    .catch(error => {
+	        console.error('Error marking notification as read:', error);
+	        alert('標記通知為已讀失敗，請稍後再試！'); // 顯示錯誤提示
+	    });
+	}
+
+</script>
+
+</body>
+</html>

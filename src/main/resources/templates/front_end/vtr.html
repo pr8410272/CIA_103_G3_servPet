@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>VTR List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            text-align: center;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>VTR List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>VTR ID</th>
+                <th>MEB ID</th>
+                <th>Money</th>
+                <th>Transaction Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="vtrVO : ${vtrVOs}">
+                <td th:text="${vtrVO.vtrId}"></td>
+                <td th:text="${vtrVO.mebId}"></td>
+                <td th:text="${vtrVO.money}"></td>
+                <td th:text="${vtrVO.traType}"></td>
+                <td>
+                    <a th:href="@{/vtr/view/{id}(id=${vtrVO.vtrId})}">View</a>
+                    <a th:href="@{/vtr/delete/{id}(id=${vtrVO.vtrId})}">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/vtr/create" class="btn">Create New VTR</a>
+</div>
+
+</body>
+</html>

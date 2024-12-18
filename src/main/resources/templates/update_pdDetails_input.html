@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>商品資料修改 - update_pdDetails_input.html</title>
+<!-- <head th:insert="~{/back_end/pdDetails/included-fragment}"></head> -->
+<style>
+@charset "UTF-8";
+
+/* 引入 Google Fonts 字型 */
+@import
+	url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap')
+	;
+
+body {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	background-color: #F8F9FA;
+	color: #334252;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+nav.navbar {
+	background-color: #334252;
+	color: white;
+	padding: 15px 0;
+	text-align: center;
+}
+
+nav.navbar h2 {
+	margin: 0;
+	font-size: 24px;
+}
+
+nav.navbar h3 a {
+	color: #FFD700;
+	text-decoration: none;
+}
+
+form {
+	max-width: 600px;
+	margin: 20px auto;
+	padding: 20px;
+	background: #ffffff;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+}
+
+form div {
+    margin-bottom: 20px; /* 增加欄位之間的間距 */
+    text-align: left; /* 確保標籤靠左 */
+    max-width: 500px; /* 限制最大寬度 */
+    margin: 0 auto 20px; /* 讓欄位置中，並設定底部間距 */
+}
+
+form label {
+    display: block; /* 使 label 獨占一行 */
+    margin-bottom: 5px; /* 增加間距 */
+    font-weight: bold;
+}
+
+form input, form select, form button {
+	width: 100%; /* 保持寬度填滿父容器 */
+	padding: 10px; /* 增加內邊距 */
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	text-align: left; /* 讓文字靠左 */
+	box-sizing: border-box; /* 避免 padding 導致寬度超出 */
+}
+
+form button {
+    display: block; /* 讓按鈕獨佔一行 */
+    margin: 30px auto; /* 置中並設定上下間距 */
+    padding: 10px 20px; /* 增加內邊距 */
+    background-color: #334252; /* 按鈕背景顏色 */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #556B8D; /* 滑鼠懸停顏色 */
+}
+
+form .image-preview-container {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+form .image-preview {
+	position: relative;
+	display: inline-block;
+}
+
+form .image-preview img {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+form .image-preview .remove-btn {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-color: red;
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	text-align: center;
+	line-height: 20px;
+	font-size: 12px;
+}
+
+footer {
+	background-color: #334252;
+	color: white;
+	text-align: center;
+	padding: 10px 0;
+}
+</style>
+</head>
+
+
+<body>
+
+	<nav
+		class="navbar navbar-expand-md navbar-dark bg-success fixed-top justify-content-center">
+		<div align="center">
+			<h2>商品資料修改 - update_pdDetails_input.html</h2>
+			<h3>
+				<a class="navbar-brand" th:href="@{/pdDetails/listAllProducts}">回到所有商品資料頁面</a>
+			</h3>
+		</div>
+	</nav>
+
+	<div align="center">
+		<form th:action="@{update}" method="post" th:object="${pdDetailsVO}"
+			enctype="multipart/form-data">
+			<div>
+				<label>商品編號:</label> <input type="text" th:field="*{pdId}"
+					style="border: 0px; font-weight: bold;" readonly /><br />
+			</div>
+
+			<div>
+				<label>商品類別:</label> <select th:field="*{pdCategVO.pdCategory}">
+					<option th:each="category : ${categoryList}"
+						th:value="${category.pdCategory}"
+						th:text="${category.categoryName}"
+						th:selected="${pdDetailsVO.pdCategVO.pdCategory == category.pdCategory}">
+					</option>
+				</select>
+			</div>
+
+			<div>
+				<label>商品名稱:</label> <input type="text" th:field="*{pdName}" />
+			</div>
+
+			<div>
+				<label>商品描述:</label> <input type="text" th:field="*{pdDescr}" />
+			</div>
+
+			<div>
+				<label>商品價格:</label> <input type="number" th:field="*{pdPrice}" />
+			</div>
+
+			<div>
+				<label>商品數量:</label> <input type="number" th:field="*{pdQty}" />
+			</div>
+
+			<div>
+				<label>商品重量 (kg):</label> <input type="number" step="0.01"
+					th:field="*{pdWeight}" />
+			</div>
+
+			<div>
+				<label>商品尺寸:</label> <input type="text" th:field="*{pdSize}" />
+			</div>
+
+			<div>
+				<label>商品顏色:</label> <input type="text" th:field="*{pdColor}" />
+			</div>
+
+			<div>
+				<label>商品狀態:</label> <select th:field="*{pdStatus}">
+					<option value="0">下架</option>
+					<option value="1">上架中</option>
+					<option value="2">停售</option>
+					<option value="3">測試</option>
+				</select>
+			</div>
+
+			<div>
+				<label>商品圖片<br>(最多 4 張):
+				</label> <input type="file" name="upFiles" id="imageUpload" accept="image/*"
+					multiple />
+			</div>
+
+			<!-- 現有圖片 -->
+			<div id="imagePreviewContainer" class="image-preview-container">
+				<div th:each="img : ${productImages}" class="image-preview">
+					<img th:src="@{/pdImg/DBGifReader} + '?pdImgId=' + ${img.pdImgId}"
+						alt="商品圖片" />
+					<button type="button" class="remove-btn"
+						th:onclick="'deleteImage(' + ${img.pdImgId} + ')'">X</button>
+				</div>
+			</div>
+
+
+			<!-- 新上傳圖片 -->
+			<div id="newImagePreviewContainer" class="image-preview-container"></div>
+
+			<div>
+				<button type="submit">送出修改</button>
+			</div>
+		</form>
+	</div>
+	
+		<!--***************** footer (下方深色) 區域 *****************-->
+	<footer>
+		<p>Copyright © 2024 ServPET 寵寵唯蹟 All Rights Reserved.</p>
+	</footer>
+
+<script>
+const imageUpload = document.getElementById('imageUpload');
+const newPreviewContainer = document.getElementById('newImagePreviewContainer');
+const maxImages = 4;
+
+// 現有圖片計數
+let existingImagesCount = document.querySelectorAll('#imagePreviewContainer .image-preview').length;
+
+// 處理新上傳圖片
+imageUpload.addEventListener('change', function (event) {
+    const files = Array.from(event.target.files);
+
+    // 檢查是否超過總圖片數量限制
+    if (existingImagesCount + files.length > maxImages) {
+        alert(`最多只能上傳 ${maxImages - existingImagesCount} 張新圖片`);
+        event.target.value = ''; // 清空 input
+        return;
+    }
+
+    files.forEach((file, index) => {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const previewDiv = document.createElement('div');
+            previewDiv.classList.add('image-preview');
+
+            const img = document.createElement('img');
+            img.src = e.target.result;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'X';
+            removeBtn.classList.add('remove-btn');
+            removeBtn.addEventListener('click', () => {
+                // 從預覽中移除圖片
+                previewDiv.remove();
+
+                // 更新 input 的 file 列表
+                const remainingFiles = Array.from(imageUpload.files).filter((_, i) => i !== index);
+                const updatedDataTransfer = new DataTransfer();
+                remainingFiles.forEach(file => updatedDataTransfer.items.add(file));
+                imageUpload.files = updatedDataTransfer.files;
+
+                console.log(`剩餘新圖片數量: ${updatedDataTransfer.files.length}`);
+            });
+
+            previewDiv.appendChild(img);
+            previewDiv.appendChild(removeBtn);
+            newPreviewContainer.appendChild(previewDiv);
+        };
+
+        reader.readAsDataURL(file);
+    });
+});
+
+// 刪除現有圖片
+function deleteImage(pdImgId) {
+    if (confirm("確定要刪除此圖片嗎？")) {
+        // 找到圖片對應的 <div>
+        const imageDiv = document.querySelector(`img[src*="${pdImgId}"]`).parentElement;
+
+        // 將刪除的圖片 ID 添加到隱藏的 <input>
+        let hiddenInput = document.querySelector(`input[name="imgIdsToDelete"][value="${pdImgId}"]`);
+        if (!hiddenInput) {
+            hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "imgIdsToDelete"; // 待刪除的圖片 ID 列表
+            hiddenInput.value = pdImgId;
+            document.querySelector("form").appendChild(hiddenInput);
+        }
+
+        // 從前端移除圖片預覽
+        imageDiv.remove();
+
+        // 更新現有圖片計數
+        existingImagesCount--;
+
+        console.log(`剩餘圖片數量: ${existingImagesCount}`);
+    }
+}
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+
+<head>
+    <title>EventAnn: Home</title>
+    <style>
+    html, body {
+	font-weight: bold;
+	width:100%;
+	height: 100%;
+	margin: 0;
+	padding: 0; /* 將網頁padding歸0，以免留下邊框 */
+}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            
+        }
+        
+        
+   header {
+		    background-color: #334252;
+	 	    color: #F0F8FF; 
+	 	    text-align: center; 
+	 	    padding:3%; 
+	 	    font-size: 2.5em; /* Relative font size */ 
+	 	    font-weight: bold; 
+	}
+	
+	#role, #name {
+             background-color: #334252; 
+        }
+
+        #role span, #name span {
+            color: #334252;
+        }
+        
+        nav {    
+		    margin-top: 0%;
+		}
+	
+
+
+
+/* **整體樣式重設** */
+html, body {
+    font-weight: bold;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* 淺灰背景 */
+    font-family: 'Arial', sans-serif; /* 優雅簡約的字體 */
+}
+
+/* **表格樣式** */
+table#table-1 {
+    width: 100%;
+    background-color: #17a2b8; /* 主色調青藍色 */
+    margin-bottom: 20px;
+    border-radius: 10px; /* 柔化圓角 */
+    border: none; /* 移除浮雕邊框 */
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* 更加柔和的陰影效果 */
+    color: white; /* 白色文字 */
+    font-size: 1rem; /* 清晰易讀的字體大小 */
+}
+
+/* **標題樣式** */
+h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #17a2b8; /* 與主色調一致 */
+    font-size: 2.5em; /* 適中的標題字體大小 */
+    font-weight: bold;
+}
+
+h4, h5 {
+    color: #495057; /* 深灰色，增強可讀性 */
+    text-align: center;
+    font-size: 1.8em; /* 適中的字體大小 */
+    margin: 20px 0; /* 增加上下間距 */
+    border-bottom: 2px solid #17a2b8; /* 與主色調一致的分隔線 */
+    padding-bottom: 10px; /* 分隔線與文字的間距 */
+}
+
+/* **錯誤訊息樣式** */
+.error-message {
+    color: #dc3545; /* 鮮紅色，用於強調錯誤 */
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.error-list {
+    list-style-type: disc; /* 使用圓點作為項目符號 */
+    margin-left: 20px; /* 與文字保持間距 */
+    padding: 0;
+}
+
+.error-list li {
+    color: #dc3545;
+    padding: 5px 0;
+    font-size: 1rem;
+}
+
+/* **表單樣式** */
+form {
+    background-color: #ffffff; /* 白色背景 */
+    padding: 20px; /* 更充裕的內邊距 */
+    margin-bottom: 2%;
+    border-radius: 10px; /* 圓角設計 */
+    border: 1px solid #ddd; /* 柔和的邊框 */
+    width: 60%; /* 表單寬度限制 */
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto; /* 表單居中 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* 添加陰影以突出表單 */
+}
+
+form b {
+    font-size: 23px;
+    color: #495057; /* 深灰色文字 */
+}
+
+/* **輸入框與選擇框樣式** */
+input[type="text"], select {
+    padding: 12px; /* 增大內邊距，增強點擊區域 */
+    margin: 10px 0;
+    width: 100%; /* 讓輸入框與表單寬度一致 */
+    box-sizing: border-box;
+    border-radius: 8px; /* 柔和的圓角 */
+    border: 1px solid #ccc; /* 淺灰色邊框 */
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus, select:focus {
+    border-color: #17a2b8; /* 聚焦時的青藍色邊框 */
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5); /* 聚焦時的柔和陰影 */
+    outline: none; /* 移除默認的藍色外框 */
+}
+
+/* **按鈕樣式** */
+input[type="submit"] {
+    background-color: #17a2b8; /* 青藍色背景 */
+    color: white; /* 白色文字 */
+    padding: 12px 20px; /* 增加內邊距 */
+    border: none; /* 移除邊框 */
+    border-radius: 8px; /* 柔和的圓角 */
+    cursor: pointer;
+    font-size: 1.2rem; /* 適中的字體大小 */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #138496; /* 更深的青藍色 */
+    transform: scale(1.05); /* 懸停時微小放大 */
+}
+
+input[type="submit"]:active {
+    background-color: #0f6674; /* 點擊時更深的顏色 */
+    transform: scale(0.95); /* 點擊時微小縮小 */
+}
+
+/* **鏈接樣式** */
+a {
+    color: #17a2b8; /* 青藍色文字 */
+    text-decoration: none; /* 移除下劃線 */
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline; /* 懸停時添加下劃線 */
+    color: #138496; /* 更深的青藍色 */
+}
+
+/* **Logo圖片** */
+.logo-image {
+    width: auto;
+    height: auto;
+    max-width: 50%;
+    margin: 0 auto;
+    display: block; /* 居中圖片 */
+}
+
+       footer {
+		background-color: #334252;
+		padding:1%;
+		color: #FFE4CA;
+		text-align: center;
+		font-size: 0.9em;
+	}
+	
+	
+	main {
+    padding: 20px; /* 增加內邊距，讓內容有呼吸空間 */
+    background-color: #ffffff; /* 白色背景 */
+    margin: 20px auto; /* 上下左右居中 */
+    max-width: 1200px; /* 最大寬度，限制過寬的內容 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 增加陰影效果，增強立體感 */
+    border-radius: 10px; /* 添加圓角，柔化邊緣 */
+    border: 1px solid #e0e0e0; /* 輕微邊框，讓內容更突出 */
+}
+
+main .menu-item {
+    margin-bottom: 20px; /* 每個區塊之間添加間距 */
+    padding: 15px; /* 增加內邊距，讓區塊更有層次 */
+    background-color: #f8f9fa; /* 使用淺灰色背景 */
+    border-radius: 8px; /* 圓角邊框 */
+    border: 1px solid #ddd; /* 添加輕微邊框 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 添加淡陰影效果 */
+}
+
+main .menu-item:hover {
+    background-color: #e9ecef; /* 滑鼠懸停時更亮的背景 */
+    transition: background-color 0.3s ease; /* 平滑過渡效果 */
+}
+
+main .menu-link {
+    font-size: 1.2rem; /* 調整文字大小 */
+    color: #007bff; /* 藍色字體 */
+    font-weight: bold; /* 加粗文字 */
+    text-decoration: none; /* 移除下劃線 */
+}
+
+main .menu-link:hover {
+    color: #0056b3; /* 懸停時字體變深 */
+    text-decoration: underline; /* 懸停時添加下劃線 */
+}
+
+main .form-inline {
+    display: flex;
+    flex-direction: column; /* 讓表單元素垂直排列 */
+    align-items: start; /* 元素左對齊 */
+    margin-bottom: 20px; /* 與其他區塊的間距 */
+}
+
+main .form-label {
+    font-size: 1.2rem; /* 表單標籤字體大小 */
+    color: #495057; /* 深灰色字體 */
+    margin-bottom: 5px; /* 與輸入框的間距 */
+}
+
+
+main .form-control,
+main .form-select {
+    width: 85%; /* 輸入框和選擇框全寬 */
+    padding: 10px; /* 增加內邊距 */
+    font-size: 1rem; /* 字體大小 */
+    border-radius: 5px; /* 圓角邊框 */
+    border: 1px solid #ccc; /* 輕微邊框 */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 內陰影 */
+}
+
+main .form-control:focus,
+main .form-select:focus {
+    border-color: #17a2b8; /* 聚焦時的邊框顏色 */
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5); /* 聚焦時的外部陰影 */
+    outline: none; /* 移除默認的藍色邊框 */
+}
+
+main .btn-submit {
+    background-color: #17a2b8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 85%;
+    margin-top: 8px;
+}
+
+main .btn-submit:hover {
+    background-color: #138496; /* 懸停時更深的青藍色 */
+}
+
+main .error-message {
+    color: red; /* 錯誤文字顏色 */
+    font-size: 1.2rem; /* 錯誤提示字體大小 */
+    margin-bottom: 20px; /* 與內容的間距 */
+    font-weight: bold; /* 加粗提示文字 */
+}
+
+main .error-text {
+    color: red; /* 錯誤訊息文字顏色 */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+	.home-link {
+    color: rgba(0, 0, 0, 0); /* 完全透明的文字 */
+    text-decoration: none; /* 去掉下劃線 */
+    position: relative; /* 保持鏈接位置正確 */
+}
+
+.search-result-item {
+    cursor: pointer; /* 滑鼠變為可點擊狀態 */
+    padding: 12px 20px; /* 內邊距，增加可點擊區域 */
+    margin: 10px 0; /* 項目之間的間距 */
+    background-color: #f8f9fa; /* 淺灰背景 */
+    border: 1px solid #ddd; /* 添加淡灰色邊框 */
+    border-radius: 8px; /* 圓角邊框 */
+    font-size: 1rem; /* 適中字體大小 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加陰影，增加立體感 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 平滑過渡效果 */
+}
+
+.search-result-item:hover {
+    background-color: #e2e6ea; /* 滑鼠懸停時背景顏色變深 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 增加陰影效果 */
+    border-color: #17a2b8; /* 滑鼠懸停時邊框變色 */
+}
+
+.search-result-item span {
+    display: block; /* 每一段顯示為獨立一行 */
+    line-height: 1.5; /* 調整行距 */
+    color: #495057; /* 深灰色文字 */
+}
+
+.search-result-item .result-title {
+    font-size: 1.1rem;
+    font-weight: bold; /* 標題加粗 */
+    color: #007bff; /* 藍色強調標題 */
+}
+
+.search-result-item .result-content {
+    font-size: 0.95rem; /* 稍小字體 */
+    color: #6c757d; /* 次要內容使用淺灰色 */
+}
+
+.no-result {
+    text-align: center;
+    padding: 12px;
+    color: #dc3545; /* 鮮紅色提示無結果 */
+    font-weight: bold;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+}
+
+ /* icon 外部容器 */
+		.contact-icon {
+ 		    position: fixed; /* 固定位置 */ 
+		   top:35%; /* 距離頁面底部 20px  
+		    width: 0px; /* 容器寬度 */ 
+		     height: 0px; /* 容器高度 */ 
+		    display: flex; /* 使用彈性盒模型 */
+		    flex-direction: column; /* 垂直排列 */ 
+		    border-radius: 90%; /* 圓形背景 */ 
+		/*     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* 添加陰影效果 */ 
+		    cursor: pointer; /* 鼠標顯示手型 */
+		    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 動態效果 */
+		    z-index: 9999;
+		}
+		
+			.contact-icon img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 29%;
+    margin-left: -203%;
+    margin-top: 300%;
+}
+		
+		/* icon 文字樣式 */
+		.contact-icon span {
+    font-size: 20px;
+    color: #333;
+    margin-top: 5px;
+    text-align: center;
+    white-space: nowrap;
+    margin-left: -410%;
+}
+		
+		/* 懸停效果 */
+		.contact-icon:hover {
+		    transform: scale(1.1); /* 放大效果 */
+		    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+		}
+		
+		.contact-icon:hover span {
+		    display: block; /* 懸停時顯示文字 */
+		}
+		.menu-item {
+    text-align: center;
+}
+	a.menu-link {
+    margin-left: 79%;
+}
+	
+    </style>
+</head>
+
+
+
+
+   <header>
+			    <div class="header-container">
+			        <div class="home-button">最新消息管理 
+			            <a th:href="@{/back_end/index}">
+			                <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁">
+			                
+			            </a>
+			    	</div>	       
+			 </div>
+    </header>
+     
+     <div id="role">
+		<span th:if="${admin == null}" th:text="未知身分"></span>
+	</div>
+	
+	<div id="role">
+		<span th:if="${admin != null}" th:switch="${admin.adminRole}">
+			<span th:case="1">超級管理</span> <span th:case="2">後台管理</span> <span
+			th:case="3">商城管理</span> <span th:case="*">未知身分</span>  
+		</span>
+	</div>
+	
+	<div id="name">
+		<span th:if="${admin != null}" th:text="${admin.adminName}"></span> <span
+			th:if="${admin == null}" th:text="造訪者"></span>
+	</div>  
+	
+<div th:include="@{/back_end/admin/dashboard}"></div>
+	
+
+<body>
+<main>
+
+    <!-- 顯示錯誤訊息 -->
+    <div th:if="${errorMsgs != null}" class="error-message">
+        <p>請修正以下錯誤:</p>
+        <ul class="error-list">
+            <li th:each="message : ${errorMsgs}" th:text="${message}"></li>
+        </ul>
+    </div>
+
+    <div class="menu-item">
+        <a th:href="@{/event/list}" class="menu-link">最新消息列表</a>
+        <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁" class="menu-icon">
+    </div>
+    <div class="menu-item">
+        <a th:href="@{/event/addPage}" class="menu-link">新增一個最新消息</a>
+         <img th:src="@{/images/pflogow.png}" width="50" height="50" alt="回首頁" class="menu-icon">
+    </div>
+    	
+    	
+    
+
+    <div class="menu-item">
+        <!-- 錯誤提示 -->
+        <div th:if="${errorMsg}" class="error-text">
+            <p th:text="${errorMsg}"></p>
+        </div>
+		 <h2 style="text-align: center; color: #007bff;">最新消息模糊查詢</h2>
+		   <!-- 搜索輸入框 -->
+	    <input 
+	        id="search-input" 
+	        type="text" 
+	        placeholder="請輸入最新消息編號、標題、內容或狀態進行查詢" 
+	    >
+
+	    <!-- 顯示動態匹配結果 -->
+	    <ul id="search-results" class="search-results"></ul>
+	 </div>
+	
+	<div class="menu-item">
+        <!-- 表單 -->
+        <form method="get" th:action="@{/event/display}" class="form-inline">
+            <label for="infid-input" class="form-label">
+                <b>輸入最新消息編號 (如14000~14999):</b>
+            </label><br>
+            <input 
+                id="infid-input" 
+                type="number" 
+                name="infid" 
+                placeholder="請輸入活動公告編號" 
+                min="14000" 
+                max="14999" 
+                required 
+                class="form-control">
+            <input 
+                type="submit" 
+                value="送出" 
+                class="btn-submit">
+        </form>
+    </div>
+
+    <div class="menu-item">
+        <form method="get" th:action="@{/event/display}">
+            <label for="select-infid" class="form-label">
+                <b>選擇最新消息編號:</b>
+            </label>
+            <select id="select-infid" name="infid" required class="form-select">
+                <option value="" disabled selected>請選擇最新消息編號</option>
+                <option th:each="eventVO : ${events}" th:value="${eventVO.infId}" th:text="${eventVO.infId}"></option>
+            </select>
+            <input type="submit" value="送出" class="btn-submit">
+        </form>
+    </div>
+
+    <div class="menu-item">
+        <form method="get" th:action="@{/event/display}">
+            <label for="select-title" class="form-label">
+                <b>選擇最新消息標題:</b>
+            </label>
+            <select id="select-title" name="infid" required class="form-select">
+                <option value="" disabled selected>請選擇最新消息標題</option>
+                <option th:each="eventVO : ${events}" th:value="${eventVO.infId}" th:text="${eventVO.title}"></option>
+            </select>
+            <input type="submit" value="送出" class="btn-submit">
+        </form>
+    </div>
+		<div class="contact-icon" id="icon-container">
+				    <a th:href="@{/back_end/index}">
+				        <img id="pet1" th:src="@{/images/BIRDIE-8.JPG}" width="100%" height="100%" alt="Pet Image">
+				    </a>
+				    <span>後台首頁</span>
+				</div>
+</main>
+	 <script th:inline="javascript">
+        /* Thymeleaf 後端數據渲染為 JavaScript 數組 */
+        const events = /*[[${events}]]*/ []; 
+        // 假設 events 數據格式: [{"infId": "14001", "title": "公告A", "content": "這是公告A的內容"}, ...]
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-input");
+        const resultContainer = document.getElementById("search-results");
+
+        const statusMap = {
+            0: "最新消息",
+            1: "常見QA",
+            2: "專欄文章",
+            99: "下架"
+        };
+
+        searchInput.addEventListener("input", function () {
+            const keyword = searchInput.value.trim().toLowerCase();
+            resultContainer.innerHTML = "";
+
+            if (keyword === "") return;
+
+            const filteredResults = events.filter(event =>
+                event.infId.toString().includes(keyword) ||
+                (event.title && event.title.toLowerCase().includes(keyword)) ||
+                (event.content && event.content.toLowerCase().includes(keyword)) ||
+                (statusMap[event.infType] && statusMap[event.infType].toLowerCase().includes(keyword))
+            );
+
+            if (filteredResults.length > 0) {
+                filteredResults.forEach(event => {
+                    const li = document.createElement("li");
+                    li.classList.add("search-result-item");
+
+                    const statusText = statusMap[event.infType] || "未知狀態";
+                    li.innerHTML = `
+                        <span class="result-title">編號: ${event.infId} | 標題: ${event.title}</span>
+                        <span class="result-content">內容: ${event.content}</span>
+                        <span class="result-content">狀態: ${statusText}</span>
+                    `;
+
+                    li.addEventListener("click", () => {
+                        window.location.href = `display?infid=${event.infId}`;
+                    });
+
+                    resultContainer.appendChild(li);
+                });
+            } else {
+                const noResult = document.createElement("li");
+                noResult.classList.add("no-result");
+                noResult.textContent = "沒有找到符合條件的公告";
+                resultContainer.appendChild(noResult);
+            }
+        });
+    });
+
+
+
+    </script>
+    <footer>
+        <p>© 2024 寵寵唯跡友善平台</p>
+    </footer>
+</body>
+</html>

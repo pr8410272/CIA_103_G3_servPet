@@ -1,0 +1,328 @@
+@charset "UTF-8";
+/****************** 全域設定 ******************/
+/* 引入 Google Fonts 字型 */
+@import
+	url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap')
+	;
+
+html, body {
+	font-weight: bold;
+	width:100%;
+	height: 100%;
+	margin: 0;
+	padding: 0; /* 將網頁padding歸0，以免留下邊框 */
+}
+
+body {
+	font-family: 'Zen Maru Gothic', sans-serif; /* 設置整個頁面的字型 */
+	background-color: #334252; /*設置整個頁面的背景色*/
+}
+.error{
+	color:red;
+	font-weight: normal;
+}
+
+
+/****************** table#header (上方深色) 區域 ******************/
+table#header {
+	background-color: #334252;
+	text-align: center;
+	width: 100%; /* 根據圖片和標題的寬度進行調整 */
+	min-width: 500px; /* 最小寬度 */
+	height: 150px; margin : 0;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin: 0;
+}
+
+/*header圖片 */
+table#header img {
+	width: 60px;
+	height: 60px;
+	border: 0;
+	vertical-align: bottom; /* 將圖片垂直貼齊下方 */
+}
+
+/*header文字字體 */
+table#header font {
+	font-size: 50px; /* 字體大小 */
+	color: #FFFAF4;/* 字體顏色 */
+	border: 0;
+	width: 60px;
+	height: 60px;
+	margin: 0;
+	vertical-align: bottom; /* 將圖片垂直貼齊下方 */
+}
+
+table#header h1 {
+	color: #FFFAF4;
+	display: block;
+	margin: 10px;
+}
+
+table#header h2 {
+	color: #FFFAF4;
+	display: block;
+}
+
+table#header h4 {
+	margin: 0;
+}
+
+table#header h4 a {
+	font-size: 20px; /* 字體大小 */
+	font-weight: normal;
+	color: #FFFAF4;
+	text-decoration: none; /*頁面文字預設元素去除*/
+	display: block;
+}
+
+table#header h4 a:visited {
+	color: #FFEEDD;
+	display: block;
+}
+
+table#header h4 a:hover {
+	font-weight: bold;
+	color: #FFFAF4;
+	display: block;
+}
+
+table#header h4 a {
+	font-weight: normal;
+	color: #FFFAF4;
+	display: block;
+}
+
+table#header h4 a:visited {
+	color: #FFE4CA;
+	display: block;
+}
+
+table#header h4 a:hover {
+	font-weight: bold;
+	color: #FFFAF4;
+	display: block;
+}
+
+/***************** div#body (中間淺色) 區域 *****************/
+div#body {
+	color: #334252; /* 設置文字顏色為藍 */
+	text-align: center; /* 文字左右置中 */
+	width: 100%;
+	height: auto;
+	min-height: 500px;
+	background: linear-gradient(to top, #FFE4CA, #FFEEDD, #FFFAF4);
+	min-width: 500px; /* 固定寬度 */
+}
+
+div#blob_holder {
+	margin:10px;
+}
+
+div#body img {
+	border: 1px solid #334252;
+	text-align: center; /* 文字左右置中 */
+	vertical-align: middle;
+	width: 50px;
+	height: 50px;
+}
+
+div#body article {
+	height: auto;
+	min-height: 400px;
+		padding: 20px;
+}
+
+div#body form {
+	max-height: 100%;
+}
+
+div#body h2 {
+	color: #334252;
+	height:40px;
+	text-align: center; /* 使文字置中 */
+	font-size: 24px; /* 字體大小 */
+	margin: 0px;
+	padding-top: 40px; /* 去掉預設邊距 */
+	padding-bottom: 10px;
+}
+
+div#body h4,div#body h5 {
+	margin: 1px;
+}
+
+div#body div#noimages{
+	width: 300px; 
+	height: 300px; 
+	border: 1px solid #334252; 
+	text-align: center; 
+	line-height: 300px;
+}
+
+div#body img{
+	width: 300px; 
+	height: 300px; 
+	border: 1px solid #334252; 
+	text-align: center; 
+}
+
+table#body th,table#body td{
+	padding: 10px;
+}
+
+table#body {
+	border: 3px solid #334252;
+	font-size: 16px;
+	text-align: center;
+	width:1260px;
+	margin-left: auto; /* 左邊距自動 */
+	margin-right: auto; /* 右邊距自動 */
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-collapse: collapse;
+}
+
+table#body tbody {
+	text-align: center;
+	margin-left: auto; /* 左邊距自動 */
+	margin-right: auto; /* 右邊距自動 */
+}
+
+table#body thead {
+	border: 2px solid #334252;
+	text-align: center;
+	margin-left: auto; /* 左邊距自動 */
+	margin-right: auto; /* 右邊距自動 */
+}
+
+table#body td#right {
+	color: #334252; /* 設置表格內文字顏色為深藍色 */
+	text-align: left; /* 內容左對齊 */
+	padding: 1px;
+	padding-left: 0px;
+}
+
+table#body td#left {
+	color: #334252;
+	text-align: right; /* 文字右對齊 */
+	font-weight: bold;
+	white-space: nowrap;
+	padding-right: 10px; /* 右側內邊距 */
+	padding-left: 100px; /* 右側內邊距 */
+}
+
+table#body td#des {
+	max-width: 300px; 
+	overflow: hidden; 
+	white-space: normal;
+	word-wrap: break-word;
+}
+
+div#body a {
+	text-decoration: none;
+}
+
+div#body a:hover {
+	text-decoration: none;
+	font-weight: bold;
+}
+
+div#body input[type="TEXT"] { /* 文字輸入框 */
+	width:220px;
+	font-size: 16px;
+	font-family: 'Zen Maru Gothic', sans-serif;
+	padding: 1px 0px;
+    border-width: 1px;
+    border-style: inset;
+    border-color: #334252;
+    border-image: initial;
+  	background-color: #FFFAF4;
+  	margin-top: 5px;
+  	margin-bottom: 5px;
+  	padding: 5px 10px;
+  	border-radius: 5px;
+  	cursor: pointer;
+}
+
+div#body input[type="file"] { /* 上傳圖片的文字框 */
+	width:220px;
+	font-size: 16px;
+	font-family: 'Zen Maru Gothic', sans-serif;
+	padding: 1px 0px;
+    border-width: 1px;
+    border-style: inset;
+    border-color: #334252;
+    border-image: initial;
+  	background-color: #FFFAF4;
+  	margin-top: 5px;
+  	margin-bottom: 5px;
+  	padding: 5px 10px;
+  	border-radius: 5px;
+  	cursor: pointer;
+}
+
+div#body input[type="submit"] {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	margin-top: 0px; /* 額外的上邊距 */
+	margin-bottom: 10px; /* 額外的上邊距 */
+	font-size: 20px; /* 放大字型 */
+	padding: 10px 20px; /* 設定內邊距，上下10px，左右20px */
+	background-color: #334252; /* 背景顏色 */
+	color: #F0F8FF; /* 字體顏色 */
+	border: none; /* 去掉邊框 */
+	border-radius: 5px; /* 圓角邊框 */
+	cursor: pointer; /* 鼠標懸停時顯示為指針 */
+}
+
+div#body input[type="submit"]:hover {
+	background-color: #778899; /* 懸停時的背景顏色 */
+	transform: scale(1.05); /* 按鈕輕微放大 */
+}
+
+div#body input[type="submit"]:active {
+	background-color: #778899; /* 按下時的背景顏色 */
+	transform: scale(1.02); /* 按下時按鈕縮小 */
+}
+
+div#body button[type="submit"] {
+	font-family: 'Zen Maru Gothic', sans-serif;
+	margin-top: 0px; /* 額外的上邊距 */
+	margin-bottom: 10px; /* 額外的上邊距 */
+	font-size: 20px; /* 放大字型 */
+	padding: 10px 20px; /* 設定內邊距，上下10px，左右20px */
+	background-color: #334252; /* 背景顏色 */
+	color: #F0F8FF; /* 字體顏色 */
+	border: none; /* 去掉邊框 */
+	border-radius: 5px; /* 圓角邊框 */
+	cursor: pointer; /* 鼠標懸停時顯示為指針 */
+}
+
+div#body button[type="submit"]:hover {
+	background-color: #778899; /* 懸停時的背景顏色 */
+	transform: scale(1.05); /* 按鈕輕微放大 */
+}
+
+div#body button[type="submit"]:active {
+	background-color: #778899; /* 按下時的背景顏色 */
+	transform: scale(1.02); /* 按下時按鈕縮小 */
+}
+
+
+/***************** footer (下方深色) 區域 *****************/
+footer {
+	background-color: #334252;
+	text-align: center;
+	width: 100%; /* 根據圖片和標題的寬度進行調整 */
+	min-width: 500px; /* 最小寬度 */
+	height: 80px;
+	padding-top: 20px;
+}
+
+footer p {
+	font-size: 16px; /* 字體大小 */
+	font-weight: normal;
+	color: #FFE4CA; /* 字體顏色 */
+	border: 0;
+	vertical-align: middle; /* 將圖片垂直置中 */
+}
